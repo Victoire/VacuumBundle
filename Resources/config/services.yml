@@ -1,2 +1,3 @@
 services:
-
+    victoire.vacuum_bundle.word_press_processor:
+        class: Victoire\DevTools\VacuumBundle\Processor\WordPressProcessor

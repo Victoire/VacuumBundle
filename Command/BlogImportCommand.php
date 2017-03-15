@@ -7,6 +7,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Victoire\DevTools\VacuumBundle\Entity\DataContainer\WordPressDataContainer;
 
 /**
  * Class BlogImportCommand
@@ -63,6 +68,15 @@ EOT
             $output->writeln('<error>Wrong path the file '.$pathToDump.' can\'t be found</error>');
         }
 
-        $container = $this->getContainer();
+        $data = simplexml_load_file($pathToDump);
+        $playload = [];
+
+        foreach ($data->channel as $children) {
+            foreach ($children as $key => $item) {
+                $playload[$key] = $item;
+            }
+        }
+
+
     }
 }
