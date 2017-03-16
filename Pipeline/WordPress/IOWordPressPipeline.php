@@ -4,10 +4,10 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 
 use Victoire\DevTools\VacuumBundle\Entity\DataContainer\WordPressDataContainer;
 use Victoire\DevTools\VacuumBundle\Entity\Playload;
-use Victoire\DevTools\VacuumBundle\Pipeline\Pipeline\WordPressPipeline;
-use Victoire\DevTools\VacuumBundle\Pipeline\Processor\WordPressProcessor;
-use Victoire\DevTools\VacuumBundle\Pipeline\Stages\ArticleGeneratorStages;
-use Victoire\DevTools\VacuumBundle\Pipeline\Stages\ArticleHydratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Pipeline\WordPressPipeline;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Processor\WordPressProcessor;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\ArticleGeneratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\ArticleHydratorStages;
 
 class IOWordPressPipeline
 {
