@@ -1,8 +1,6 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Pipeline\Pipeline;
-
-use Victoire\DevTools\VacuumBundle\Pipeline\Stages\StageInterface;
+namespace Victoire\DevTools\VacuumBundle\Pipeline;
 
 interface PipelineInterface extends StageInterface
 {

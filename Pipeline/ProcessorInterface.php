@@ -1,6 +1,6 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Pipeline\Processor;
+namespace Victoire\DevTools\VacuumBundle\Pipeline;
 
 interface ProcessorInterface
 {

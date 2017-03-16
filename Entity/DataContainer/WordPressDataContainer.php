@@ -4,143 +4,39 @@ namespace Victoire\DevTools\VacuumBundle\Entity\DataContainer;
 
 class WordPressDataContainer
 {
-    private $title;
+    private $rawData;
 
-    private $link;
-
-    private $pubDate;
-
-    private $creator;
-
-    private $description;
-
-    private $content;
-
-    private $category;
+    private $article;
 
     /**
      * @return mixed
      */
-    public function getTitle()
+    public function getRawData()
     {
-        return $this->title;
+        return $this->rawData;
     }
 
     /**
-     * @param mixed $title
-     * @return WordPressDataContainer
+     * @param mixed $rawData
      */
-    public function setTitle($title)
+    public function setRawData($rawData)
     {
-        $this->title = $title;
-        return $this;
+        $this->rawData = $rawData;
     }
 
     /**
      * @return mixed
      */
-    public function getLink()
+    public function getArticle()
     {
-        return $this->link;
+        return $this->article;
     }
 
     /**
-     * @param mixed $link
-     * @return WordPressDataContainer
+     * @param mixed $article
      */
-    public function setLink($link)
+    public function setArticle($article)
     {
-        $this->link = $link;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPubDate()
-    {
-        return $this->pubDate;
-    }
-
-    /**
-     * @param mixed $pubDate
-     * @return WordPressDataContainer
-     */
-    public function setPubDate($pubDate)
-    {
-        $this->pubDate = $pubDate;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCreator()
-    {
-        return $this->creator;
-    }
-
-    /**
-     * @param mixed $creator
-     * @return WordPressDataContainer
-     */
-    public function setCreator($creator)
-    {
-        $this->creator = $creator;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param mixed $description
-     * @return WordPressDataContainer
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * @param mixed $content
-     * @return WordPressDataContainer
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param mixed $category
-     * @return WordPressDataContainer
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-        return $this;
+        $this->article = $article;
     }
 }

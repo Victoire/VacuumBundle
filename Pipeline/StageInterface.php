@@ -1,6 +1,6 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Pipeline\Stages;
+namespace Victoire\DevTools\VacuumBundle\Pipeline;
 
 use Victoire\DevTools\VacuumBundle\Entity\Playload;
 

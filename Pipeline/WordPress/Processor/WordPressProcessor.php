@@ -1,6 +1,8 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Pipeline\Processor;
+namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Processor;
+
+use Victoire\DevTools\VacuumBundle\Pipeline\ProcessorInterface;
 
 class WordPressProcessor implements ProcessorInterface
 {

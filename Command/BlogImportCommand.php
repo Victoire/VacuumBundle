@@ -13,6 +13,11 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Victoire\DevTools\VacuumBundle\Entity\DataContainer\WordPressDataContainer;
 use Victoire\DevTools\VacuumBundle\Entity\Playload;
+use Victoire\DevTools\VacuumBundle\Pipeline\Pipeline\WordPressPipeline;
+use Victoire\DevTools\VacuumBundle\Pipeline\Processor\WordPressProcessor;
+use Victoire\DevTools\VacuumBundle\Pipeline\Stages\ArticleGeneratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\Stages\ArticleHydratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\IOWordPressPipeline;
 
 /**
  * Class BlogImportCommand
@@ -69,16 +74,6 @@ EOT
             $output->writeln('<error>Wrong path the file '.$pathToDump.' can\'t be found</error>');
         }
 
-        $data = simplexml_load_file($pathToDump);
-        $playload = new Playload();
-
-        foreach ($data->channel as $children) {
-            foreach ($children as $key => $item) {
-                $playload->addResult($item);
-            }
-        }
-
-        $container = $this->getContainer();
-        $container->get('victoire.vacuum_bundle.word_press_processor')->process($stages, $playload);
+        new IOWordPressPipeline(simplexml_load_file($pathToDump));
     }
 }

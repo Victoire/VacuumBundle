@@ -9,9 +9,10 @@ namespace Victoire\DevTools\VacuumBundle\Entity;
 class Playload
 {
     /**
-     * @var null|string
+     * @var array
      */
-    protected $result = null;
+    protected $result = [];
+
     /**
      * @return null
      */
@@ -34,7 +35,7 @@ class Playload
      */
     public function addResult($result)
     {
-        $this->result .= $result;
+        array_push($this->result, $result);
         return $this;
     }
 }
