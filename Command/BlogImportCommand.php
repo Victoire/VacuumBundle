@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Victoire\DevTools\VacuumBundle\Entity\DataContainer\WordPressDataContainer;
+use Victoire\DevTools\VacuumBundle\Entity\Playload;
 
 /**
  * Class BlogImportCommand
@@ -69,14 +70,15 @@ EOT
         }
 
         $data = simplexml_load_file($pathToDump);
-        $playload = [];
+        $playload = new Playload();
 
         foreach ($data->channel as $children) {
             foreach ($children as $key => $item) {
-                $playload[$key] = $item;
+                $playload->addResult($item);
             }
         }
 
-
+        $container = $this->getContainer();
+        $container->get('victoire.vacuum_bundle.word_press_processor')->process($stages, $playload);
     }
 }
