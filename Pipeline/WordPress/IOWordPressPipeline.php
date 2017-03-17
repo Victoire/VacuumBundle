@@ -38,8 +38,12 @@ class IOWordPressPipeline
 
     public function process()
     {
+        $raw = file_get_contents($this->input);
+        $raw = str_replace(["wp:","dc:",":encoded"],"",$raw);
+        $rawData = simplexml_load_string($raw);
+
         $playload = new WordPressPlayload();
-        $playload->setRawData($this->input);
+        $playload->setRawData($rawData);
 
         $blogPipeline = new WordPressPipeline([], new WordPressProcessor());
         $authorPipeline = new WordPressPipeline([], new WordPressProcessor());

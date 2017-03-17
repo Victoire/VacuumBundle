@@ -75,7 +75,7 @@ EOT
             $output->writeln('<error>Wrong path the file '.$pathToDump.' can\'t be found</error>');
         }
 
-        $ioWordPressPipeline = new IOWordPressPipeline(simplexml_load_file($pathToDump));
+        $ioWordPressPipeline = new IOWordPressPipeline($pathToDump);
         $ioWordPressPipeline->process();
         $output = $ioWordPressPipeline->getOutput();
     }
