@@ -2,13 +2,19 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 
-use Victoire\DevTools\VacuumBundle\Entity\DataContainer\WordPressDataContainer;
-use Victoire\DevTools\VacuumBundle\Entity\Playload;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Pipeline\WordPressPipeline;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Processor\WordPressProcessor;
-use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\ArticleGeneratorStages;
-use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\ArticleHydratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\ArticleDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author\AuthorDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\BlogDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\CategoryDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Term\TermDataExtractorStages;
 
+/**
+ * Class IOWordPressPipeline
+ * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress
+ */
 class IOWordPressPipeline
 {
     /**
@@ -30,22 +36,35 @@ class IOWordPressPipeline
         $this->input = $data;
     }
 
-    public function __invoke()
+    public function process()
     {
-        $playload = new Playload();
+        $playload = new WordPressPlayload();
+        $playload->setRawData($this->input);
 
-        foreach ($this->input->channel as $children) {
-            foreach ($children->item as $key => $item) {
-                $dataContainer = new WordPressDataContainer();
-                $dataContainer->setRawData($item);
-                $playload->addResult($dataContainer);
-            }
-        }
+        $blogPipeline = new WordPressPipeline([], new WordPressProcessor());
+        $authorPipeline = new WordPressPipeline([], new WordPressProcessor());
+        $termPipeline = new WordPressPipeline([], new WordPressProcessor());
+        $categoryPipeline = new WordPressPipeline([], new WordPressProcessor());
+        $tagPipeline = new WordPressPipeline([], new WordPressProcessor());
+        $articlePipeline = new WordPressPipeline([], new WordPressProcessor());
 
-        $pipeline = new WordPressPipeline([], new WordPressProcessor());
-        $pipeline
-            ->pipe(new ArticleGeneratorStages())
-            ->pipe(new ArticleHydratorStages())
+        $blogPipeline
+            ->pipe(new BlogDataExtractorStages())
+            ->pipe($authorPipeline
+                ->pipe(new AuthorDataExtractorStages())
+            )
+            ->pipe($termPipeline
+                ->pipe(new TermDataExtractorStages())
+            )
+            ->pipe($categoryPipeline
+                ->pipe(new CategoryDataExtractorStages())
+            )
+            ->pipe($tagPipeline
+                ->pipe(new TagDataExtractorStages())
+            )
+            ->pipe($articlePipeline
+                ->pipe(new ArticleDataExtractorStages())
+            )
             ->process($playload)
         ;
     }

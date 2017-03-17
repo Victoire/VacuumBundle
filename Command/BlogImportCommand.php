@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -74,6 +75,8 @@ EOT
             $output->writeln('<error>Wrong path the file '.$pathToDump.' can\'t be found</error>');
         }
 
-        new IOWordPressPipeline(simplexml_load_file($pathToDump));
+        $ioWordPressPipeline = new IOWordPressPipeline(simplexml_load_file($pathToDump));
+        $ioWordPressPipeline->process();
+        $output = $ioWordPressPipeline->getOutput();
     }
 }

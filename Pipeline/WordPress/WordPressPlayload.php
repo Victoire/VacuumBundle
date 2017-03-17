@@ -4,6 +4,8 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 
 class WordPressPlayload
 {
+    private $rawData;
+
     /**
      * @var string
      */
@@ -42,27 +44,32 @@ class WordPressPlayload
     /**
      * @var array
      */
-    private $authors;
+    private $authors = [];
 
     /**
      * @var array
      */
-    private $categories;
+    private $categories = [];
 
     /**
      * @var array
      */
-    private $tags;
+    private $tags = [];
 
     /**
      * @var array
      */
-    private $items;
+    private $items = [];
+
+    /**
+     * @var array
+     */
+    private $terms = [];
 
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle()
     {
         return $this->title;
     }
@@ -71,7 +78,7 @@ class WordPressPlayload
      * @param string $title
      * @return WordPressPlayload
      */
-    public function setTitle(string $title): WordPressPlayload
+    public function setTitle(string $title)
     {
         $this->title = $title;
         return $this;
@@ -80,7 +87,7 @@ class WordPressPlayload
     /**
      * @return string
      */
-    public function getLink(): string
+    public function getLink()
     {
         return $this->link;
     }
@@ -89,7 +96,7 @@ class WordPressPlayload
      * @param string $link
      * @return WordPressPlayload
      */
-    public function setLink(string $link): WordPressPlayload
+    public function setLink($link)
     {
         $this->link = $link;
         return $this;
@@ -98,7 +105,7 @@ class WordPressPlayload
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription()
     {
         return $this->description;
     }
@@ -107,7 +114,7 @@ class WordPressPlayload
      * @param string $description
      * @return WordPressPlayload
      */
-    public function setDescription(string $description): WordPressPlayload
+    public function setDescription($description)
     {
         $this->description = $description;
         return $this;
@@ -116,7 +123,7 @@ class WordPressPlayload
     /**
      * @return \DateTime
      */
-    public function getPublicationDate(): \DateTime
+    public function getPublicationDate()
     {
         return $this->publicationDate;
     }
@@ -125,7 +132,7 @@ class WordPressPlayload
      * @param \DateTime $publicationDate
      * @return WordPressPlayload
      */
-    public function setPublicationDate(\DateTime $publicationDate): WordPressPlayload
+    public function setPublicationDate($publicationDate)
     {
         $this->publicationDate = $publicationDate;
         return $this;
@@ -134,7 +141,7 @@ class WordPressPlayload
     /**
      * @return string
      */
-    public function getLanguage(): string
+    public function getLanguage()
     {
         return $this->language;
     }
@@ -143,7 +150,7 @@ class WordPressPlayload
      * @param string $language
      * @return WordPressPlayload
      */
-    public function setLanguage(string $language): WordPressPlayload
+    public function setLanguage($language)
     {
         $this->language = $language;
         return $this;
@@ -152,7 +159,7 @@ class WordPressPlayload
     /**
      * @return string
      */
-    public function getBaseSiteUrl(): string
+    public function getBaseSiteUrl()
     {
         return $this->baseSiteUrl;
     }
@@ -161,7 +168,7 @@ class WordPressPlayload
      * @param string $baseSiteUrl
      * @return WordPressPlayload
      */
-    public function setBaseSiteUrl(string $baseSiteUrl): WordPressPlayload
+    public function setBaseSiteUrl($baseSiteUrl)
     {
         $this->baseSiteUrl = $baseSiteUrl;
         return $this;
@@ -170,7 +177,7 @@ class WordPressPlayload
     /**
      * @return string
      */
-    public function getBaseBlogUrl(): string
+    public function getBaseBlogUrl()
     {
         return $this->baseBlogUrl;
     }
@@ -179,7 +186,7 @@ class WordPressPlayload
      * @param string $baseBlogUrl
      * @return WordPressPlayload
      */
-    public function setBaseBlogUrl(string $baseBlogUrl): WordPressPlayload
+    public function setBaseBlogUrl($baseBlogUrl)
     {
         $this->baseBlogUrl = $baseBlogUrl;
         return $this;
@@ -198,16 +205,29 @@ class WordPressPlayload
     /**
      * @return array
      */
-    public function getAuthors(): array
+    public function getAuthors()
     {
         return $this->authors;
+    }
+
+    /**
+     * @param $authorLogin
+     * @return mixed
+     */
+    public function getAuthor($authorLogin)
+    {
+        foreach ($this->authors as $author) {
+            if ($author->getAuthorLogin() == $authorLogin) {
+                return $author;
+            }
+        }
     }
 
     /**
      * @param array $authors
      * @return WordPressPlayload
      */
-    public function setAuthors(array $authors): WordPressPlayload
+    public function setAuthors(array $authors)
     {
         $this->authors = $authors;
         return $this;
@@ -226,7 +246,7 @@ class WordPressPlayload
     /**
      * @return array
      */
-    public function getCategories(): array
+    public function getCategories()
     {
         return $this->categories;
     }
@@ -235,7 +255,7 @@ class WordPressPlayload
      * @param array $categories
      * @return WordPressPlayload
      */
-    public function setCategories(array $categories): WordPressPlayload
+    public function setCategories(array $categories)
     {
         $this->categories = $categories;
         return $this;
@@ -254,7 +274,7 @@ class WordPressPlayload
     /**
      * @return array
      */
-    public function getTags(): array
+    public function getTags()
     {
         return $this->tags;
     }
@@ -263,7 +283,7 @@ class WordPressPlayload
      * @param array $tags
      * @return WordPressPlayload
      */
-    public function setTags(array $tags): WordPressPlayload
+    public function setTags(array $tags)
     {
         $this->tags = $tags;
         return $this;
@@ -282,7 +302,7 @@ class WordPressPlayload
     /**
      * @return array
      */
-    public function getItems(): array
+    public function getItems()
     {
         return $this->items;
     }
@@ -291,9 +311,68 @@ class WordPressPlayload
      * @param array $items
      * @return WordPressPlayload
      */
-    public function setItems(array $items): WordPressPlayload
+    public function setItems(array $items)
     {
         $this->items = $items;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRawData()
+    {
+        return $this->rawData;
+    }
+
+    /**
+     * @param mixed $rawData
+     * @return WordPressPlayload
+     */
+    public function setRawData($rawData)
+    {
+        $this->rawData = $rawData;
+        return $this;
+    }
+
+    /**
+     * @param $term
+     * @return $this
+     */
+    public function addTerm($term)
+    {
+        array_push($this->terms, $term);
+        return $this;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getTerm($id)
+    {
+        foreach ($this->getTerms() as $term) {
+            if ($id == $term->getTermId()) {
+                return $term;
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getTerms()
+    {
+        return $this->terms;
+    }
+
+    /**
+     * @param array $terms
+     * @return WordPressPlayload
+     */
+    public function setTerms(array $terms)
+    {
+        $this->terms = $terms;
         return $this;
     }
 }
