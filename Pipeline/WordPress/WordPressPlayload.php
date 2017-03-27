@@ -6,6 +6,8 @@ class WordPressPlayload
 {
     private $rawData;
 
+    private $newBlog;
+
     /**
      * @var string
      */
@@ -373,6 +375,24 @@ class WordPressPlayload
     public function setTerms(array $terms)
     {
         $this->terms = $terms;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewBlog()
+    {
+        return $this->newBlog;
+    }
+
+    /**
+     * @param mixed $newBlog
+     * @return WordPressPlayload
+     */
+    public function setNewBlog($newBlog)
+    {
+        $this->newBlog = $newBlog;
         return $this;
     }
 }

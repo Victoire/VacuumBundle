@@ -5,10 +5,14 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Pipeline\WordPressPipeline;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Processor\WordPressProcessor;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\ArticleDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\VicArticleGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author\AuthorDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\BlogDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\VicBlogGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\CategoryDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\CategoryGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Term\TermDataExtractorStages;
 
 /**
@@ -45,32 +49,24 @@ class IOWordPressPipeline
         $playload = new WordPressPlayload();
         $playload->setRawData($rawData);
 
-        $blogPipeline = new WordPressPipeline([], new WordPressProcessor());
-        $authorPipeline = new WordPressPipeline([], new WordPressProcessor());
-        $termPipeline = new WordPressPipeline([], new WordPressProcessor());
-        $categoryPipeline = new WordPressPipeline([], new WordPressProcessor());
-        $tagPipeline = new WordPressPipeline([], new WordPressProcessor());
-        $articlePipeline = new WordPressPipeline([], new WordPressProcessor());
+        $exctractionPipeline = new WordPressPipeline([], new WordPressProcessor());
+        $generatorPipeline =  new WordPressPipeline([], new WordPressProcessor());
 
-        $blogPipeline
+        $exctractionPipeline
             ->pipe(new BlogDataExtractorStages())
-            ->pipe($authorPipeline
-                ->pipe(new AuthorDataExtractorStages())
+            ->pipe(new AuthorDataExtractorStages())
+            ->pipe(new TermDataExtractorStages())
+            ->pipe(new CategoryDataExtractorStages())
+            ->pipe(new TagDataExtractorStages())
+            ->pipe(new ArticleDataExtractorStages())
+            ->pipe($generatorPipeline
+                ->pipe(new VicBlogGeneratorStages())
+                ->pipe(new CategoryGeneratorStages())
+                ->pipe(new TagGeneratorStages())
+                ->pipe(new VicArticleGeneratorStages()
+                )
             )
-            ->pipe($termPipeline
-                ->pipe(new TermDataExtractorStages())
-            )
-            ->pipe($categoryPipeline
-                ->pipe(new CategoryDataExtractorStages())
-            )
-            ->pipe($tagPipeline
-                ->pipe(new TagDataExtractorStages())
-            )
-            ->pipe($articlePipeline
-                ->pipe(new ArticleDataExtractorStages())
-            )
-            ->process($playload)
-        ;
+        ->process($playload);
     }
 
     /**
