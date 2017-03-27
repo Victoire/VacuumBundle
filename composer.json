@@ -21,6 +21,9 @@
     "symfony/framework-bundle": "~2.8|~3.0",
     "victoire/victoire": ">=2.0.0"
   },
+  "required-dev": {
+    "phpunit/phpunit": "5.7"
+  },
   "autoload": {
     "psr-0": {
       "Victoire\\DevTools\\VacuumBundle": ""

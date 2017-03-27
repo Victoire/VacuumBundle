@@ -1,6 +1,6 @@
 <?php
 
-namespace Victoire\VacuumBundle\DependencyInjection;
+namespace Victoire\DevTools\VacuumBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
