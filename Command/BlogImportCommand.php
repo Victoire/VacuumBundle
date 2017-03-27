@@ -7,6 +7,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Victoire\DevTools\VacuumBundle\Entity\DataContainer\WordPressDataContainer;
+use Victoire\DevTools\VacuumBundle\Entity\Playload;
+use Victoire\DevTools\VacuumBundle\Pipeline\Pipeline\WordPressPipeline;
+use Victoire\DevTools\VacuumBundle\Pipeline\Processor\WordPressProcessor;
+use Victoire\DevTools\VacuumBundle\Pipeline\Stages\ArticleGeneratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\Stages\ArticleHydratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\IOWordPressPipeline;
 
 /**
  * Class BlogImportCommand
@@ -63,6 +75,8 @@ EOT
             $output->writeln('<error>Wrong path the file '.$pathToDump.' can\'t be found</error>');
         }
 
-        $container = $this->getContainer();
+        $ioWordPressPipeline = new IOWordPressPipeline($pathToDump);
+        $ioWordPressPipeline->process();
+        $output = $ioWordPressPipeline->getOutput();
     }
 }

@@ -1,2 +1,22 @@
 services:
 
+    ############################
+    #### PROCESSOR
+    ############################
+
+    victoire.vacuum_bundle.word_press_processor:
+        class: Victoire\DevTools\VacuumBundle\Processor\WordPressProcessor
+
+    ############################
+    #### PIPELINE
+    ############################
+
+    victoire.vacuum_bundle.word_press.pipeline:
+        class: Victoire\DevTools\VacuumBundle\Pipeline\Pipeline\WordPressPipeline
+
+    ############################
+    #### STAGES
+    ############################
+
+    victoire.vacuum_bundle.article_generator.stage:
+        class: Victoire\DevTools\VacuumBundle\Pipeline\Stages\ArticleGeneratorStages
