@@ -12,7 +12,7 @@ class VicArticleGeneratorStages implements StageInterface
     {
         foreach ($playload->getItems() as $plArticle) {
             $article = new Article();
-            $article->setName($plArticle->title);
+            $article->setName($plArticle->getTitle());
             $playload->getNewBlog()->addArticle($article);
         }
 

@@ -11,9 +11,9 @@ class CategoryGeneratorStages implements StageInterface
     {
         foreach ($playload->getCategories() as $plCategory) {
             $category = new Category();
-            $category->setTitle($plCategory->getTitle());
-            $category->setSlug($plCategory->getSlug());
-            $playload->getNewBlog()->addCategory($category);
+            $category->setTitle($plCategory->getCategoryName());
+            $category->setSlug($plCategory->getCategoryNiceName());
+            $playload->getNewBlog()->addCategorie($category);
         }
 
         return $playload;

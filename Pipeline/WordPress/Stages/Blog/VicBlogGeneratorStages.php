@@ -16,5 +16,7 @@ class VicBlogGeneratorStages implements StageInterface
         $blog->setPublishedAt($playload->getPublicationDate());
         $blog->setCreatedAt($playload->getPublicationDate());
         $playload->setNewBlog($blog);
+
+        return $playload;
     }
 }

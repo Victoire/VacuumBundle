@@ -75,8 +75,8 @@ EOT
             $output->writeln('<error>Wrong path the file '.$pathToDump.' can\'t be found</error>');
         }
 
-        $ioWordPressPipeline = new IOWordPressPipeline($pathToDump);
-        $ioWordPressPipeline->process();
+        $ioWordPressPipeline = $this->getContainer()->get('victoire.vacuum_bundle.io_word_press.pipeline');
+        $ioWordPressPipeline->process($pathToDump);
         $output = $ioWordPressPipeline->getOutput();
     }
 }

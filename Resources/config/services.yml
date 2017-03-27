@@ -11,12 +11,7 @@ services:
     #### PIPELINE
     ############################
 
-    victoire.vacuum_bundle.word_press.pipeline:
-        class: Victoire\DevTools\VacuumBundle\Pipeline\Pipeline\WordPressPipeline
-
-    ############################
-    #### STAGES
-    ############################
-
-    victoire.vacuum_bundle.article_generator.stage:
-        class: Victoire\DevTools\VacuumBundle\Pipeline\Stages\ArticleGeneratorStages
+    victoire.vacuum_bundle.io_word_press.pipeline:
+        class: Victoire\DevTools\VacuumBundle\Pipeline\WordPress\IOWordPressPipeline
+        arguments:
+            - "@doctrine.orm.entity_manager"

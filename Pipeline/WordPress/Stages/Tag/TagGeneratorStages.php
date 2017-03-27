@@ -11,8 +11,8 @@ class TagGeneratorStages implements StageInterface
     {
         foreach ($playload->getTags() as $wpTag) {
             $tag = new Tag();
-            $tag->setTitle($wpTag->getTitle());
-            $tag->setSlug(($wpTag->getSlug()));
+            $tag->setTitle($wpTag->getTagName());
+            $tag->setSlug(($wpTag->getTagSlug()));
             $playload->getNewBlog()->addTag($tag);
         }
 

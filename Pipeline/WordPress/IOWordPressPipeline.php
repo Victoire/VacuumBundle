@@ -2,6 +2,7 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 
+use Doctrine\ORM\EntityManager;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Pipeline\WordPressPipeline;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Processor\WordPressProcessor;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\ArticleDataExtractorStages;
@@ -26,25 +27,27 @@ class IOWordPressPipeline
     /**
      * @var mixed
      */
-    private $input;
+    private $output;
 
     /**
-     * @var mixed
+     * @var EntityManager
      */
-    private $output;
+    private $entityManager;
 
     /**
      * IOWordPressPipeline constructor.
      * @param $data
      */
-    public function __construct($data)
+    public function __construct(
+        EntityManager $entityManager
+    )
     {
-        $this->input = $data;
+        $this->entityManager = $entityManager;
     }
 
-    public function process()
+    public function process($input)
     {
-        $raw = file_get_contents($this->input);
+        $raw = file_get_contents($input);
         $raw = str_replace(["wp:","dc:",":encoded"],"",$raw);
         $rawData = simplexml_load_string($raw);
 
@@ -69,7 +72,7 @@ class IOWordPressPipeline
                 ->pipe(new VicArticleGeneratorStages())
                     ->pipe($vicArchitecturePipeline
                         ->pipe(new VicArticleTemplateBuilder())
-                        ->pipe(new VicArticlesBusinessPagesStages())
+                        ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))
                 )
             )
         ->process($playload);
