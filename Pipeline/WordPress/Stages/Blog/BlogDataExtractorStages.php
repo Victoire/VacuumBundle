@@ -2,12 +2,19 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog;
 
-
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
+/**
+ * Class BlogDataExtractorStages
+ * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog
+ */
 class BlogDataExtractorStages implements StageInterface
 {
+    /**
+     * @param $playload
+     * @return mixed
+     */
     public function __invoke($playload)
     {
         $xmlDataFormater = new XmlDataFormater();

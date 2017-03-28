@@ -4,17 +4,26 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Pages;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BusinessPageBundle\Entity\BusinessPage;
-use Victoire\Bundle\PageBundle\Entity\Page;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStagesInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\Widget\CKEditorBundle\Entity\WidgetCKEditor;
 use Victoire\Bundle\CoreBundle\Entity\EntityProxy;
 
-class VicArticlesBusinessPagesStages implements StageInterface
+/**
+ * Class VicArticlesBusinessPagesStages
+ * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Pages
+ */
+class VicArticlesBusinessPagesStages implements PersisterStagesInterface
 {
+    /**
+     * @var EntityManager
+     */
     private $entityManager;
 
+    /**
+     * VicArticlesBusinessPagesStages constructor.
+     * @param EntityManager $entityManager
+     */
     public function __construct(
         EntityManager $entityManager
     )
@@ -22,6 +31,10 @@ class VicArticlesBusinessPagesStages implements StageInterface
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param $playload
+     * @return mixed
+     */
     public function __invoke($playload)
     {
         foreach ($playload->getNewBlog()->getArticles() as $key => $article) {
@@ -35,7 +48,7 @@ class VicArticlesBusinessPagesStages implements StageInterface
 
             $entityProxy = new EntityProxy();
             $entityProxy->setEntity($article, "article");
-//            $this->entityManager->persist($entityProxy);
+            $this->entityManager->persist($entityProxy);
 
             $widgetMapCKEditor = new WidgetMap();
             $widgetMapCKEditor->setAction(WidgetMap::ACTION_OVERWRITE);

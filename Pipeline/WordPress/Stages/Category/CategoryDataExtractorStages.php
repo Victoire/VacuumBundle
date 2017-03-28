@@ -6,8 +6,16 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Category;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
+/**
+ * Class CategoryDataExtractorStages
+ * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category
+ */
 class CategoryDataExtractorStages implements StageInterface
 {
+    /**
+     * @param $playload
+     * @return mixed
+     */
     public function __invoke($playload)
     {
         $xmlDataFormater = new XmlDataFormater();

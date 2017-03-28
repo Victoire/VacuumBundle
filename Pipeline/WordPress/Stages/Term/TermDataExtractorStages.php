@@ -6,8 +6,16 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Term;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
+/**
+ * Class TermDataExtractorStages
+ * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Term
+ */
 class TermDataExtractorStages implements StageInterface
 {
+    /**
+     * @param $playload
+     * @return mixed
+     */
     public function __invoke($playload)
     {
         $xmlDataFormater = new XmlDataFormater();

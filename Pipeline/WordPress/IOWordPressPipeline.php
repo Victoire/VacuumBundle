@@ -11,10 +11,10 @@ use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author\AuthorDataEx
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\BlogDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\VicBlogGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\CategoryDataExtractorStages;
-use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\CategoryGeneratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\VicCategoryGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Pages\VicArticlesBusinessPagesStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtractorStages;
-use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagGeneratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\VicTagGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Template\VicArticleTemplateBuilder;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Term\TermDataExtractorStages;
 
@@ -45,6 +45,9 @@ class IOWordPressPipeline
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param $input
+     */
     public function process($input)
     {
         $raw = file_get_contents($input);
@@ -66,10 +69,10 @@ class IOWordPressPipeline
             ->pipe(new TagDataExtractorStages())
             ->pipe(new ArticleDataExtractorStages())
             ->pipe($generatorPipeline
-                ->pipe(new VicBlogGeneratorStages())
-                ->pipe(new CategoryGeneratorStages())
-                ->pipe(new TagGeneratorStages())
-                ->pipe(new VicArticleGeneratorStages())
+                ->pipe(new VicBlogGeneratorStages($this->entityManager))
+                ->pipe(new VicCategoryGeneratorStages($this->entityManager))
+                ->pipe(new VicTagGeneratorStages($this->entityManager))
+                ->pipe(new VicArticleGeneratorStages($this->entityManager))
                     ->pipe($vicArchitecturePipeline
                         ->pipe(new VicArticleTemplateBuilder())
                         ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))

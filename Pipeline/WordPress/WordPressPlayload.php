@@ -2,10 +2,22 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 
+use Victoire\Bundle\BlogBundle\Entity\Blog;
+
+/**
+ * Class WordPressPlayload
+ * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress
+ */
 class WordPressPlayload
 {
+    /**
+     * @var mixed
+     */
     private $rawData;
 
+    /**
+     * @var Blog
+     */
     private $newBlog;
 
     /**
@@ -80,7 +92,7 @@ class WordPressPlayload
      * @param string $title
      * @return WordPressPlayload
      */
-    public function setTitle(string $title)
+    public function setTitle($title)
     {
         $this->title = $title;
         return $this;

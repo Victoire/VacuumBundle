@@ -6,8 +6,16 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Tag;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
+/**
+ * Class TagDataExtractorStages
+ * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag
+ */
 class TagDataExtractorStages implements StageInterface
 {
+    /**
+     * @param $playload
+     * @return mixed
+     */
     public function __invoke($playload)
     {
         $xmlDataFormater = new XmlDataFormater();

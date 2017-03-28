@@ -5,8 +5,16 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Author;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
+/**
+ * Class AuthorDataExtractorStages
+ * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author
+ */
 class AuthorDataExtractorStages implements StageInterface
 {
+    /**
+     * @param $playload
+     * @return mixed
+     */
     public function __invoke($playload)
     {
         $xmlDataFormater = new XmlDataFormater();
