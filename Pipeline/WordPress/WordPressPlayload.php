@@ -23,6 +23,11 @@ class WordPressPlayload
     /**
      * @var string
      */
+    private $locale;
+
+    /**
+     * @var string
+     */
     private $title;
 
     /**
@@ -405,6 +410,24 @@ class WordPressPlayload
     public function setNewBlog($newBlog)
     {
         $this->newBlog = $newBlog;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     * @return WordPressPlayload
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
         return $this;
     }
 }

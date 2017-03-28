@@ -32,12 +32,25 @@ class VicArticleGeneratorStages implements PersisterStagesInterface
      */
     public function __invoke($playload)
     {
-        foreach ($playload->getItems() as $plArticle) {
-            $article = new Article();
-            $article->setName($plArticle->getTitle());
-            $playload->getNewBlog()->addArticle($article);
+        $locale = $playload->getLocale();
 
-            $this->entityManager->persist($article);
+        foreach ($playload->getItems() as $plArticle) {
+            if (null != $plArticle->getTitle()) {
+                $article = new Article();
+                $article->setName($plArticle->getTitle(), $locale);
+                $article->setDescription($plArticle->getDescription());
+                $article->setPublishedAt($plArticle->getPubDate());
+                $article->setLocale($locale);
+                $playload->getNewBlog()->addArticle($article);
+
+                foreach ($article->getTranslations() as $key => $translation) {
+                    if ($key != $locale) {
+                        $article->removeTranslation($translation);
+                    }
+                }
+
+                $this->entityManager->persist($article);
+            }
         }
 
         return $playload;

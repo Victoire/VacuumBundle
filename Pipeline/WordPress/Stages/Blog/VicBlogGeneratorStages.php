@@ -37,7 +37,6 @@ class VicBlogGeneratorStages implements PersisterStagesInterface
     {
         $blog = new Blog();
         $blog->setName($playload->getTitle());
-        $blog->addWidgetMap(new WidgetMap());
         $blog->setPublishedAt($playload->getPublicationDate());
         $blog->setCreatedAt($playload->getPublicationDate());
         $playload->setNewBlog($blog);

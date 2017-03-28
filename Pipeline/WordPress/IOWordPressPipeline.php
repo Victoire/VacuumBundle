@@ -12,6 +12,8 @@ use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\BlogDataExtrac
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\VicBlogGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\CategoryDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\VicCategoryGeneratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\FinalStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Locale\LocaleStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Pages\VicArticlesBusinessPagesStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\VicTagGeneratorStages;
@@ -62,6 +64,7 @@ class IOWordPressPipeline
         $vicArchitecturePipeline =  new WordPressPipeline([], new WordPressProcessor());
 
         $exctractionPipeline
+            ->pipe(new LocaleStages())
             ->pipe(new BlogDataExtractorStages())
             ->pipe(new AuthorDataExtractorStages())
             ->pipe(new TermDataExtractorStages())
@@ -76,6 +79,7 @@ class IOWordPressPipeline
                     ->pipe($vicArchitecturePipeline
                         ->pipe(new VicArticleTemplateBuilder())
                         ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))
+                        ->pipe(new FinalStages($this->entityManager))
                 )
             )
         ->process($playload);

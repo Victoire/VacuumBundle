@@ -37,7 +37,7 @@ class VicArticlesBusinessPagesStages implements PersisterStagesInterface
      */
     public function __invoke($playload)
     {
-        foreach ($playload->getNewBlog()->getArticles() as $key => $article) {
+        foreach ($playload->getNewBlog()->getArticles() as  $article) {
 
             $overWriteWidgetMaps = $article->getTemplate()->getWidgetMaps();
             foreach ($overWriteWidgetMaps as $widgetMap) {
