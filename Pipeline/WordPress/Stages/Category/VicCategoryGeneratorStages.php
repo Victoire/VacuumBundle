@@ -4,13 +4,13 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Category;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStagesInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
 /**
  * Class VicCategoryGeneratorStages
  * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category
  */
-class VicCategoryGeneratorStages implements PersisterStagesInterface
+class VicCategoryGeneratorStages implements PersisterStageInterface
 {
     /**
      * @var EntityManager

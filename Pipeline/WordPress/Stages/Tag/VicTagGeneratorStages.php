@@ -4,13 +4,13 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Tag;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStagesInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
 /**
  * Class VicTagGeneratorStages
  * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag
  */
-class VicTagGeneratorStages implements PersisterStagesInterface
+class VicTagGeneratorStages implements PersisterStageInterface
 {
     /**
      * @var EntityManager

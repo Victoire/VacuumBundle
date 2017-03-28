@@ -5,7 +5,7 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Pages;
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BusinessPageBundle\Entity\BusinessPage;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStagesInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\Widget\CKEditorBundle\Entity\WidgetCKEditor;
 use Victoire\Bundle\CoreBundle\Entity\EntityProxy;
 
@@ -13,7 +13,7 @@ use Victoire\Bundle\CoreBundle\Entity\EntityProxy;
  * Class VicArticlesBusinessPagesStages
  * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Pages
  */
-class VicArticlesBusinessPagesStages implements PersisterStagesInterface
+class VicArticlesBusinessPagesStages implements PersisterStageInterface
 {
     /**
      * @var EntityManager
@@ -56,6 +56,11 @@ class VicArticlesBusinessPagesStages implements PersisterStagesInterface
 
             $widgetCKEditor = new WidgetCKEditor();
             $widgetCKEditor->setWidgetMap($widgetMapCKEditor);
+            foreach ($playload->getItems() as $wpArticle) {
+                if ($wpArticle->getTitle() == $article->getName()) {
+                    $widgetCKEditor->setContent($wpArticle->getContent());
+                }
+            }
 
             $businessPage = new BusinessPage();
             $businessPage->setTemplate($article->getTemplate());

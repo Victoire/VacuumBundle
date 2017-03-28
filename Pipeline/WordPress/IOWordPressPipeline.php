@@ -6,7 +6,10 @@ use Doctrine\ORM\EntityManager;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Pipeline\WordPressPipeline;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Processor\WordPressProcessor;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\ArticleDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\VicArticleAttachmentStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\VicArticleContentStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\VicArticleGeneratorStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\VicArticleMediaBuilderStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author\AuthorDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\BlogDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\VicBlogGeneratorStages;
@@ -37,14 +40,21 @@ class IOWordPressPipeline
     private $entityManager;
 
     /**
+     * @var string
+     */
+    private $kernelRootDir;
+
+    /**
      * IOWordPressPipeline constructor.
      * @param $data
      */
     public function __construct(
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        $kernelRootDir
     )
     {
         $this->entityManager = $entityManager;
+        $this->kernelRootDir = $kernelRootDir;
     }
 
     /**
@@ -61,6 +71,7 @@ class IOWordPressPipeline
 
         $exctractionPipeline = new WordPressPipeline([], new WordPressProcessor());
         $generatorPipeline =  new WordPressPipeline([], new WordPressProcessor());
+        $vicArticleContentPipeline = new WordPressPipeline([], new WordPressProcessor());
         $vicArchitecturePipeline =  new WordPressPipeline([], new WordPressProcessor());
 
         $exctractionPipeline
@@ -75,11 +86,15 @@ class IOWordPressPipeline
                 ->pipe(new VicBlogGeneratorStages($this->entityManager))
                 ->pipe(new VicCategoryGeneratorStages($this->entityManager))
                 ->pipe(new VicTagGeneratorStages($this->entityManager))
-                ->pipe(new VicArticleGeneratorStages($this->entityManager))
-                    ->pipe($vicArchitecturePipeline
-                        ->pipe(new VicArticleTemplateBuilder())
-                        ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))
-                        ->pipe(new FinalStages($this->entityManager))
+                ->pipe($vicArticleContentPipeline
+//                    ->pipe(new VicArticleAttachmentStages($this->kernelRootDir))
+                    ->pipe(new VicArticleContentStages($this->kernelRootDir))
+                    ->pipe(new VicArticleGeneratorStages($this->entityManager))
+                )
+                ->pipe($vicArchitecturePipeline
+                    ->pipe(new VicArticleTemplateBuilder())
+                    ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))
+                    ->pipe(new FinalStages($this->entityManager))
                 )
             )
         ->process($playload);

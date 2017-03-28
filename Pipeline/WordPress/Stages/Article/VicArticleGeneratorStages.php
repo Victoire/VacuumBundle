@@ -4,13 +4,14 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Article;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStagesInterface;
+use Victoire\Bundle\PageBundle\Entity\PageStatus;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
 /**
  * Class VicArticleGeneratorStages
  * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article
  */
-class VicArticleGeneratorStages implements PersisterStagesInterface
+class VicArticleGeneratorStages implements PersisterStageInterface
 {
     /**
      * @var EntityManager
@@ -35,21 +36,25 @@ class VicArticleGeneratorStages implements PersisterStagesInterface
         $locale = $playload->getLocale();
 
         foreach ($playload->getItems() as $plArticle) {
+
             if (null != $plArticle->getTitle()) {
                 $article = new Article();
                 $article->setName($plArticle->getTitle(), $locale);
-                $article->setDescription($plArticle->getDescription());
+                $article->setSlug($plArticle->getSlug(), $locale);
+                $article->setDescription($plArticle->getDescription(), $locale);
                 $article->setPublishedAt($plArticle->getPubDate());
+                if ($plArticle->getStatus() == "publish") {
+                    $article->setStatus(PageStatus::PUBLISHED);
+                }
                 $article->setLocale($locale);
                 $playload->getNewBlog()->addArticle($article);
 
+                // remove default "en" ArticleTranslation to avoid error when flushing
                 foreach ($article->getTranslations() as $key => $translation) {
                     if ($key != $locale) {
                         $article->removeTranslation($translation);
                     }
                 }
-
-                $this->entityManager->persist($article);
             }
         }
 

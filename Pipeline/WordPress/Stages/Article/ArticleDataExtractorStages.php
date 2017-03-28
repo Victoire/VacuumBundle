@@ -21,23 +21,38 @@ class ArticleDataExtractorStages implements StageInterface
         $xmlDataFormater = new XmlDataFormater();
 
         foreach ($playload->getRawData()->channel as $blog) {
+
+            $typePost = [];
+            $typeAttachement = [];
+
             foreach ($blog->item as $wpArticle) {
                 $postType = $xmlDataFormater->formatString('post_type', $wpArticle);
                 if ($postType == "post") {
-                    $article = new Article();
-                    $article->setTitle($xmlDataFormater->formatString('title', $wpArticle));
-                    $article->setLink($xmlDataFormater->formatString('link', $wpArticle));
-                    $article->setPubDate($xmlDataFormater->formatDate('pubDate', $wpArticle));
-                    $article->setCreator($playload->getAuthor($xmlDataFormater->formatString('creator', $wpArticle)));
-                    $article->setDescription($xmlDataFormater->formatString('description', $wpArticle));
-                    $article->setContent($xmlDataFormater->formatString('content', $wpArticle));
-                    $article->setPostId($xmlDataFormater->formatInteger('post_id', $wpArticle));
-                    $article->setPostDate($xmlDataFormater->formatDate('post_date', $wpArticle));
-                    $article->setPostDateGmt($xmlDataFormater->formatDate('post_date_gmt', $wpArticle));
-                    $article->setStatus($xmlDataFormater->formatString('status', $wpArticle));
-                    $article->setAttachmentUrl($xmlDataFormater->formatString('attachment_url', $wpArticle));
-                    $playload->addItem($article);
+                    array_push($typePost, $wpArticle);
+                } elseif ($postType == "attachment") {
+                    array_push($typeAttachement, $wpArticle);
                 }
+            }
+
+            foreach ($typePost as $wpArticle) {
+                $article = new Article();
+                $article->setTitle($xmlDataFormater->formatString('title', $wpArticle));
+                $article->setSlug($xmlDataFormater->formatString('post_name', $wpArticle));
+                $article->setLink($xmlDataFormater->formatString('link', $wpArticle));
+                $article->setPubDate($xmlDataFormater->formatDate('pubDate', $wpArticle));
+                $article->setCreator($playload->getAuthor($xmlDataFormater->formatString('creator', $wpArticle)));
+                $article->setDescription($xmlDataFormater->formatString('description', $wpArticle));
+                $article->setContent($xmlDataFormater->formatString('content', $wpArticle));
+                $article->setPostId($xmlDataFormater->formatInteger('post_id', $wpArticle));
+                $article->setPostDate($xmlDataFormater->formatDate('post_date', $wpArticle));
+                $article->setPostDateGmt($xmlDataFormater->formatDate('post_date_gmt', $wpArticle));
+                $article->setStatus($xmlDataFormater->formatString('status', $wpArticle));
+                foreach ($typeAttachement as $attachment) {
+                    if ($article->getPostId() == $xmlDataFormater->formatInteger('post_parent', $attachment)) {
+                        $article->setAttachmentUrl($xmlDataFormater->formatString('attachment_url', $attachment));
+                    }
+                }
+                $playload->addItem($article);
             }
         }
 

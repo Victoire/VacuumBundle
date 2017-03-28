@@ -3,13 +3,13 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages;
 
 use Doctrine\ORM\EntityManager;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStagesInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
 /**
  * Class FinalStages
  * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages
  */
-class FinalStages implements PersisterStagesInterface
+class FinalStages implements PersisterStageInterface
 {
     /**
      * @var EntityManager
@@ -32,6 +32,7 @@ class FinalStages implements PersisterStagesInterface
      */
     public function __invoke($playload)
     {
+        $this->entityManager->persist($playload->getNewBlog());
         $this->entityManager->flush();
         return $playload;
     }

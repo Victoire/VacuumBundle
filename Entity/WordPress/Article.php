@@ -7,6 +7,8 @@ class Article
 {
     private $title;
 
+    private $slug;
+
     private $link;
 
     private $pubDate;
@@ -50,6 +52,24 @@ class Article
     public function setTitle($title)
     {
         $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     * @return Article
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
         return $this;
     }
 
