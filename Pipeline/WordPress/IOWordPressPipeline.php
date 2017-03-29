@@ -92,7 +92,7 @@ class IOWordPressPipeline
                     ->pipe(new VicArticleGeneratorStages($this->entityManager))
                 )
                 ->pipe($vicArchitecturePipeline
-                    ->pipe(new VicArticleTemplateBuilder())
+                    ->pipe(new VicArticleTemplateBuilder($this->entityManager))
                     ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))
                     ->pipe(new FinalStages($this->entityManager))
                 )

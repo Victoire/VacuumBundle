@@ -30,16 +30,47 @@ class VicBlogGeneratorStages implements PersisterStageInterface
     }
 
     /**
+     * @param $id
+     * @return null|object|\Victoire\Bundle\TemplateBundle\Entity\Template
+     */
+    private function getBaseTemplate($id)
+    {
+        $template = $this->entityManager->getRepository('VictoireTemplateBundle:Template')->find($id);
+        return $template;
+    }
+
+    /**
+     * @param $id
+     * @return null|object|\Victoire\Bundle\PageBundle\Entity\Page
+     */
+    private function getParentPage($id)
+    {
+        $page = $this->entityManager->getRepository('VictoirePageBundle:Page')->find($id);
+        return $page;
+    }
+
+    /**
      * @param $playload
      * @return mixed
      */
     public function __invoke($playload)
     {
         $blog = new Blog();
-        $blog->setName($playload->getTitle());
+        $blog->setName($playload->getTitle(), $playload->getLocale());
+        $blog->setCurrentLocale($playload->getLocale());
+        $blog->setDefaultLocale($playload->getLocale());
+        $blog->setTemplate(self::getBaseTemplate(1));
+        $blog->setParent(self::getParentPage(8));
         $blog->setPublishedAt($playload->getPublicationDate());
         $blog->setCreatedAt($playload->getPublicationDate());
         $playload->setNewBlog($blog);
+
+        foreach ($blog->getTranslations() as $key => $translation) {
+            if ($key != $playload->getLocale()) {
+                $blog->removeTranslation($translation);
+            }
+        }
+
         $this->entityManager->persist($blog);
         return $playload;
     }

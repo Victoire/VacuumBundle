@@ -40,6 +40,7 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
         foreach ($playload->getNewBlog()->getArticles() as  $article) {
 
             $overWriteWidgetMaps = $article->getTemplate()->getWidgetMaps();
+
             foreach ($overWriteWidgetMaps as $widgetMap) {
                 if ($widgetMap->getSlot() == "static_ckeditor") {
                     $overWriteWidgetMap = $widgetMap;
@@ -56,6 +57,7 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
 
             $widgetCKEditor = new WidgetCKEditor();
             $widgetCKEditor->setWidgetMap($widgetMapCKEditor);
+
             foreach ($playload->getItems() as $wpArticle) {
                 if ($wpArticle->getTitle() == $article->getName()) {
                     $widgetCKEditor->setContent($wpArticle->getContent());
@@ -64,6 +66,15 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
 
             $businessPage = new BusinessPage();
             $businessPage->setTemplate($article->getTemplate());
+            $businessPage->setName($article->getName(), $playload->getLocale());
+            $businessPage->setslug($article->getslug(), $playload->getLocale());
+
+            foreach ($businessPage->getTranslations() as $key => $translation) {
+                if ($key != $playload->getLocale()) {
+                    $businessPage->removeTranslation($translation);
+                }
+            }
+
             $businessPage->setParent($playload->getNewBlog());
             $businessPage->addWidgetMap($widgetMapCKEditor);
             $businessPage->setEntityProxy($entityProxy);
