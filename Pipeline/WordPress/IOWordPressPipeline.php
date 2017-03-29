@@ -87,7 +87,7 @@ class IOWordPressPipeline
                 ->pipe(new VicCategoryGeneratorStages($this->entityManager))
                 ->pipe(new VicTagGeneratorStages($this->entityManager))
                 ->pipe($vicArticleContentPipeline
-//                    ->pipe(new VicArticleAttachmentStages($this->kernelRootDir))
+                    ->pipe(new VicArticleAttachmentStages($this->kernelRootDir))
                     ->pipe(new VicArticleContentStages($this->kernelRootDir))
                     ->pipe(new VicArticleGeneratorStages($this->entityManager))
                 )

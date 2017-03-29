@@ -30,7 +30,7 @@ class VicArticleContentStages implements FileStageInterface
                 $document = self::generateDOMDocument($content);
 
                 if ($document) {
-                    self::handleImg($document);
+                    $document = self::handleImg($document);
                 }
 
                 if ($document) {
@@ -77,21 +77,47 @@ class VicArticleContentStages implements FileStageInterface
                 $fileName = explode("/", $distantPath);
                 $fileName = end($fileName);
                 try {
-                    $filePath = sprintf("%s/../web/uploads/blog/%s", $this->kernelRootDir, $fileName);
-                    copy($distantPath, $filePath);
+                    if (!file_exists($this->kernelRootDir."/../web/uploads/blog/article_content")) {
+                        mkdir($this->kernelRootDir."/../web/uploads/blog/article_content", 0777, true);
+                    }
+                    $filePath = sprintf("%s/../web/uploads/blog/article_content/%s", $this->kernelRootDir, $fileName);
+                    if (!file_exists($filePath)) {
+                        $lfile = fopen($filePath, "w");
+
+                        $ch = curl_init();
+                        curl_setopt($ch, CURLOPT_URL, $distantPath);
+                        curl_setopt($ch, CURLOPT_HEADER, 0);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)');
+                        curl_setopt($ch, CURLOPT_FILE, $lfile);
+
+                        fclose($lfile);
+                        curl_close($ch);
+                    }
                 } catch (\Exception $e) {
                     return false;
                 } catch (\Throwable $e) {
                     return false;
                 }
+
                 $a = $xpath->query("//a//img/preceding::a[1]");
                 foreach ($a as $link) {
-                    if ($link->getAttribute('href') == $distantPath) {
-                        $link->setAttribute('href', $filePath);
+
+                    $linkFileName = $link->getAttribute('href');
+                    $linkFileName = explode("/", $linkFileName);
+                    $linkFileName = end($linkFileName);
+                    $linkFileName = str_replace(['.jpg','.png','.gif'],"", $linkFileName);
+
+                    if (null != $linkFileName) {
+                        if (strpos($distantPath, $linkFileName)) {
+                            $link->setAttribute('href', 'uploads/blog/article_content/'.$fileName);
+                        }
                     }
                 }
-                $node->setAttribute('src', $filePath);
+                $node->setAttribute('src', 'uploads/blog/article_content/'.$fileName);
             }
         }
+
+        return $document;
     }
 }
