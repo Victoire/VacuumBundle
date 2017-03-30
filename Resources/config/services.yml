@@ -16,3 +16,14 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "%kernel.root_dir%"
+            - "@victoire.vacuum_bundle.media_formater.utils"
+
+    ############################
+    #### UTILS
+    ############################
+
+    victoire.vacuum_bundle.media_formater.utils:
+        class: Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "%kernel.root_dir%"

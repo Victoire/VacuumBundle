@@ -4,6 +4,7 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Article;
+use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\Bundle\PageBundle\Entity\PageStatus;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
@@ -46,7 +47,11 @@ class VicArticleGeneratorStages implements PersisterStageInterface
                 if ($plArticle->getStatus() == "publish") {
                     $article->setStatus(PageStatus::PUBLISHED);
                 }
+                if (null != $plArticle->getAttachment()) {
+                    $article->setImage($plArticle->getAttachment(), $locale);
+                }
                 $article->setLocale($locale);
+
                 $playload->getNewBlog()->addArticle($article);
 
                 // remove default "en" ArticleTranslation to avoid error when flushing

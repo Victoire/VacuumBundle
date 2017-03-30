@@ -37,6 +37,8 @@ class Article
 
     private $attachmentUrl;
 
+    private $attachment;
+
     /**
      * @return mixed
      */
@@ -322,6 +324,24 @@ class Article
     public function setAttachmentUrl($attachmentUrl)
     {
         $this->attachmentUrl = $attachmentUrl;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttachment()
+    {
+        return $this->attachment;
+    }
+
+    /**
+     * @param mixed $attachment
+     * @return Article
+     */
+    public function setAttachment($attachment)
+    {
+        $this->attachment = $attachment;
         return $this;
     }
 }
