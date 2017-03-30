@@ -64,7 +64,7 @@ class VicArticleTemplateBuilder implements PersisterStageInterface
 
         $widgetMapLayout = new WidgetMap();
         $widgetMapLayout->setAction(WidgetMap::ACTION_CREATE);
-        $widgetMapLayout->setSlot("main_content");
+        $widgetMapLayout->setSlot("oneCol_content");
 
         $widgetLayout = new WidgetLayout();
         $widgetLayout->setWidgetMap($widgetMapLayout);
@@ -73,7 +73,7 @@ class VicArticleTemplateBuilder implements PersisterStageInterface
 
         $widgetMapCKEditor = new WidgetMap();
         $widgetMapCKEditor->setAction(WidgetMap::ACTION_CREATE);
-        $widgetMapCKEditor->setSlot("static_ckeditor");
+        $widgetMapCKEditor->setSlot($widgetLayout->getChildrenSlot()."_1");
 
         $widgetCKEditor = new WidgetCKEditor();
         $widgetCKEditor->setWidgetMap($widgetMapCKEditor);
@@ -84,6 +84,8 @@ class VicArticleTemplateBuilder implements PersisterStageInterface
         foreach ($playload->getNewBlog()->getArticles() as $article) {
             $article->setTemplate($template);
         }
+
+        $playload->setContentWidgetMap($widgetMapCKEditor);
 
         return $playload;
     }

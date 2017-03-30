@@ -3,6 +3,7 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 
 use Victoire\Bundle\BlogBundle\Entity\Blog;
+use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 
 /**
  * Class WordPressPlayload
@@ -19,6 +20,11 @@ class WordPressPlayload
      * @var Blog
      */
     private $newBlog;
+
+    /**
+     * @var WidgetMap
+     */
+    private $contentWidgetMap;
 
     /**
      * @var string
@@ -428,6 +434,24 @@ class WordPressPlayload
     public function setLocale($locale)
     {
         $this->locale = $locale;
+        return $this;
+    }
+
+    /**
+     * @return WidgetMap
+     */
+    public function getContentWidgetMap()
+    {
+        return $this->contentWidgetMap;
+    }
+
+    /**
+     * @param WidgetMap $contentWidgetMap
+     * @return WordPressPlayload
+     */
+    public function setContentWidgetMap(WidgetMap $contentWidgetMap)
+    {
+        $this->contentWidgetMap = $contentWidgetMap;
         return $this;
     }
 }

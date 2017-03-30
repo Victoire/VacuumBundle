@@ -110,11 +110,11 @@ class VicArticleContentStages implements FileStageInterface
 
                     if (null != $linkFileName) {
                         if (strpos($distantPath, $linkFileName)) {
-                            $link->setAttribute('href', 'uploads/blog/article_content/'.$fileName);
+                            $link->setAttribute('href', '/uploads/blog/article_content/'.$fileName);
                         }
                     }
                 }
-                $node->setAttribute('src', 'uploads/blog/article_content/'.$fileName);
+                $node->setAttribute('src', '/uploads/blog/article_content/'.$fileName);
             }
         }
 

@@ -39,13 +39,7 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
     {
         foreach ($playload->getNewBlog()->getArticles() as  $article) {
 
-            $overWriteWidgetMaps = $article->getTemplate()->getWidgetMaps();
-
-            foreach ($overWriteWidgetMaps as $widgetMap) {
-                if ($widgetMap->getSlot() == "static_ckeditor") {
-                    $overWriteWidgetMap = $widgetMap;
-                }
-            }
+            $overWriteWidgetMap = $playload->getContentWidgetMap();
 
             $entityProxy = new EntityProxy();
             $entityProxy->setEntity($article, "article");
@@ -54,6 +48,7 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
             $widgetMapCKEditor = new WidgetMap();
             $widgetMapCKEditor->setAction(WidgetMap::ACTION_OVERWRITE);
             $widgetMapCKEditor->setReplaced($overWriteWidgetMap);
+            $widgetMapCKEditor->setSlot($overWriteWidgetMap->getSlot());
 
             $widgetCKEditor = new WidgetCKEditor();
             $widgetCKEditor->setWidgetMap($widgetMapCKEditor);
