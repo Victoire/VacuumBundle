@@ -104,7 +104,7 @@ class IOWordPressPipeline
             ->pipe(new ArticleDataExtractorStages())
                 ->pipe($vicArticleContentPipeline
                     ->pipe(new VicArticleAttachmentStages($this->mediaFormater))
-                    ->pipe(new VicArticleContentStages($this->curlsTools))
+                    ->pipe(new VicArticleContentStages($this->mediaFormater))
                     ->pipe(new VicArticleGeneratorStages($this->entityManager))
                 )
                 ->pipe($vicArchitecturePipeline

@@ -3,26 +3,28 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
 use Behat\Mink\Exception\Exception;
+use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
 use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
+use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
 class VicArticleContentStages implements StageInterface
 {
     /**
-     * @var string
+     * @var MediaFormater
      */
-    private $curlsTools;
+    private $mediaFormater;
 
     /**
      * VicArticleContentStages constructor.
      * @param CurlsTools $curlsTools
      */
     public function __construct(
-        CurlsTools $curlsTools
+        MediaFormater $mediaFormater
     )
     {
-        $this->curlsTools = $curlsTools;
+        $this->mediaFormater = $mediaFormater;
     }
 
     /**
@@ -38,7 +40,7 @@ class VicArticleContentStages implements StageInterface
                 $document = self::generateDOMDocument($content);
 
                 if ($document) {
-                    $document = self::handleImg($document);
+                    $document = self::handleImg($document, $plArticle, $playload);
                 }
 
                 if ($document) {
@@ -75,33 +77,24 @@ class VicArticleContentStages implements StageInterface
      * @param \DOMDocument $document
      * @return bool
      */
-    private function handleImg(\DOMDocument $document) {
+    private function handleImg(\DOMDocument $document, Article $article, $playload) {
 
         if (null != $document->getElementsByTagName("img")) {
             $xpath = new \DOMXPath($document);
             $nodes = $xpath->query("//a//img");
             foreach ($nodes as $node) {
-                $distantPath = $node->getAttribute('src');
-                $fileName = explode("/", $distantPath);
-                $fileName = end($fileName);
 
-                $this->curlsTools->getDistantPicture($fileName, $distantPath);
+                $distantPath = $this->mediaFormater->cleanUrl($node->getAttribute('src'));
 
-                $a = $xpath->query("//a//img/preceding::a[1]");
-                foreach ($a as $link) {
-
-                    $linkFileName = $link->getAttribute('href');
-                    $linkFileName = explode("/", $linkFileName);
-                    $linkFileName = end($linkFileName);
-                    $linkFileName = str_replace(['.jpg','.png','.gif'],"", $linkFileName);
-
-                    if (null != $linkFileName) {
-                        if (strpos($distantPath, $linkFileName)) {
-                            $link->setAttribute('href', '/uploads/media/blog/'.$fileName);
-                        }
-                    }
+                if (null != $article->getAttachment()) {
+                    $folder = $article->getAttachment()->getFolder();
+                } else {
+                    $blogFolder = $this->mediaFormater->generateBlogFolder($playload);
+                    $folder = $this->mediaFormater->generateFoler($article->getTitle(), $blogFolder);
                 }
-                $node->setAttribute('src', '/uploads/media/blog/'.$fileName);
+                $image = $this->mediaFormater->generateImageMedia($distantPath, $folder);
+
+                $node->setAttribute('src', $image->getUrl());
             }
         }
 

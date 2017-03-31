@@ -41,7 +41,7 @@ class ArticleDataExtractorStages implements StageInterface
                 $article->setLink($xmlDataFormater->formatString('link', $wpArticle));
                 $article->setPubDate($xmlDataFormater->formatDate('pubDate', $wpArticle));
                 $article->setCreator($playload->getAuthor($xmlDataFormater->formatString('creator', $wpArticle)));
-                $article->setDescription($xmlDataFormater->formatString('description', $wpArticle));
+                $article->setDescription($xmlDataFormater->formatString('excerpt', $wpArticle));
                 $article->setContent($xmlDataFormater->formatString('content', $wpArticle));
                 $article->setPostId($xmlDataFormater->formatInteger('post_id', $wpArticle));
                 $article->setPostDate($xmlDataFormater->formatDate('post_date', $wpArticle));

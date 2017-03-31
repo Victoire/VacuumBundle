@@ -40,6 +40,40 @@ class MediaFormater
     }
 
     /**
+     * @param $playload
+     * @return mixed
+     */
+    public function generateBlogFolder($playload)
+    {
+        if (null == $playload->getBlogFolder()) {
+            $blogFolder = $this->generateFoler("blog");
+            $playload->setBlogFolder($blogFolder);
+        } else {
+            $blogFolder = $playload->getBlogFolder();
+        }
+
+        return $blogFolder;
+    }
+
+    /**
+     * @param $distantPath
+     * @return mixed|string
+     */
+    public function cleanUrl($distantPath)
+    {
+        $distantPath = trim($distantPath);
+        $url = parse_url($distantPath);
+        $distantPath = sprintf("%s://%s%s",
+            $url['scheme'],
+            $url['host'],
+            urlencode($url['path'])
+        );
+        $distantPath = str_replace("%2F","/", $distantPath);
+
+        return $distantPath;
+    }
+
+    /**
      * @param $newFolderName
      * @param $parentFolderName
      * @return mixed

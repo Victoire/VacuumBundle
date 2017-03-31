@@ -3,6 +3,7 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 
 use Victoire\Bundle\BlogBundle\Entity\Blog;
+use Victoire\Bundle\MediaBundle\Entity\Folder;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 
 /**
@@ -20,6 +21,11 @@ class WordPressPlayload
      * @var Blog
      */
     private $newBlog;
+
+    /**
+     * @var Folder
+     */
+    private $blogFolder;
 
     /**
      * @var WidgetMap
@@ -452,6 +458,24 @@ class WordPressPlayload
     public function setContentWidgetMap(WidgetMap $contentWidgetMap)
     {
         $this->contentWidgetMap = $contentWidgetMap;
+        return $this;
+    }
+
+    /**
+     * @return Folder
+     */
+    public function getBlogFolder()
+    {
+        return $this->blogFolder;
+    }
+
+    /**
+     * @param Folder $blogFolder
+     * @return WordPressPlayload
+     */
+    public function setBlogFolder(Folder $blogFolder)
+    {
+        $this->blogFolder = $blogFolder;
         return $this;
     }
 }
