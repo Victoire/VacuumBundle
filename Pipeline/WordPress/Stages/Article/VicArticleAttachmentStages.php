@@ -39,7 +39,7 @@ class VicArticleAttachmentStages implements StageInterface
         foreach ($playload->getItems() as $plArticle) {
             if (null != $plArticle->getAttachmentUrl()) {
                 $articleFolder = $this->mediaFormater->generateFoler($plArticle->getTitle(), $blogFolder);
-                $distantPath = $this->mediaFormater->cleanUrl($plArticle);
+                $distantPath = $this->mediaFormater->cleanUrl($plArticle->getAttachmentUrl());
                 $plArticle->setAttachment($this->mediaFormater->generateImageMedia($distantPath, $articleFolder));
             }
         }
