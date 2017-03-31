@@ -22,6 +22,7 @@ use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtracto
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\VicTagGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Template\VicArticleTemplateBuilder;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Term\TermDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
 /**
@@ -51,18 +52,25 @@ class IOWordPressPipeline
     private  $mediaFormater;
 
     /**
+     * @var CurlsTools
+     */
+    private $curlsTools;
+
+    /**
      * IOWordPressPipeline constructor.
      * @param $data
      */
     public function __construct(
         EntityManager $entityManager,
         $kernelRootDir,
-        MediaFormater $mediaFormater
+        MediaFormater $mediaFormater,
+        CurlsTools $curlsTools
     )
     {
         $this->entityManager = $entityManager;
         $this->kernelRootDir = $kernelRootDir;
         $this->mediaFormater = $mediaFormater;
+        $this->curlsTools = $curlsTools;
     }
 
     /**
@@ -96,7 +104,7 @@ class IOWordPressPipeline
                 ->pipe(new VicTagGeneratorStages($this->entityManager))
                 ->pipe($vicArticleContentPipeline
                     ->pipe(new VicArticleAttachmentStages($this->mediaFormater))
-                    ->pipe(new VicArticleContentStages($this->kernelRootDir))
+                    ->pipe(new VicArticleContentStages($this->curlsTools))
                     ->pipe(new VicArticleGeneratorStages($this->entityManager))
                 )
                 ->pipe($vicArchitecturePipeline

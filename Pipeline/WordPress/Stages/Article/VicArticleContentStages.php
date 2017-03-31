@@ -4,23 +4,31 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
 use Behat\Mink\Exception\Exception;
 use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
+use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 
-class VicArticleContentStages implements FileStageInterface
+class VicArticleContentStages implements StageInterface
 {
     /**
      * @var string
      */
-    private $kernelRootDir;
+    private $curlsTools;
 
     /**
      * VicArticleContentStages constructor.
-     * @param $kernerRootDir
+     * @param CurlsTools $curlsTools
      */
-    public function __construct($kernerRootDir)
+    public function __construct(
+        CurlsTools $curlsTools
+    )
     {
-        $this->kernelRootDir = $kernerRootDir;
+        $this->curlsTools = $curlsTools;
     }
 
+    /**
+     * @param $playload
+     * @return mixed
+     */
     public function __invoke($playload)
     {
         foreach ($playload->getItems() as $plArticle) {
@@ -76,29 +84,8 @@ class VicArticleContentStages implements FileStageInterface
                 $distantPath = $node->getAttribute('src');
                 $fileName = explode("/", $distantPath);
                 $fileName = end($fileName);
-                try {
-                    if (!file_exists($this->kernelRootDir."/../web/uploads/blog/article_content")) {
-                        mkdir($this->kernelRootDir."/../web/uploads/blog/article_content", 0777, true);
-                    }
-                    $filePath = sprintf("%s/../web/uploads/blog/article_content/%s", $this->kernelRootDir, $fileName);
-                    if (!file_exists($filePath)) {
-                        $lfile = fopen($filePath, "w");
 
-                        $ch = curl_init();
-                        curl_setopt($ch, CURLOPT_URL, $distantPath);
-                        curl_setopt($ch, CURLOPT_HEADER, 0);
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)');
-                        curl_setopt($ch, CURLOPT_FILE, $lfile);
-
-                        fclose($lfile);
-                        curl_close($ch);
-                    }
-                } catch (\Exception $e) {
-                    return false;
-                } catch (\Throwable $e) {
-                    return false;
-                }
+                $this->curlsTools->getDistantPicture($fileName, $distantPath);
 
                 $a = $xpath->query("//a//img/preceding::a[1]");
                 foreach ($a as $link) {

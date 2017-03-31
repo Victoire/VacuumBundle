@@ -20,7 +20,7 @@ class BlogDataExtractorStages implements StageInterface
         $xmlDataFormater = new XmlDataFormater();
 
         foreach ($playload->getRawData()->channel as $blog) {
-            $playload->setTitle($xmlDataFormater->formatString('title', $blog));
+            $playload->setTitle('j\'ai rendez vous avec ma vie');
             $playload->setLink($xmlDataFormater->formatString('link', $blog));
             $playload->setPublicationDate($xmlDataFormater->formatDate('pubDate', $blog));
             $playload->setDescription($xmlDataFormater->formatString('description', $blog));

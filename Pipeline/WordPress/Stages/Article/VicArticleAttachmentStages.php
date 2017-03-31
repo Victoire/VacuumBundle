@@ -34,8 +34,12 @@ class VicArticleAttachmentStages implements StageInterface
      */
     public function __invoke($playload)
     {
+        $blogFolder = $this->mediaFormater->generateFoler("blog");
         foreach ($playload->getItems() as $plArticle) {
-            $plArticle->setAttachment($this->mediaFormater->generateImageMedia($plArticle->getAttachmentUrl()));
+            if (null != $plArticle->getAttachmentUrl()) {
+                $articleFolder = $this->mediaFormater->generateFoler($plArticle->getTitle(), $blogFolder);
+                $plArticle->setAttachment($this->mediaFormater->generateImageMedia($plArticle->getAttachmentUrl(), $articleFolder));
+            }
         }
         return $playload;
     }

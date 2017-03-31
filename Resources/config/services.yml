@@ -17,6 +17,7 @@ services:
             - "@doctrine.orm.entity_manager"
             - "%kernel.root_dir%"
             - "@victoire.vacuum_bundle.media_formater.utils"
+            - "@victoire.vacuum_bundle.curl_tools.utils"
 
     ############################
     #### UTILS
@@ -26,4 +27,10 @@ services:
         class: Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater
         arguments:
             - "@doctrine.orm.entity_manager"
+            - "%kernel.root_dir%"
+            - "@victoire.vacuum_bundle.curl_tools.utils"
+
+    victoire.vacuum_bundle.curl_tools.utils:
+        class: Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools
+        arguments:
             - "%kernel.root_dir%"
