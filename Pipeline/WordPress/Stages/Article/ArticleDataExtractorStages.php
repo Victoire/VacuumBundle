@@ -52,6 +52,30 @@ class ArticleDataExtractorStages implements StageInterface
                         $article->setAttachmentUrl($xmlDataFormater->formatString('attachment_url', $attachment));
                     }
                 }
+
+                foreach ($wpArticle->category as $cat) {
+                    foreach ($cat->attributes() as $key => $attribute) {
+                        if ($key == "domain") {
+                            $domain = $attribute;
+                        } elseif ($key == "nicename") {
+                            $nicename = $xmlDataFormater->formatString(0, $attribute);
+                        }
+                    }
+
+                    if ($domain == "post_tag") {
+                        foreach ($playload->getNewBlog()->getTags() as $tag) {
+                            if ($tag->getSlug() == $nicename) {
+                                $article->addTag($tag);
+                            }
+                        }
+                    } elseif ($domain == "category") {
+                        foreach ($playload->getNewBlog()->getCategories() as $category) {
+                            if ($category->getSlug() == $nicename) {
+                                $article->setCategory($category);
+                            }
+                        }
+                    }
+                }
                 $playload->addItem($article);
             }
         }

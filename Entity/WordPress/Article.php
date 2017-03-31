@@ -39,6 +39,10 @@ class Article
 
     private $attachment;
 
+    private $category;
+
+    private $tags = [];
+
     /**
      * @return mixed
      */
@@ -342,6 +346,52 @@ class Article
     public function setAttachment($attachment)
     {
         $this->attachment = $attachment;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     * @return Article
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param $tag
+     * @return $this
+     */
+    public function addTag($tag)
+    {
+        array_push($this->tags, $tag);
+        return $this;
+    }
+
+    /**
+     * @param mixed $tags
+     * @return Article
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
         return $this;
     }
 }

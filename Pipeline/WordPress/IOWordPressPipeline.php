@@ -97,11 +97,11 @@ class IOWordPressPipeline
             ->pipe(new TermDataExtractorStages())
             ->pipe(new CategoryDataExtractorStages())
             ->pipe(new TagDataExtractorStages())
-            ->pipe(new ArticleDataExtractorStages())
             ->pipe($generatorPipeline
                 ->pipe(new VicBlogGeneratorStages($this->entityManager))
                 ->pipe(new VicCategoryGeneratorStages($this->entityManager))
                 ->pipe(new VicTagGeneratorStages($this->entityManager))
+            ->pipe(new ArticleDataExtractorStages())
                 ->pipe($vicArticleContentPipeline
                     ->pipe(new VicArticleAttachmentStages($this->mediaFormater))
                     ->pipe(new VicArticleContentStages($this->curlsTools))
