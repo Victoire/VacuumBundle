@@ -47,9 +47,16 @@ class ArticleDataExtractorStages implements StageInterface
                 $article->setPostDate($xmlDataFormater->formatDate('post_date', $wpArticle));
                 $article->setPostDateGmt($xmlDataFormater->formatDate('post_date_gmt', $wpArticle));
                 $article->setStatus($xmlDataFormater->formatString('status', $wpArticle));
+
                 foreach ($typeAttachement as $attachment) {
-                    if ($article->getPostId() == $xmlDataFormater->formatInteger('post_parent', $attachment)) {
-                        $article->setAttachmentUrl($xmlDataFormater->formatString('attachment_url', $attachment));
+                    foreach ($attachment->postmeta as $postMeta) {
+                        $value = $postMeta->meta_value;
+                        // should be update for multiple word press widget
+                        if ($xmlDataFormater->formatString(0, $value) == "grande-image") {
+                            if ($article->getPostId() == $xmlDataFormater->formatInteger('post_parent', $attachment)) {
+                                $article->setAttachmentUrl($xmlDataFormater->formatString('attachment_url', $attachment));
+                            }
+                        }
                     }
                 }
 
