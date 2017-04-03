@@ -28,9 +28,8 @@ class BlogImportCommand extends ContainerAwareCommand
         $this
             ->setName('victoire:blog-import')
             ->setDefinition([
-                new InputOption('blog_name', '-b', InputOption::VALUE_OPTIONAL, 'The name of the blog to populate'),
-                new InputOption('dump', '-d', InputOption::VALUE_OPTIONAL, 'Path to the dump who should bee imported'),
-                new InputOption('new_article_template', '-nat', InputOption::VALUE_OPTIONAL, 'Define if you want to use an existing article template or create one'),
+                new InputOption('blog_name', '-b', InputOption::VALUE_REQUIRED, 'The name of the blog to populate'),
+                new InputOption('dump', '-d', InputOption::VALUE_REQUIRED, 'Path to the dump who should bee imported'),
                 new InputOption('article_template_name', '-atn', InputOption::VALUE_OPTIONAL, 'article template name'),
                 new InputOption('article_template_layout', '-atl', InputOption::VALUE_OPTIONAL, 'article template layout designation'),
                 new InputOption('article_template_parent_id', '-atpid', InputOption::VALUE_OPTIONAL, 'article template parent id'),
@@ -66,42 +65,70 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $questionHelper = $this->getQuestionHelper();
+        $commandParameters = [];
+
+        $requiredParameter = ["blog_name", "dump", "article_template_first_slot"];
+
+        foreach ($requiredParameter as $parameter) {
+            if (null == $input->getOption($parameter)) {
+                throw new \RuntimeException(sprintf('The "%s" parameter must be provided', $parameter));
+            }
+        }
+
+        // Xml dump path
+        $commandParameters['dump'] = $input->getOption('dump');
+
+        // Blog name
+        $commandParameters['blog_name'] = $input->getOption('blog_name');
+
+        // Article Template
+        if (null !== $input->getOption('article_template_id')) {
+            $commandParameters['new_article_template'] = false;
+            $commandParameters['article_template_id'] = $input->getOption('article_template_id');
+            $commandParameters['article_template_first_slot'] = $input->getOption('article_template_first_slot');
+        } else {
+            $commandParameters['new_article_template'] = true;
+            $commandParameters['article_template_name'] = $input->getOption('article_template_name');
+            $commandParameters['article_template_layout'] = $input->getOption('article_template_layout');
+            $commandParameters['article_template_parent_id'] = $input->getOption('article_template_parent_id');
+            $commandParameters['article_template_first_slot'] = $input->getOption('article_template_first_slot');
+        }
 
         if ($input->isInteractive()) {
-            $question = new ConfirmationQuestion($questionHelper->getQuestion('Do you confirm blog import', 'yes', '?'), true);
+            $message = "";
+            foreach ($commandParameters as $key => $parameter) {
+                $message .= $key.": ".$parameter."\n";
+            }
+
+            //summary
+            $output->writeln([
+                '',
+                $this->getHelper('formatter')->formatBlock('Summary before generation', 'bg=blue;fg=white', true),
+                '',
+                sprintf(
+                    "Do you confirm blog import with following parameters: \n %s",
+                    $message
+                ),
+                '',
+            ]);
+
+            $question = new ConfirmationQuestion(
+                $questionHelper->getQuestion(
+                    'do you wish to continue ?'
+                    , 'yes', '?'),
+                    true
+            );
+
             if (!$questionHelper->ask($input, $output, $question)) {
                 $output->writeln('<error>Command aborted</error>');
                 return 1;
             }
         }
 
-        $requiredParameter = ["blog_name", "dump", "new_article_template", "article_template_first_slot"];
-
-        foreach ($requiredParameter as $parameter) {
-            if (null === $input->getOption($parameter)) {
-                throw new \RuntimeException(sprintf('The "%s" parameter must be provided', $parameter));
-            }
-        }
-
-        $pathToDump = $input->getOption('dump');
-
-        if (!realpath($pathToDump)) {
-            throw new RuntimeException(sprintf('Wrong path the file "%s" can\'t be found', $pathToDump));
-        }
-
-        if (true == $input->getOption("new_article_template")) {
-
-            $requiredParameter = ["article_template_name", "article_template_layout", "article_template_parent_id"];
-
-            foreach ($requiredParameter as $parameter) {
-                if (null === $input->getOption($parameter)) {
-                    throw new \RuntimeException(sprintf('The "%s" parameter must be provided', $parameter));
-                }
-            }
-        }
+        $progress = $this->getHelper('progress');
 
         $ioWordPressPipeline = $this->getContainer()->get('victoire.vacuum_bundle.io_word_press.pipeline');
-        $ioWordPressPipeline->process($pathToDump);
+        $ioWordPressPipeline->process($commandParameters, $output, $questionHelper);
         $output = $ioWordPressPipeline->getOutput();
     }
 
@@ -126,7 +153,8 @@ EOT
            return self::validateBlogName($answer);
         });
 
-        $questionHelper->ask($input, $output, $question);
+        $blogName = (string) $questionHelper->ask($input, $output, $question);
+        $input->setOption('blog_name', $blogName);
 
         // path to dump
         $question = new Question($questionHelper->getQuestion('path to dump', $input->getOption('dump')));
@@ -134,23 +162,26 @@ EOT
            return self::validatePath($answer);
         });
 
-        $questionHelper->ask($input, $output, $question);
+        $pathToDump = (string) $questionHelper->ask($input, $output, $question);
+        $input->setOption('dump', $pathToDump);
 
         // Use existing ArticleTemplate
-        $question = new ConfirmationQuestion('Use Existing Article Template: ', false);
+        $question = new ConfirmationQuestion('Use Existing Article Template(yes/no): ', false);
 
         if (!$questionHelper->ask($input, $output, $question)) {
 
             // ArticleTemplate name
             $question = new Question($questionHelper->getQuestion('Article template name', $input->getOption('article_template_name')));
-            $questionHelper->ask($input, $output, $question);
+            $articleTemplateName = (string) $questionHelper->ask($input, $output, $question);
+            $input->setOption('article_template_name', $articleTemplateName);
 
             // ArticleTemplate layout
             $question = new Question($questionHelper->getQuestion('Article template layout', $input->getOption('article_template_layout')));
             $question->setValidator(function ($answer) {
                 return self::validateLayout($answer);
             });
-            $questionHelper->ask($input, $output, $question);
+            $articleTemplateLayout = (string) $questionHelper->ask($input, $output, $question);
+            $input->setOption('article_template_layout', $articleTemplateLayout);
 
             // ArticleTemplate parent_id
             $question = new Question($questionHelper->getQuestion('Article template parent id', $input->getOption('article_template_parent_id')));
@@ -158,11 +189,13 @@ EOT
                return self::validateTemplateId($answer);
             });
 
-            $questionHelper->ask($input, $output, $question);
+            $articleTemplateParentId = (int) $questionHelper->ask($input, $output, $question);
+            $input->setOption('article_template_parent_id', $articleTemplateParentId);
 
             // ArticleTemplate slot
             $question = new Question($questionHelper->getQuestion('Article Template first slot', $input->getOption('article_template_first_slot')));
-            $questionHelper->ask($input, $output, $question);
+            $articleTemplateFirstSlot = (string) $questionHelper->ask($input, $output, $question);
+            $input->setOption('article_template_first_slot', $articleTemplateFirstSlot);
 
         } else {
 
@@ -172,11 +205,13 @@ EOT
                 return self::validateArticleTemplateId($answer);
             });
 
-            $questionHelper->ask($input, $output, $question);
+            $articleTemplateId = (int) $questionHelper->ask($input, $output, $question);
+            $input->setOption('article_template_id', $articleTemplateId);
 
             // ArticleTemplate slot
             $question = new Question($questionHelper->getQuestion('Article Template first slot', $input->getOption('article_template_first_slot')));
-            $questionHelper->ask($input, $output, $question);
+            $articleTemplateFirstSlot = (string) $questionHelper->ask($input, $output, $question);
+            $input->setOption('article_template_first_slot', $articleTemplateFirstSlot);
         }
     }
 
@@ -192,6 +227,8 @@ EOT
                 throw new \RuntimeException(sprintf('Blog with name "%s" already exist', $name));
             }
         }
+
+        return $name;
     }
 
     /**
@@ -206,6 +243,8 @@ EOT
         if (mime_content_type($path) != "application/xml") {
             throw new RuntimeException('Wrong file format. Format accepted "xml"');
         }
+
+        return $path;
     }
 
     /**
@@ -254,6 +293,8 @@ EOT
                 $name
             ));
         }
+
+        return $name;
     }
 
     /**

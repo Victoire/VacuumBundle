@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\ArticleTemplate;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\Widget\CKEditorBundle\Entity\WidgetCKEditor;
 use Victoire\Widget\LayoutBundle\Entity\WidgetLayout;
@@ -36,7 +37,7 @@ class VicArticleTemplateBuilder implements PersisterStageInterface
      * @param $id
      * @return null|object|\Victoire\Bundle\TemplateBundle\Entity\Template
      */
-    private function getBaseTemplate($id)
+    private function getTemplate($id)
     {
         $template = $this->entityManager->getRepository('VictoireTemplateBundle:Template')->find($id);
         return $template;
@@ -45,26 +46,34 @@ class VicArticleTemplateBuilder implements PersisterStageInterface
     /**
      * @param $playload
      */
-    public function __invoke($playload)
+    public function __invoke(PlayloadInterface $playload)
     {
-        $template = new ArticleTemplate();
-        $template->setName("{{item.name}}", $playload->getLocale());
-        $template->setSlug("{{item.slug}}", $playload->getLocale());
-        $template->setBusinessEntityId("article");
-        $template->setBackendName("quovadis-article-template");
-        $template->setLayout("one_col");
-        $template->setParent($playload->getNewBlog());
-        $template->setTemplate(self::getBaseTemplate(1));
+        $playload->getOutput()->write('Victoire Article Template genration:');
 
-        foreach ($template->getTranslations() as $key => $translation) {
-            if ($key != $playload->getLocale()) {
-                $template->removeTranslation($translation);
+        $parameters = $playload->getParameters();
+
+        if ($parameters['new_article_template']) {
+            $template = new ArticleTemplate();
+            $template->setName("{{item.name}}", $playload->getLocale());
+            $template->setSlug("{{item.slug}}", $playload->getLocale());
+            $template->setBusinessEntityId("article");
+            $template->setBackendName("quovadis-article-template");
+            $template->setLayout($parameters['article_template_layout']);
+            $template->setParent($playload->getNewBlog());
+            $template->setTemplate(self::getTemplate($parameters['article_template_parent_id']));
+
+            foreach ($template->getTranslations() as $key => $translation) {
+                if ($key != $playload->getLocale()) {
+                    $template->removeTranslation($translation);
+                }
             }
+        } else {
+            $template = self::getTemplate($parameters['article_template_id']);
         }
 
         $widgetMapLayout = new WidgetMap();
         $widgetMapLayout->setAction(WidgetMap::ACTION_CREATE);
-        $widgetMapLayout->setSlot("oneCol_content");
+        $widgetMapLayout->setSlot($parameters['article_template_first_slot']);
 
         $widgetLayout = new WidgetLayout();
         $widgetLayout->setWidgetMap($widgetMapLayout);
@@ -87,6 +96,7 @@ class VicArticleTemplateBuilder implements PersisterStageInterface
 
         $playload->setContentWidgetMap($widgetMapCKEditor);
 
+        $playload->getOutput()->writeln(' success');
         return $playload;
     }
 }

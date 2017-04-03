@@ -5,6 +5,7 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 use Behat\Mink\Exception\Exception;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
 use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
@@ -31,8 +32,11 @@ class VicArticleContentStages implements StageInterface
      * @param $playload
      * @return mixed
      */
-    public function __invoke($playload)
+    public function __invoke(PlayloadInterface $playload)
     {
+        $progress = $playload->getProgressBar(count($playload->getItems()));
+        $playload->getOutput()->writeln(sprintf('Victoire Article Content generation:'));
+
         foreach ($playload->getItems() as $plArticle) {
             if (null != $plArticle->getContent()) {
 
@@ -46,10 +50,12 @@ class VicArticleContentStages implements StageInterface
                 if ($document) {
                     $content = $document->saveHTML();
                     $plArticle->setContent($content);
+                    $progress->advance();
                 }
             }
         }
 
+        $playload->getOutput()->writeln(' success');
         return $playload;
     }
 

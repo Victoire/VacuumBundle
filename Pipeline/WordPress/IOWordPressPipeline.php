@@ -3,6 +3,10 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Helper\ProgressHelper;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Output\OutputInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Pipeline\WordPressPipeline;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Processor\WordPressProcessor;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\ArticleDataExtractorStages;
@@ -76,14 +80,13 @@ class IOWordPressPipeline
     /**
      * @param $input
      */
-    public function process($input)
+    public function process($commandParameter, OutputInterface $output, QuestionHelper $questionHelper)
     {
-        $raw = file_get_contents($input);
+        $raw = file_get_contents($commandParameter['dump']);
         $raw = str_replace(["wp:","dc:",":encoded"],"",$raw);
         $rawData = simplexml_load_string($raw);
 
-        $playload = new WordPressPlayload();
-        $playload->setRawData($rawData);
+        $playload = new WordPressPlayload($commandParameter, $output, $questionHelper, $rawData);
 
         $exctractionPipeline = new WordPressPipeline([], new WordPressProcessor());
         $generatorPipeline =  new WordPressPipeline([], new WordPressProcessor());

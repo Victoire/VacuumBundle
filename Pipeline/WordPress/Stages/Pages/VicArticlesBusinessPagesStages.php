@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BusinessPageBundle\Entity\BusinessPage;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\Widget\CKEditorBundle\Entity\WidgetCKEditor;
 use Victoire\Bundle\CoreBundle\Entity\EntityProxy;
 
@@ -35,8 +36,11 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
      * @param $playload
      * @return mixed
      */
-    public function __invoke($playload)
+    public function __invoke(PlayloadInterface $playload)
     {
+        $progress = $playload->getProgressBar(count($playload->getNewBlog()->getArticles()));
+        $playload->getOutput()->writeln(sprintf('Victoire BusinessPage generation:'));
+
         foreach ($playload->getNewBlog()->getArticles() as  $article) {
 
             $overWriteWidgetMap = $playload->getContentWidgetMap();
@@ -76,9 +80,12 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
             $businessPage->setStatus("published");
 
             $this->entityManager->persist($businessPage);
+            $progress->advance();
         }
 
         $this->entityManager->persist($playload->getNewBlog());
+        $progress->finish();
+        $playload->getOutput()->writeln(' success');
 
         return $playload;
     }

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Blog;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 
 /**
  * Class VicBlogGeneratorStages
@@ -53,8 +54,10 @@ class VicBlogGeneratorStages implements PersisterStageInterface
      * @param $playload
      * @return mixed
      */
-    public function __invoke($playload)
+    public function __invoke(PlayloadInterface $playload)
     {
+        $playload->getOutput()->write(sprintf('Victoire Blog generation:'));
+
         $blog = new Blog();
         $blog->setName($playload->getTitle(), $playload->getLocale());
         $blog->setCurrentLocale($playload->getLocale());
@@ -72,6 +75,7 @@ class VicBlogGeneratorStages implements PersisterStageInterface
         }
 
         $this->entityManager->persist($blog);
+        $playload->getOutput()->writeln(' success');
         return $playload;
     }
 }

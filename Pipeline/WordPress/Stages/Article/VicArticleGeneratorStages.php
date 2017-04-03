@@ -7,6 +7,7 @@ use Victoire\Bundle\BlogBundle\Entity\Article;
 use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\Bundle\PageBundle\Entity\PageStatus;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 
 /**
  * Class VicArticleGeneratorStages
@@ -32,9 +33,12 @@ class VicArticleGeneratorStages implements PersisterStageInterface
      * @param $playload
      * @return mixed
      */
-    public function __invoke($playload)
+    public function __invoke(PlayloadInterface $playload)
     {
         $locale = $playload->getLocale();
+
+        $progress = $playload->getProgressBar(count($playload->getItems()));
+        $playload->getOutput()->writeln(sprintf('Victoire Article generation:'));
 
         foreach ($playload->getItems() as $plArticle) {
 
@@ -62,8 +66,12 @@ class VicArticleGeneratorStages implements PersisterStageInterface
                         $article->removeTranslation($translation);
                     }
                 }
+                $progress->advance();
             }
         }
+
+        $progress->finish();
+        $playload->getOutput()->writeln(' success');
 
         return $playload;
     }

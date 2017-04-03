@@ -3,6 +3,7 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Pipeline;
 
 use Victoire\DevTools\VacuumBundle\Pipeline\PipelineInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\ProcessorInterface;
 
 
@@ -65,7 +66,7 @@ class WordPressPipeline implements PipelineInterface
      * @param $playload
      * @return mixed
      */
-    public function __invoke($playload)
+    public function __invoke(PlayloadInterface $playload)
     {
         return $this->process($playload);
     }

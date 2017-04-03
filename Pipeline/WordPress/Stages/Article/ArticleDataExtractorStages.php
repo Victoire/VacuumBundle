@@ -3,6 +3,7 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
+use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
@@ -16,7 +17,7 @@ class ArticleDataExtractorStages implements StageInterface
      * @param $playload
      * @return mixed
      */
-    public function __invoke($playload)
+    public function __invoke(PlayloadInterface $playload)
     {
         $xmlDataFormater = new XmlDataFormater();
 
@@ -33,6 +34,9 @@ class ArticleDataExtractorStages implements StageInterface
                     array_push($typeAttachement, $wpArticle);
                 }
             }
+
+            $progress = $playload->getProgressBar(count($typePost));
+            $playload->getOutput()->writeln(sprintf('Article Data extraction:'));
 
             foreach ($typePost as $wpArticle) {
                 $article = new Article();
@@ -84,8 +88,12 @@ class ArticleDataExtractorStages implements StageInterface
                     }
                 }
                 $playload->addItem($article);
+                $progress->advance();
             }
         }
+
+        $progress->finish();
+        $playload->getOutput()->writeln(sprintf(' success'));
 
         unset($xmlDataFormater);
         return $playload;
