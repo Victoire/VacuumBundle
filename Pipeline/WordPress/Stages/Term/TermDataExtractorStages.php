@@ -35,7 +35,7 @@ class TermDataExtractorStages implements StageInterface
             }
         }
         $progress->finish();
-        $playload->getOutput()->writeln(sprintf(' success'));
+        $playload->getSuccess();
 
         unset($xmlDataFormater);
         return $playload;

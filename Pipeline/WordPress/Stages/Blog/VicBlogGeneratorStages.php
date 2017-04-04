@@ -75,7 +75,7 @@ class VicBlogGeneratorStages implements PersisterStageInterface
         }
 
         $this->entityManager->persist($blog);
-        $playload->getOutput()->writeln(' success');
+        $playload->getSuccess();
         return $playload;
     }
 }

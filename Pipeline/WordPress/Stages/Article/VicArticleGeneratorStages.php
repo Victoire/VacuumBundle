@@ -57,6 +57,7 @@ class VicArticleGeneratorStages implements PersisterStageInterface
                 $article->setLocale($locale);
                 $article->setCategory($plArticle->getCategory());
                 $article->setTags($plArticle->getTags());
+                $article->setAuthor($plArticle->getAuthor());
 
                 $playload->getNewBlog()->addArticle($article);
 
@@ -71,7 +72,7 @@ class VicArticleGeneratorStages implements PersisterStageInterface
         }
 
         $progress->finish();
-        $playload->getOutput()->writeln(' success');
+        $playload->getSuccess();
 
         return $playload;
     }

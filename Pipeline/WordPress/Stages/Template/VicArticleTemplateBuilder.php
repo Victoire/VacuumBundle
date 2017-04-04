@@ -96,7 +96,7 @@ class VicArticleTemplateBuilder implements PersisterStageInterface
 
         $playload->setContentWidgetMap($widgetMapCKEditor);
 
-        $playload->getOutput()->writeln(' success');
+        $playload->getSuccess();
         return $playload;
     }
 }

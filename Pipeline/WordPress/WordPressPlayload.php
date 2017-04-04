@@ -331,7 +331,7 @@ class WordPressPlayload implements PlayloadInterface
     public function getAuthor($authorLogin)
     {
         foreach ($this->authors as $author) {
-            if ($author->getAuthorLogin() == $authorLogin) {
+            if ($author->getUsername() == $authorLogin || $author->getEmail() == $authorLogin) {
                 return $author;
             }
         }
@@ -586,5 +586,11 @@ class WordPressPlayload implements PlayloadInterface
     {
         $this->questionHelper = $questionHelper;
         return $this;
+    }
+
+
+    public function getSuccess()
+    {
+        $this->output->writeln("<info>success</info>");
     }
 }

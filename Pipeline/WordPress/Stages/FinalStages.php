@@ -38,7 +38,7 @@ class FinalStages implements PersisterStageInterface
         $this->entityManager->persist($playload->getNewBlog());
         $this->entityManager->flush();
 
-        $playload->getOutput()->write(' success');
+        $playload->getSuccess();
         return $playload;
     }
 }

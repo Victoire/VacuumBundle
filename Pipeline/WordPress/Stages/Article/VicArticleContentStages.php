@@ -55,7 +55,7 @@ class VicArticleContentStages implements StageInterface
             }
         }
 
-        $playload->getOutput()->writeln(' success');
+        $playload->getSuccess();
         return $playload;
     }
 

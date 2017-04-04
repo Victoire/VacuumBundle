@@ -48,7 +48,7 @@ class VicCategoryGeneratorStages implements PersisterStageInterface
         }
 
         $progress->finish();
-        $playload->getOutput()->writeln(sprintf(' success'));
+        $playload->getSuccess();
 
         return $playload;
     }

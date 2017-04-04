@@ -96,7 +96,7 @@ class IOWordPressPipeline
         $exctractionPipeline
             ->pipe(new LocaleStages())
             ->pipe(new BlogDataExtractorStages())
-            ->pipe(new AuthorDataExtractorStages())
+            ->pipe(new AuthorDataExtractorStages($this->entityManager))
             ->pipe(new TermDataExtractorStages())
             ->pipe(new CategoryDataExtractorStages())
             ->pipe(new TagDataExtractorStages())

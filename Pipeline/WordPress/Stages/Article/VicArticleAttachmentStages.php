@@ -49,7 +49,7 @@ class VicArticleAttachmentStages implements StageInterface
             }
         }
 
-        $playload->getOutput()->writeln(sprintf(' success'));
+        $playload->getSuccess();
 
         return $playload;
     }

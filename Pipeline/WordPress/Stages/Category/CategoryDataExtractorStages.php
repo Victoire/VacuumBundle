@@ -35,7 +35,8 @@ class CategoryDataExtractorStages implements StageInterface
                 $progress->advance();
             }
         }
-        $playload->getOutput()->writeln(' success');
+        $progress->finish();
+        $playload->getSuccess();
 
         unset($xmlDataFormater);
         return $playload;

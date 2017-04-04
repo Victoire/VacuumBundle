@@ -85,7 +85,7 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
 
         $this->entityManager->persist($playload->getNewBlog());
         $progress->finish();
-        $playload->getOutput()->writeln(' success');
+        $playload->getSuccess();
 
         return $playload;
     }

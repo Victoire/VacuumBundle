@@ -34,7 +34,7 @@ class BlogDataExtractorStages implements StageInterface
             $progress->advance();
         }
         $progress->finish();
-        $playload->getOutput()->writeln(sprintf(' success'));
+        $playload->getSuccess();
 
         unset($xmlDataFormater);
         return $playload;

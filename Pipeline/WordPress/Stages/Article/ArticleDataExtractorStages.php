@@ -45,7 +45,13 @@ class ArticleDataExtractorStages implements StageInterface
                 $article->setLink($xmlDataFormater->formatString('link', $wpArticle));
                 $article->setPubDate($xmlDataFormater->formatDate('pubDate', $wpArticle));
                 $article->setCreator($playload->getAuthor($xmlDataFormater->formatString('creator', $wpArticle)));
-                $article->setDescription($xmlDataFormater->formatString('excerpt', $wpArticle));
+
+                if (null != $xmlDataFormater->formatString('excerpt', $wpArticle)) {
+                    $article->setDescription($xmlDataFormater->formatString('excerpt', $wpArticle));
+                } else {
+                    $article->setDescription($xmlDataFormater->formatString('description', $wpArticle));
+                }
+
                 $article->setContent($xmlDataFormater->formatString('content', $wpArticle));
                 $article->setPostId($xmlDataFormater->formatInteger('post_id', $wpArticle));
                 $article->setPostDate($xmlDataFormater->formatDate('post_date', $wpArticle));
@@ -93,7 +99,7 @@ class ArticleDataExtractorStages implements StageInterface
         }
 
         $progress->finish();
-        $playload->getOutput()->writeln(sprintf(' success'));
+        $playload->getSuccess();
 
         unset($xmlDataFormater);
         return $playload;
