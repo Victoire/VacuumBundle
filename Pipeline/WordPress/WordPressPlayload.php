@@ -117,6 +117,11 @@ class WordPressPlayload implements PlayloadInterface
     private $terms = [];
 
     /**
+     * @var array
+     */
+    private $seos = [];
+
+    /**
      * WordPressPlayload constructor.
      * @param array $parameters
      * @param ProgressBar $progressBar
@@ -565,8 +570,11 @@ class WordPressPlayload implements PlayloadInterface
     /**
      * @return ProgressBar
      */
-    public function getProgressBar($value)
+    public function getProgressBar($value = null)
     {
+        if (null == $value) {
+            return new ProgressBar($this->output);
+        }
         return new ProgressBar($this->output, $value);
     }
 
@@ -592,5 +600,47 @@ class WordPressPlayload implements PlayloadInterface
     public function getSuccess()
     {
         $this->output->writeln("<info>success</info>");
+    }
+
+    /**
+     * @return array
+     */
+    public function getSeos()
+    {
+        return $this->seos;
+    }
+
+    /**
+     * @param array $seos
+     * @return WordPressPlayload
+     */
+    public function setSeos(array $seos)
+    {
+        $this->seos = $seos;
+        return $this;
+    }
+
+    /**
+     * @param $article
+     * @param $seo
+     * @return $this
+     */
+    public function addSeo($article, $seo)
+    {
+        array_push($this->seos, [$article => $seo]);
+        return $this;
+    }
+
+    /**
+     * @param $article
+     * @return mixed
+     */
+    public function getSeo($article)
+    {
+        foreach ($this->seos as $seo) {
+            if (array_key_exists($article, $seo)) {
+                return $seo[$article];
+            }
+        }
     }
 }

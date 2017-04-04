@@ -44,7 +44,7 @@ interface PlayloadInterface
     /**
      * @return ProgressBar
      */
-    public function getProgressBar($value);
+    public function getProgressBar($value = null);
 
     /**
      * @return QuestionHelper

@@ -2,6 +2,7 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
+use Victoire\Bundle\SeoBundle\Entity\PageSeo;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
@@ -70,6 +71,7 @@ class ArticleDataExtractorStages implements StageInterface
                     }
                 }
 
+                // set category and tag
                 foreach ($wpArticle->category as $cat) {
                     foreach ($cat->attributes() as $key => $attribute) {
                         if ($key == "domain") {

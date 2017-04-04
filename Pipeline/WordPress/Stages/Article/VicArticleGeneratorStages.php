@@ -57,7 +57,7 @@ class VicArticleGeneratorStages implements PersisterStageInterface
                 $article->setLocale($locale);
                 $article->setCategory($plArticle->getCategory());
                 $article->setTags($plArticle->getTags());
-                $article->setAuthor($plArticle->getAuthor());
+                $article->setAuthor($plArticle->getCreator());
 
                 $playload->getNewBlog()->addArticle($article);
 

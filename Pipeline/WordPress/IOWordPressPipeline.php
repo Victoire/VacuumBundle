@@ -22,6 +22,7 @@ use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\VicCategor
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\FinalStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Locale\LocaleStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Pages\VicArticlesBusinessPagesStages;
+use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\SEO\VicSEOGenerator;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\VicTagGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Template\VicArticleTemplateBuilder;
@@ -113,6 +114,8 @@ class IOWordPressPipeline
                 ->pipe($vicArchitecturePipeline
                     ->pipe(new VicArticleTemplateBuilder($this->entityManager))
                     ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))
+                    ->pipe(new FinalStages($this->entityManager))
+                    ->pipe(new VicSEOGenerator($this->entityManager))
                     ->pipe(new FinalStages($this->entityManager))
                 )
             )
