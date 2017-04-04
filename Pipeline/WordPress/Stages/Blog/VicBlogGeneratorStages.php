@@ -56,14 +56,16 @@ class VicBlogGeneratorStages implements PersisterStageInterface
      */
     public function __invoke(PlayloadInterface $playload)
     {
+        $parameters = $playload->getParameters();
+
         $playload->getOutput()->write(sprintf('Victoire Blog generation:'));
 
         $blog = new Blog();
-        $blog->setName($playload->getTitle(), $playload->getLocale());
+        $blog->setName($parameters['blog_name'], $playload->getLocale());
         $blog->setCurrentLocale($playload->getLocale());
         $blog->setDefaultLocale($playload->getLocale());
-        $blog->setTemplate(self::getBaseTemplate(1));
-        $blog->setParent(self::getParentPage(8));
+        $blog->setTemplate(self::getBaseTemplate($parameters['blog_template']));
+        $blog->setParent(self::getParentPage($parameters['blog_parent_id']));
         $blog->setPublishedAt($playload->getPublicationDate());
         $blog->setCreatedAt($playload->getPublicationDate());
         $playload->setNewBlog($blog);

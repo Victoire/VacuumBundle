@@ -29,6 +29,8 @@ class BlogImportCommand extends ContainerAwareCommand
             ->setName('victoire:blog-import')
             ->setDefinition([
                 new InputOption('blog_name', '-b', InputOption::VALUE_REQUIRED, 'The name of the blog to populate'),
+                new InputOption('blog_template', '-bt', InputOption::VALUE_REQUIRED, 'The id of the blog template'),
+                new InputOption('blog_parent_id', '-bpi', InputOption::VALUE_REQUIRED, 'The id of the blog parent page'),
                 new InputOption('dump', '-d', InputOption::VALUE_REQUIRED, 'Path to the dump who should bee imported'),
                 new InputOption('article_template_name', '-atn', InputOption::VALUE_OPTIONAL, 'article template name'),
                 new InputOption('article_template_layout', '-atl', InputOption::VALUE_OPTIONAL, 'article template layout designation'),
@@ -80,6 +82,12 @@ EOT
 
         // Blog name
         $commandParameters['blog_name'] = $input->getOption('blog_name');
+
+        // Blog template id
+        $commandParameters['blog_template'] = $input->getOption('blog_template');
+
+        // Blog parent id
+        $commandParameters['blog_parent_id'] = $input->getOption('blog_parent_id');
 
         // Article Template
         if (null !== $input->getOption('article_template_id')) {
@@ -156,6 +164,24 @@ EOT
         $blogName = (string) $questionHelper->ask($input, $output, $question);
         $input->setOption('blog_name', $blogName);
 
+        // blog template id
+        $question = new Question($questionHelper->getQuestion('blog template id', $input->getOption('blog_template')));
+        $question->setValidator(function ($answer) {
+           return self::validateTemplateId($answer);
+        });
+
+        $blogTemplateId = (int) $questionHelper->ask($input, $output, $question);
+        $input->setOption('blog_template', $blogTemplateId);
+
+        // blog parent id
+        $question = new Question($questionHelper->getQuestion('blog parent id', $input->getOption('blog_parent_id')));
+        $question->setValidator(function ($answer) {
+            return self::validateView($answer);
+        });
+
+        $blogTemplateId = (int) $questionHelper->ask($input, $output, $question);
+        $input->setOption('blog_parent_id', $blogTemplateId);
+
         // path to dump
         $question = new Question($questionHelper->getQuestion('path to dump', $input->getOption('dump')));
         $question->setValidator(function ($answer) {
@@ -213,6 +239,21 @@ EOT
             $articleTemplateFirstSlot = (string) $questionHelper->ask($input, $output, $question);
             $input->setOption('article_template_first_slot', $articleTemplateFirstSlot);
         }
+    }
+
+    /**
+     * @param $id int
+     * @return int
+     */
+    private function validateView($id)
+    {
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $result = $em->getRepository('Victoire\Bundle\CoreBundle\Entity\View')->find($id);
+        if (empty($result)) {
+            throw new \RuntimeException('Can\'t find any vic view with id: "%s"', $id);
+        }
+
+        return $id;
     }
 
     /**
