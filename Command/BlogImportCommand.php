@@ -133,11 +133,8 @@ EOT
             }
         }
 
-        $progress = $this->getHelper('progress');
-
         $ioWordPressPipeline = $this->getContainer()->get('victoire.vacuum_bundle.io_word_press.pipeline');
-        $ioWordPressPipeline->process($commandParameters, $output, $questionHelper);
-        $output = $ioWordPressPipeline->getOutput();
+        $ioWordPressPipeline->preparePipeline($commandParameters, $output, $questionHelper);
     }
 
     /**

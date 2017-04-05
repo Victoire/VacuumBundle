@@ -1,16 +1,17 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Pipeline;
+namespace Victoire\DevTools\VacuumBundle\Playload;
 
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
+use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 
 /**
  * Interface PlayloadInterface
  * @package Victoire\DevTools\VacuumBundle\Pipeline
  */
-interface PlayloadInterface
+interface CommandPlayloadInterface
 {
     /**
      * WordPressPlayload constructor.
@@ -37,14 +38,9 @@ interface PlayloadInterface
     public function getParameter($key);
 
     /**
-     * @return PlayloadInterface
+     * @return CommandPlayloadInterface
      */
     public function setParameters(array $parameters);
-
-    /**
-     * @return ProgressBar
-     */
-    public function getProgressBar($value = null);
 
     /**
      * @return QuestionHelper
@@ -52,7 +48,7 @@ interface PlayloadInterface
     public function getQuestionHelper();
 
     /**
-     * @return PlayloadInterface
+     * @return CommandPlayloadInterface
      */
     public function setQuestionHelper(QuestionHelper $questionHelper);
 
@@ -62,7 +58,7 @@ interface PlayloadInterface
     public function getRawData();
 
     /**
-     * @return PlayloadInterface
+     * @return CommandPlayloadInterface
      */
     public function setRawData(\SimpleXMLElement $rawData);
 
@@ -70,4 +66,44 @@ interface PlayloadInterface
      * @return OutputInterface
      */
     public function getOutput();
+
+    /**
+     * @return Blog
+     */
+    public function getTmpBlog();
+
+    /**
+     * @param Blog $blog
+     * @return mixed
+     */
+    public function setTmpBlog(Blog $blog);
+
+    /**
+     * @return \Victoire\Bundle\BlogBundle\Entity\Blog
+     */
+    public function getNewVicBlog();
+
+    /**
+     * @param \Victoire\Bundle\BlogBundle\Entity\Blog $blog
+     * @return mixed
+     */
+    public function setNewVicBlog(\Victoire\Bundle\BlogBundle\Entity\Blog $blog);
+
+    /**
+     * @param null $value
+     * @return mixed
+     */
+    public function getNewProgressBar($value = null);
+
+    /**
+     * @param $message
+     * @return mixed
+     */
+    public function getNewSuccessMessage($message);
+
+    /**
+     * @param $message
+     * @return mixed
+     */
+    public function throwErrorAndStop($message);
 }

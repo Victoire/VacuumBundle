@@ -2,8 +2,10 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog;
 
+use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
 /**
@@ -13,28 +15,41 @@ use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 class BlogDataExtractorStages implements StageInterface
 {
     /**
+     * Will extract the blog from raw data
+     * stop the command if more than one blog is in the dump
+     *
      * @param $playload
      * @return mixed
      */
-    public function __invoke(PlayloadInterface $playload)
+    public function __invoke(CommandPlayloadInterface $playload)
     {
         $xmlDataFormater = new XmlDataFormater();
 
         $progress = $playload->getProgressBar(count($playload->getRawData()->channel));
         $playload->getOutput()->writeln(sprintf('Blog data extraction:'));
 
-        foreach ($playload->getRawData()->channel as $key => $blog) {
-            $playload->setTitle($playload->getParameters()['blog_name']);
-            $playload->setLink($xmlDataFormater->formatString('link', $blog));
-            $playload->setPublicationDate($xmlDataFormater->formatDate('pubDate', $blog));
-            $playload->setDescription($xmlDataFormater->formatString('description', $blog));
-            $playload->setLanguage($xmlDataFormater->formatString('language', $blog));
-            $playload->setBaseSiteUrl($xmlDataFormater->formatString('base_site_url', $blog));
-            $playload->setBaseBlogUrl($xmlDataFormater->formatString('base_blog_url', $blog));
-            $progress->advance();
+        if (count($playload->getRawData()->channel) > 1) {
+            $playload->throwErrorAndStop("Dump has more than on blog in it.");
+        } else {
+            $channel = $playload->getRawData()->channel;
+            $blog = new Blog();
+            $blog->setTitle($playload->getParameters()['blog_name']);
+            $blog->setLink($xmlDataFormater->formatString('link', $channel));
+            $blog->setPublicationDate($xmlDataFormater->formatDate('pubDate', $channel));
+            $blog->setDescription($xmlDataFormater->formatString('description', $channel));
+
+            $locale = $xmlDataFormater->formatString("language", $channel);
+            $locale = explode("-", $locale);
+            $blog->setLanguage($locale);
+
+            $blog->setBaseSiteUrl($xmlDataFormater->formatString('base_site_url', $channel));
+            $blog->setBaseBlogUrl($xmlDataFormater->formatString('base_blog_url', $channel));
+
+            $playload->setTmpBlog($blog);
         }
+
         $progress->finish();
-        $playload->getSuccess();
+        $playload->getNewSuccessMessage("success");
 
         unset($xmlDataFormater);
         return $playload;

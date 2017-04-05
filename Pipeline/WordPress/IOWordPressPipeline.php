@@ -81,7 +81,7 @@ class IOWordPressPipeline
     /**
      * @param $input
      */
-    public function process($commandParameter, OutputInterface $output, QuestionHelper $questionHelper)
+    public function preparePipeline($commandParameter, OutputInterface $output, QuestionHelper $questionHelper)
     {
         $raw = file_get_contents($commandParameter['dump']);
         $raw = str_replace(["wp:","dc:",":encoded"],"",$raw);
@@ -89,36 +89,26 @@ class IOWordPressPipeline
 
         $playload = new WordPressPlayload($commandParameter, $output, $questionHelper, $rawData);
 
-        $exctractionPipeline = new WordPressPipeline([], new WordPressProcessor());
-        $generatorPipeline =  new WordPressPipeline([], new WordPressProcessor());
-        $vicArticleContentPipeline = new WordPressPipeline([], new WordPressProcessor());
-        $vicArchitecturePipeline =  new WordPressPipeline([], new WordPressProcessor());
+        $pipeline = new WordPressPipeline([], new WordPressProcessor());
 
-        $exctractionPipeline
-            ->pipe(new LocaleStages())
+        $pipeline
             ->pipe(new BlogDataExtractorStages())
             ->pipe(new AuthorDataExtractorStages($this->entityManager))
             ->pipe(new TermDataExtractorStages())
             ->pipe(new CategoryDataExtractorStages())
             ->pipe(new TagDataExtractorStages())
-            ->pipe($generatorPipeline
-                ->pipe(new VicBlogGeneratorStages($this->entityManager))
-                ->pipe(new VicCategoryGeneratorStages($this->entityManager))
-                ->pipe(new VicTagGeneratorStages($this->entityManager))
+            ->pipe(new VicBlogGeneratorStages($this->entityManager))
+            ->pipe(new VicCategoryGeneratorStages($this->entityManager))
+            ->pipe(new VicTagGeneratorStages($this->entityManager))
             ->pipe(new ArticleDataExtractorStages())
-                ->pipe($vicArticleContentPipeline
-                    ->pipe(new VicArticleAttachmentStages($this->mediaFormater))
-                    ->pipe(new VicArticleContentStages($this->mediaFormater))
-                    ->pipe(new VicArticleGeneratorStages($this->entityManager))
-                )
-                ->pipe($vicArchitecturePipeline
-                    ->pipe(new VicArticleTemplateBuilder($this->entityManager))
-                    ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))
-                    ->pipe(new FinalStages($this->entityManager))
-                    ->pipe(new VicSEOGenerator($this->entityManager))
-                    ->pipe(new FinalStages($this->entityManager))
-                )
-            )
+            ->pipe(new VicArticleAttachmentStages($this->mediaFormater))
+            ->pipe(new VicArticleContentStages($this->mediaFormater))
+            ->pipe(new VicArticleGeneratorStages($this->entityManager))
+            ->pipe(new VicArticleTemplateBuilder($this->entityManager))
+            ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))
+            ->pipe(new FinalStages($this->entityManager))
+            ->pipe(new VicSEOGenerator($this->entityManager))
+            ->pipe(new FinalStages($this->entityManager))
         ->process($playload);
     }
 

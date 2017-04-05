@@ -7,6 +7,7 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Author;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
 /**
@@ -30,62 +31,64 @@ class AuthorDataExtractorStages implements PersisterStageInterface
     }
 
     /**
+     * Look for every Author in the dump inside current db.
+     * If no match throw an error and ask for creation of author
+     * account before blog import.
+     *
      * @param $playload
      * @return mixed
      */
-    public function __invoke(PlayloadInterface $playload)
+    public function __invoke(CommandPlayloadInterface $playload)
     {
         $xmlDataFormater = new XmlDataFormater();
 
-        foreach ($playload->getRawData()->channel as $blog) {
+        $channel = $playload->getRawData()->channel;
 
-            $progress = $playload->getProgressBar(count($blog->author));
-            $playload->getOutput()->writeln(sprintf('Author data extraction:'));
+        $progress = $playload->getNewProgressBar(count($channel->author));
+        $playload->getNewSuccessMessage("Author data extraction:");
 
-            $missingAuthor = [];
+        $missingAuthor = [];
 
-            foreach ($blog->author as $wpAuthor) {
-                $email = $xmlDataFormater->formatString('author_email', $wpAuthor);
+        foreach ($channel->author as $wpAuthor) {
+            $email = $xmlDataFormater->formatString('author_email', $wpAuthor);
 
-                $authorByUsername = $this->entityManager->getRepository('AppBundle:User\User')->findBy(['username' => $email]);
-                $authorByEmail =  $this->entityManager->getRepository('AppBundle:User\User')->findBy(['email' => $email]);
+            $authorByUsername = $this->entityManager->getRepository('AppBundle:User\User')->findOneBy(['username' => $email]);
+            $authorByEmail =  $this->entityManager->getRepository('AppBundle:User\User')->findOneBy(['email' => $email]);
 
-                if (empty($authorByUsername) && empty($authorByEmail)) {
+            if (empty($authorByUsername) && empty($authorByEmail)) {
 
-                    $row = [
-                        $xmlDataFormater->formatInteger('author_id', $wpAuthor),
-                        $xmlDataFormater->formatString('author_login', $wpAuthor),
-                        $xmlDataFormater->formatString('author_email', $wpAuthor),
-                        $xmlDataFormater->formatString('author_display_name', $wpAuthor),
-                        $xmlDataFormater->formatString('author_first_name', $wpAuthor),
-                        $xmlDataFormater->formatString('author_last_name', $wpAuthor)
-                    ];
-                    array_push($missingAuthor, $row);
-                } else {
-                    if (null != $authorByUsername) {
-                        $playload->addAuthor($authorByUsername[0]);
-                        $progress->advance();
-                    } elseif (null != $authorByEmail) {
-                        $playload->addAuthoy($authorByEmail[0]);
-                        $progress->advance();
-                    }
+                $row = [
+                    $xmlDataFormater->formatInteger('author_id', $wpAuthor),
+                    $xmlDataFormater->formatString('author_login', $wpAuthor),
+                    $xmlDataFormater->formatString('author_email', $wpAuthor),
+                    $xmlDataFormater->formatString('author_display_name', $wpAuthor),
+                    $xmlDataFormater->formatString('author_first_name', $wpAuthor),
+                    $xmlDataFormater->formatString('author_last_name', $wpAuthor)
+                ];
+                array_push($missingAuthor, $row);
+            } else {
+                if (null != $authorByUsername) {
+                    $playload->getTmpBlog()->addAuthors($authorByUsername);
+                    $progress->advance();
+                } elseif (null != $authorByEmail) {
+                    $playload->getTmpBlog()->addAuthors($authorByEmail);
+                    $progress->advance();
                 }
-            }
-
-            if (!empty($missingAuthor)) {
-                $playload->getOutput()->writeln("<error>Some Author can't be found ! Please create them before importing this blog again.</error>");
-                $missingAuthorListe = new Table($playload->getOutput());
-                $missingAuthorListe->setHeaders(['id', 'login', 'email', 'display name', 'firstname', 'lastname']);
-                foreach ($missingAuthor as $author) {
-                    $missingAuthorListe->addRow($author);
-                }
-                $missingAuthorListe->render();
-                exit();
             }
         }
 
+        if (!empty($missingAuthor)) {
+            $missingAuthorListe = new Table($playload->getOutput());
+            $missingAuthorListe->setHeaders(['id', 'login', 'email', 'display name', 'firstname', 'lastname']);
+            foreach ($missingAuthor as $author) {
+                $missingAuthorListe->addRow($author);
+            }
+            $missingAuthorListe->render();
+            $playload->throwErrorAndStop("Some Author can't be found ! Please create them before importing this blog again.");
+        }
+
         $progress->finish();
-        $playload->getSuccess();
+        $playload->getNewSuccessMessage("success");
 
         unset($xmlDataFormater);
         return $playload;
