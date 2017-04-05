@@ -25,8 +25,8 @@ class BlogDataExtractorStages implements StageInterface
     {
         $xmlDataFormater = new XmlDataFormater();
 
-        $progress = $playload->getProgressBar(count($playload->getRawData()->channel));
-        $playload->getOutput()->writeln(sprintf('Blog data extraction:'));
+        $progress = $playload->getNewProgressBar(count($playload->getRawData()->channel));
+        $playload->getNewStageTitleMessage("Blog data extraction:");
 
         if (count($playload->getRawData()->channel) > 1) {
             $playload->throwErrorAndStop("Dump has more than on blog in it.");
@@ -40,7 +40,7 @@ class BlogDataExtractorStages implements StageInterface
 
             $locale = $xmlDataFormater->formatString("language", $channel);
             $locale = explode("-", $locale);
-            $blog->setLanguage($locale);
+            $blog->setLocale($locale[0]);
 
             $blog->setBaseSiteUrl($xmlDataFormater->formatString('base_site_url', $channel));
             $blog->setBaseBlogUrl($xmlDataFormater->formatString('base_blog_url', $channel));
@@ -49,7 +49,8 @@ class BlogDataExtractorStages implements StageInterface
         }
 
         $progress->finish();
-        $playload->getNewSuccessMessage("success");
+        $playload->getNewSuccessMessage(" success");
+        $playload->jumpLine();
 
         unset($xmlDataFormater);
         return $playload;

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Tag;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 
 /**
  * Class VicTagGeneratorStages
@@ -30,26 +31,29 @@ class VicTagGeneratorStages implements PersisterStageInterface
     }
 
     /**
+     * Transfer tag form tmpBlog to Victoire blog.
+     *
      * @param $playload
      * @return mixed
      */
-    public function __invoke(PlayloadInterface $playload)
+    public function __invoke(CommandPlayloadInterface $playload)
     {
-        $progress = $playload->getProgressBar(count($playload->getTags()));
-        $playload->getOutput()->writeln(sprintf('Victoire Tag generation:'));
+        $progress = $playload->getNewProgressBar(count($playload->getTmpBlog()->getTags()));
+        $playload->getNewStageTitleMessage("Victoire Tag generation:");
 
-        foreach ($playload->getTags() as $wpTag) {
+        foreach ($playload->getTmpBlog()->getTags() as $wpTag) {
             $tag = new Tag();
             $tag->setTitle($wpTag->getTagName());
             $tag->setSlug(($wpTag->getTagSlug()));
-            $playload->getNewBlog()->addTag($tag);
+            $playload->getNewVicBlog()->addTag($tag);
 
             $this->entityManager->persist($tag);
             $progress->advance();
         }
 
         $progress->finish();
-        $playload->getSuccess();
+        $playload->getNewSuccessMessage(" success");
+        $playload->jumpLine();
 
         return $playload;
     }

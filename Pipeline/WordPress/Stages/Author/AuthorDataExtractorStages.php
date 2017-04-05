@@ -31,8 +31,8 @@ class AuthorDataExtractorStages implements PersisterStageInterface
     }
 
     /**
-     * Look for every Author in the dump inside current db.
-     * If no match throw an error and ask for creation of author
+     * Look for every Author in the dump, inside current db.
+     * If there is no match, it throw an error and ask for creation of author
      * account before blog import.
      *
      * @param $playload
@@ -45,7 +45,7 @@ class AuthorDataExtractorStages implements PersisterStageInterface
         $channel = $playload->getRawData()->channel;
 
         $progress = $playload->getNewProgressBar(count($channel->author));
-        $playload->getNewSuccessMessage("Author data extraction:");
+        $playload->getNewStageTitleMessage("Author data extraction:");
 
         $missingAuthor = [];
 
@@ -88,7 +88,8 @@ class AuthorDataExtractorStages implements PersisterStageInterface
         }
 
         $progress->finish();
-        $playload->getNewSuccessMessage("success");
+        $playload->getNewSuccessMessage(" success");
+        $playload->jumpLine();
 
         unset($xmlDataFormater);
         return $playload;

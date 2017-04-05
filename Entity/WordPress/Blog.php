@@ -48,11 +48,6 @@ class Blog
     /**
      * @var string
      */
-    private $language;
-
-    /**
-     * @var string
-     */
     private $baseSiteUrl;
 
     /**
@@ -89,6 +84,11 @@ class Blog
      * @var array
      */
     private $seos = [];
+
+    /**
+     * @var array
+     */
+    private $articles = [];
 
     /**
      * @return Folder
@@ -219,24 +219,6 @@ class Blog
     /**
      * @return string
      */
-    public function getLanguage()
-    {
-        return $this->language;
-    }
-
-    /**
-     * @param string $language
-     * @return Blog
-     */
-    public function setLanguage(string $language)
-    {
-        $this->language = $language;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getBaseSiteUrl()
     {
         return $this->baseSiteUrl;
@@ -279,6 +261,19 @@ class Blog
     }
 
     /**
+     * @param $login
+     * @return mixed
+     */
+    public function getAuthor($username)
+    {
+        foreach ($this->authors as $author) {
+            if ($author->getUsername() == $username) {
+                return $author;
+            }
+        }
+    }
+
+    /**
      * @param array $authors
      * @return Blog
      */
@@ -317,6 +312,16 @@ class Blog
     }
 
     /**
+     * @param $category
+     * @return $this
+     */
+    public function addCategory($category)
+    {
+        array_push($this->categories, $category);
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getTags()
@@ -331,6 +336,16 @@ class Blog
     public function setTags(array $tags)
     {
         $this->tags = $tags;
+        return $this;
+    }
+
+    /**
+     * @param $tag
+     * @return $this
+     */
+    public function addTag($tag)
+    {
+        array_push($this->tags, $tag);
         return $this;
     }
 
@@ -385,6 +400,34 @@ class Blog
     public function setSeos(array $seos)
     {
         $this->seos = $seos;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArticles(): array
+    {
+        return $this->articles;
+    }
+
+    /**
+     * @param array $articles
+     * @return Blog
+     */
+    public function setArticles(array $articles): Blog
+    {
+        $this->articles = $articles;
+        return $this;
+    }
+
+    /**
+     * @param $article
+     * @return $this
+     */
+    public function addArticle($article)
+    {
+        array_push($this->articles, $article);
         return $this;
     }
 }

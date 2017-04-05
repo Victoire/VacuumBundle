@@ -6,6 +6,8 @@ use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayload;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
 /**
@@ -31,16 +33,20 @@ class VicArticleAttachmentStages implements StageInterface
     }
 
     /**
-     * @param $playload
+     * Generate a Victoire Media Entity based on
+     * article attachment url.
+     *
+     * @param CommandPlayloadInterface $playload
+     * @return CommandPlayloadInterface
      */
-    public function __invoke(PlayloadInterface $playload)
+    public function __invoke(CommandPlayloadInterface $playload)
     {
         $blogFolder = $this->mediaFormater->generateBlogFolder($playload);
 
-        $progress = $playload->getProgressBar(count($playload->getItems()));
-        $playload->getOutput()->writeln(sprintf('Victoire Article Media generation:'));
+        $progress = $playload->getNewProgressBar(count($playload->getTmpBlog()->getArticles()));
+        $playload->getNewStageTitleMessage('Victoire Article Media generation:');
 
-        foreach ($playload->getItems() as $plArticle) {
+        foreach ($playload->getTmpBlog()->getArticles() as $plArticle) {
             if (null != $plArticle->getAttachmentUrl()) {
                 $articleFolder = $this->mediaFormater->generateFoler($plArticle->getTitle(), $blogFolder);
                 $distantPath = $this->mediaFormater->cleanUrl($plArticle->getAttachmentUrl());
@@ -49,8 +55,8 @@ class VicArticleAttachmentStages implements StageInterface
             }
         }
 
-        $playload->getSuccess();
-
+        $playload->jumpLine();
+        $playload->getNewSuccessMessage(" success");
         return $playload;
     }
 }

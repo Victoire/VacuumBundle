@@ -7,6 +7,7 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
 use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
@@ -29,15 +30,18 @@ class VicArticleContentStages implements StageInterface
     }
 
     /**
-     * @param $playload
-     * @return mixed
+     * Parse article content create Media entity for
+     * picture found in it and update link accordingly.
+     *
+     * @param CommandPlayloadInterface $playload
+     * @return CommandPlayloadInterface
      */
-    public function __invoke(PlayloadInterface $playload)
+    public function __invoke(CommandPlayloadInterface $playload)
     {
-        $progress = $playload->getProgressBar(count($playload->getItems()));
-        $playload->getOutput()->writeln(sprintf('Victoire Article Content generation:'));
+        $progress = $playload->getNewProgressBar(count($playload->getTmpBlog()->getArticles()));
+        $playload->getNewStageTitleMessage('Victoire Article Content generation:');
 
-        foreach ($playload->getItems() as $plArticle) {
+        foreach ($playload->getTmpBlog()->getArticles() as $plArticle) {
             if (null != $plArticle->getContent()) {
 
                 $content = $plArticle->getContent();
@@ -55,11 +59,14 @@ class VicArticleContentStages implements StageInterface
             }
         }
 
-        $playload->getSuccess();
+        $playload->jumpLine();
+        $playload->getNewSuccessMessage(" success");
         return $playload;
     }
 
     /**
+     * convert content in DOMDocument
+     *
      * @param $content
      * @return bool|\DOMDocument
      */

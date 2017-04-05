@@ -7,6 +7,7 @@ use Victoire\Bundle\BusinessPageBundle\Entity\BusinessPage;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 use Victoire\Widget\CKEditorBundle\Entity\WidgetCKEditor;
 use Victoire\Bundle\CoreBundle\Entity\EntityProxy;
 
@@ -33,17 +34,17 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
     }
 
     /**
-     * @param $playload
+     * @param $playload CommandPlayloadInterface
      * @return mixed
      */
-    public function __invoke(PlayloadInterface $playload)
+    public function __invoke(CommandPlayloadInterface $playload)
     {
-        $progress = $playload->getProgressBar(count($playload->getNewBlog()->getArticles()));
-        $playload->getOutput()->writeln(sprintf('Victoire BusinessPage generation:'));
+        $progress = $playload->getNewProgressBar(count($playload->getNewVicBlog()->getArticles()));
+        $playload->getNewStageTitleMessage('Victoire BusinessPage generation:');
 
-        foreach ($playload->getNewBlog()->getArticles() as  $article) {
+        foreach ($playload->getNewVicBlog()->getArticles() as  $article) {
 
-            $overWriteWidgetMap = $playload->getContentWidgetMap();
+            $overWriteWidgetMap = $playload->getParameter('article_content_widget_map');
 
             $entityProxy = new EntityProxy();
             $entityProxy->setEntity($article, "article");
@@ -57,7 +58,7 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
             $widgetCKEditor = new WidgetCKEditor();
             $widgetCKEditor->setWidgetMap($widgetMapCKEditor);
 
-            foreach ($playload->getItems() as $wpArticle) {
+            foreach ($playload->getTmpBlog()->getArticles() as $wpArticle) {
                 if ($wpArticle->getTitle() == $article->getName()) {
                     $widgetCKEditor->setContent($wpArticle->getContent());
                 }
@@ -65,16 +66,16 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
 
             $businessPage = new BusinessPage();
             $businessPage->setTemplate($article->getTemplate());
-            $businessPage->setName($article->getName(), $playload->getLocale());
-            $businessPage->setslug($article->getslug(), $playload->getLocale());
+            $businessPage->setName($article->getName(), $playload->getNewVicBlog()->getCurrentLocale());
+            $businessPage->setslug($article->getslug(), $playload->getNewVicBlog()->getCurrentLocale());
 
             foreach ($businessPage->getTranslations() as $key => $translation) {
-                if ($key != $playload->getLocale()) {
+                if ($key != $playload->getNewVicBlog()->getCurrentLocale()) {
                     $businessPage->removeTranslation($translation);
                 }
             }
 
-            $businessPage->setParent($playload->getNewBlog());
+            $businessPage->setParent($playload->getNewVicBlog());
             $businessPage->addWidgetMap($widgetMapCKEditor);
             $businessPage->setEntityProxy($entityProxy);
             $businessPage->setStatus("published");
@@ -83,9 +84,11 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
             $progress->advance();
         }
 
-        $this->entityManager->persist($playload->getNewBlog());
+        $this->entityManager->persist($playload->getNewVicBlog());
         $progress->finish();
-        $playload->getSuccess();
+
+        $playload->getNewSuccessMessage(" success");
+        $playload->jumpLine();
 
         return $playload;
     }

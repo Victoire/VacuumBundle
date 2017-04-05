@@ -8,6 +8,7 @@ use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\Bundle\PageBundle\Entity\PageStatus;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 
 /**
  * Class VicArticleGeneratorStages
@@ -33,20 +34,24 @@ class VicArticleGeneratorStages implements PersisterStageInterface
      * @param $playload
      * @return mixed
      */
-    public function __invoke(PlayloadInterface $playload)
+    public function __invoke(CommandPlayloadInterface $playload)
     {
-        $locale = $playload->getLocale();
+        $locale = $playload->getNewVicBlog()->getDefaultLocale();
 
-        $progress = $playload->getProgressBar(count($playload->getItems()));
-        $playload->getOutput()->writeln(sprintf('Victoire Article generation:'));
+        $progress = $playload->getNewProgressBar(count($playload->getTmpBlog()->getArticles()));
+        $playload->getNewStageTitleMessage('Victoire Article generation:');
 
-        foreach ($playload->getItems() as $plArticle) {
+        foreach ($playload->getTmpBlog()->getArticles() as $plArticle) {
 
             if (null != $plArticle->getTitle()) {
                 $article = new Article();
                 $article->setName($plArticle->getTitle(), $locale);
                 $article->setSlug($plArticle->getSlug(), $locale);
-                $article->setDescription($plArticle->getDescription(), $locale);
+
+                if (null != $plArticle->getDescription()) {
+                    $article->setDescription($plArticle->getDescription(), $locale);
+                }
+
                 $article->setPublishedAt($plArticle->getPubDate());
                 if ($plArticle->getStatus() == "publish") {
                     $article->setStatus(PageStatus::PUBLISHED);
@@ -55,11 +60,18 @@ class VicArticleGeneratorStages implements PersisterStageInterface
                     $article->setImage($plArticle->getAttachment(), $locale);
                 }
                 $article->setLocale($locale);
-                $article->setCategory($plArticle->getCategory());
-                $article->setTags($plArticle->getTags());
+
+                if (null != $plArticle->getCategory()) {
+                    $article->setCategory($plArticle->getCategory());
+                }
+
+                if (null != $plArticle->getTags()) {
+                    $article->setTags($plArticle->getTags());
+                }
+
                 $article->setAuthor($plArticle->getCreator());
 
-                $playload->getNewBlog()->addArticle($article);
+                $playload->getNewVicBlog()->addArticle($article);
 
                 // remove default "en" ArticleTranslation to avoid error when flushing
                 foreach ($article->getTranslations() as $key => $translation) {
@@ -72,7 +84,8 @@ class VicArticleGeneratorStages implements PersisterStageInterface
         }
 
         $progress->finish();
-        $playload->getSuccess();
+        $playload->getNewSuccessMessage(" success");
+        $playload->jumpLine();
 
         return $playload;
     }

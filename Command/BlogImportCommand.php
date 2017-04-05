@@ -105,7 +105,7 @@ EOT
         if ($input->isInteractive()) {
             $message = "";
             foreach ($commandParameters as $key => $parameter) {
-                $message .= $key.": ".$parameter."\n";
+                $message .= "<info>".$key.":</info> ".$parameter."\n";
             }
 
             //summary
@@ -114,7 +114,7 @@ EOT
                 $this->getHelper('formatter')->formatBlock('Summary before generation', 'bg=blue;fg=white', true),
                 '',
                 sprintf(
-                    "Do you confirm blog import with following parameters: \n %s",
+                    "<error>Do you confirm blog import with following parameters:</error> \n %s",
                     $message
                 ),
                 '',

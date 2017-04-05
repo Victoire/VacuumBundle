@@ -7,6 +7,7 @@ use Victoire\Bundle\BlogBundle\Entity\Blog;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 
 /**
  * Class VicBlogGeneratorStages
@@ -51,33 +52,38 @@ class VicBlogGeneratorStages implements PersisterStageInterface
     }
 
     /**
+     * Instantiate an new VictoireBlog and hydrate it with base info
+     * from tmpBlog, then persist it.
+     *
      * @param $playload
      * @return mixed
      */
-    public function __invoke(PlayloadInterface $playload)
+    public function __invoke(CommandPlayloadInterface $playload)
     {
         $parameters = $playload->getParameters();
 
-        $playload->getOutput()->write(sprintf('Victoire Blog generation:'));
+        $playload->getNewStageTitleMessage("Victoire Blog generation:");
 
         $blog = new Blog();
-        $blog->setName($parameters['blog_name'], $playload->getLocale());
-        $blog->setCurrentLocale($playload->getLocale());
-        $blog->setDefaultLocale($playload->getLocale());
+        $blog->setDefaultLocale($playload->getTmpBlog()->getLocale());
+        $blog->setCurrentLocale($blog->getDefaultLocale());
+        $blog->setName($parameters['blog_name'], $blog->getDefaultLocale());
         $blog->setTemplate(self::getBaseTemplate($parameters['blog_template']));
         $blog->setParent(self::getParentPage($parameters['blog_parent_id']));
-        $blog->setPublishedAt($playload->getPublicationDate());
-        $blog->setCreatedAt($playload->getPublicationDate());
-        $playload->setNewBlog($blog);
+        $blog->setPublishedAt($playload->getTmpBlog()->getPublicationDate());
+        $blog->setCreatedAt($playload->getTmpBlog()->getPublicationDate());
+        $playload->setNewVicBlog($blog);
 
         foreach ($blog->getTranslations() as $key => $translation) {
-            if ($key != $playload->getLocale()) {
+            if ($key != $blog->getDefaultLocale()) {
                 $blog->removeTranslation($translation);
             }
         }
 
         $this->entityManager->persist($blog);
-        $playload->getSuccess();
+        $playload->getNewSuccessMessage(" success");
+        $playload->jumpLine();
+
         return $playload;
     }
 }

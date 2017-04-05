@@ -5,6 +5,7 @@ namespace Victoire\DevTools\VacuumBundle\Utils\Media;
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\MediaBundle\Entity\Folder;
 use Victoire\Bundle\MediaBundle\Entity\Media;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 
 class MediaFormater
@@ -43,13 +44,13 @@ class MediaFormater
      * @param $playload
      * @return mixed
      */
-    public function generateBlogFolder($playload)
+    public function generateBlogFolder(CommandPlayloadInterface $playload)
     {
-        if (null == $playload->getBlogFolder()) {
+        if (null == $playload->getTmpBlog()->getBlogFolder()) {
             $blogFolder = $this->generateFoler("blog");
-            $playload->setBlogFolder($blogFolder);
+            $playload->getTmpBlog()->setBlogFolder($blogFolder);
         } else {
-            $blogFolder = $playload->getBlogFolder();
+            $blogFolder = $playload->getTmpBlog()->getBlogFolder();
         }
 
         return $blogFolder;

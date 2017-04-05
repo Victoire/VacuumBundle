@@ -5,6 +5,7 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages;
 use Doctrine\ORM\EntityManager;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
 
 /**
  * Class FinalStages
@@ -31,14 +32,15 @@ class FinalStages implements PersisterStageInterface
     /**
      * @param $playload
      */
-    public function __invoke(PlayloadInterface $playload)
+    public function __invoke(CommandPlayloadInterface $playload)
     {
-        $playload->getOutput()->write('Flush blog:');
+        $playload->getNewStageTitleMessage('Flush blog:');
 
-        $this->entityManager->persist($playload->getNewBlog());
+        $this->entityManager->persist($playload->getNewVicBlog());
         $this->entityManager->flush();
 
-        $playload->getSuccess();
+        $playload->getNewSuccessMessage(" success");
+        $playload->jumpLine();
         return $playload;
     }
 }

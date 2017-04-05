@@ -106,4 +106,15 @@ interface CommandPlayloadInterface
      * @return mixed
      */
     public function throwErrorAndStop($message);
+
+    /**
+     * @param $message
+     * @return mixed
+     */
+    public function getNewStageTitleMessage($message);
+
+    /**
+     * @return mixed
+     */
+    public function jumpLine();
 }

@@ -2,6 +2,7 @@
 
 namespace Victoire\DevTools\VacuumBundle\Playload;
 
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -62,6 +63,16 @@ class CommandPlayload implements CommandPlayloadInterface
         $this->questionHelper = $questionHelper;
         $this->output = $output;
         $this->rawData = $rawData;
+        self::loadCustomStyle();
+    }
+
+    /**
+     * Generate custom style for command dispatch
+     */
+    private function loadCustomStyle()
+    {
+        $style = new OutputFormatterStyle('white', 'blue');
+        $this->output->getFormatter()->setStyle('stageTitle', $style);
     }
 
     /**
@@ -71,6 +82,17 @@ class CommandPlayload implements CommandPlayloadInterface
     public function getParameter($key)
     {
         return $this->parameters[$key];
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function addParameter($key, $value)
+    {
+        $this->parameters[$key] = $value;
+        return $this;
     }
 
     /**
@@ -197,9 +219,22 @@ class CommandPlayload implements CommandPlayloadInterface
     /**
      * @param $message
      */
+    public function getNewStageTitleMessage($message)
+    {
+        $this->output->writeln("<stageTitle>".$message."</stageTitle>");
+    }
+
+    /**
+     * @param $message
+     */
     public function getNewSuccessMessage($message)
     {
         $this->output->writeln("<info>".$message."</info>");
+    }
+
+    public function jumpLine()
+    {
+        $this->output->writeln("");
     }
 
     /**
