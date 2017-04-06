@@ -27,11 +27,7 @@
   "required-dev": {
     "phpunit/phpunit": "5.7"
   },
-  "minimum-stability": "dev",
   "autoload": {
-    "psr-0": {
-      "Victoire\\DevTools\\VacuumBundle": ""
-    }
-  },
-  "target-dir": "Victoire/DevTools/VacuumBundle"
+    "psr-4": { "Victoire\\DevTools\\VacuumBundle": "" }
+  }
 }
