@@ -1,5 +1,5 @@
 {
-  "name": "victoire/vacuumbundle",
+  "name": "victoire/vacuum-bundle",
   "type": "symfony-bundle",
   "description": "Victoire import bundle for exterior blog",
   "keywords": [
