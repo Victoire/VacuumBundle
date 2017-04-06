@@ -24,6 +24,7 @@ use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\VicTagGenerator
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Template\VicArticleTemplateBuilder;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayload;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
+use Victoire\DevTools\VacuumBundle\Utils\History\XMLHistoryManager;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
 /**
@@ -58,6 +59,11 @@ class IOWordPressPipeline
     private $curlsTools;
 
     /**
+     * @var XMLHistoryManager
+     */
+    private $XMLHistoryManager;
+
+    /**
      * IOWordPressPipeline constructor.
      * @param $data
      */
@@ -65,13 +71,15 @@ class IOWordPressPipeline
         EntityManager $entityManager,
         $kernelRootDir,
         MediaFormater $mediaFormater,
-        CurlsTools $curlsTools
+        CurlsTools $curlsTools,
+        XMLHistoryManager $XMLHistoryManager
     )
     {
         $this->entityManager = $entityManager;
         $this->kernelRootDir = $kernelRootDir;
         $this->mediaFormater = $mediaFormater;
         $this->curlsTools = $curlsTools;
+        $this->XMLHistoryManager = $XMLHistoryManager;
     }
 
     /**
@@ -83,7 +91,13 @@ class IOWordPressPipeline
         $raw = str_replace(["wp:","dc:",":encoded"],"",$raw);
         $rawData = simplexml_load_string($raw);
 
-        $payload = new CommandPayload($commandParameter, $output, $questionHelper, $rawData);
+        $payload = new CommandPayload(
+            $commandParameter,
+            $output,
+            $questionHelper,
+            $rawData,
+            $this->XMLHistoryManager
+        );
 
         $pipeline = new WordPressPipeline([], new WordPressProcessor());
 

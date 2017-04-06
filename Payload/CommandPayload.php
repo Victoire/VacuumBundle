@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Victoire\Bundle\BlogBundle\Entity\Blog;
 use Victoire\Bundle\MediaBundle\Entity\Folder;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
+use Victoire\DevTools\VacuumBundle\Utils\History\XMLHistoryManager;
 
 /**
  * Class WordPressPayload
@@ -47,6 +48,11 @@ class CommandPayload implements CommandPayloadInterface
     private $newVicBlog;
 
     /**
+     * @var XMLHistoryManager
+     */
+    private $XMLHistoryManager;
+
+    /**
      * WordPressPlayload constructor.
      * @param array $parameters
      * @param ProgressBar $progressBar
@@ -56,13 +62,15 @@ class CommandPayload implements CommandPayloadInterface
         array $parameters,
         OutputInterface $output,
         QuestionHelper $questionHelper,
-        \SimpleXMLElement $rawData
+        \SimpleXMLElement $rawData,
+        XMLHistoryManager $XMLHistoryManager
     )
     {
         $this->parameters = $parameters;
         $this->questionHelper = $questionHelper;
         $this->output = $output;
         $this->rawData = $rawData;
+        $this->XMLHistoryManager = $XMLHistoryManager;
         self::loadCustomStyle();
     }
 
@@ -170,7 +178,7 @@ class CommandPayload implements CommandPayloadInterface
     /**
      * @return \Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog
      */
-    public function getTmpBlog(): \Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog
+    public function getTmpBlog()
     {
         return $this->tmpBlog;
     }
@@ -179,7 +187,7 @@ class CommandPayload implements CommandPayloadInterface
      * @param \Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog $tmpBlog
      * @return CommandPayload
      */
-    public function setTmpBlog(\Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog $tmpBlog): CommandPayload
+    public function setTmpBlog(\Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog $tmpBlog)
     {
         $this->tmpBlog = $tmpBlog;
         return $this;
@@ -188,7 +196,7 @@ class CommandPayload implements CommandPayloadInterface
     /**
      * @return Blog
      */
-    public function getNewVicBlog(): Blog
+    public function getNewVicBlog()
     {
         return $this->newVicBlog;
     }
@@ -197,9 +205,27 @@ class CommandPayload implements CommandPayloadInterface
      * @param Blog $newVicBlog
      * @return CommandPayload
      */
-    public function setNewVicBlog(Blog $newVicBlog): CommandPayload
+    public function setNewVicBlog(Blog $newVicBlog)
     {
         $this->newVicBlog = $newVicBlog;
+        return $this;
+    }
+
+    /**
+     * @return XMLHistoryManager
+     */
+    public function getXMLHistoryManager()
+    {
+        return $this->XMLHistoryManager;
+    }
+
+    /**
+     * @param XMLHistoryManager $XMLHistoryManager
+     * @return CommandPayload
+     */
+    public function setXMLHistoryManager(XMLHistoryManager $XMLHistoryManager)
+    {
+        $this->XMLHistoryManager = $XMLHistoryManager;
         return $this;
     }
 

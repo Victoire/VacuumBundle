@@ -9,9 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
  * @package Victoire\DevTools\VacuumBundle\Entity
  *
  * @ORM\Entity
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({
+ *      "xml" = "Victoire\DevTools\VacuumBundle\Entity\VacuumXMlRelationHistory"
+ * })
  * @ORM\Table("vic_vacuum_historic")
  */
-class VacuumRelationHistoric
+abstract class AbstractVacuumRelationHistory
 {
     /**
      * @var int
@@ -37,20 +42,6 @@ class VacuumRelationHistoric
     private $vicId;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="tag_name", type="string", length=255)
-     */
-    private $tagName;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="tag_id", type="integer")
-     */
-    private $tagId;
-
-    /**
      * @return int
      */
     public function getId()
@@ -60,7 +51,7 @@ class VacuumRelationHistoric
 
     /**
      * @param int $id
-     * @return VacuumRelationHistoric
+     * @return AbstractVacuumRelationHistory
      */
     public function setId(int $id)
     {
@@ -78,7 +69,7 @@ class VacuumRelationHistoric
 
     /**
      * @param string $vicClass
-     * @return VacuumRelationHistoric
+     * @return AbstractVacuumRelationHistory
      */
     public function setVicClass(string $vicClass)
     {
@@ -96,47 +87,11 @@ class VacuumRelationHistoric
 
     /**
      * @param int $vicId
-     * @return VacuumRelationHistoric
+     * @return AbstractVacuumRelationHistory
      */
     public function setVicId(int $vicId)
     {
         $this->vicId = $vicId;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTagName()
-    {
-        return $this->tagName;
-    }
-
-    /**
-     * @param string $tagName
-     * @return VacuumRelationHistoric
-     */
-    public function setTagName(string $tagName)
-    {
-        $this->tagName = $tagName;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTagId()
-    {
-        return $this->tagId;
-    }
-
-    /**
-     * @param int $tagId
-     * @return VacuumRelationHistoric
-     */
-    public function setTagId(int $tagId)
-    {
-        $this->tagId = $tagId;
         return $this;
     }
 }

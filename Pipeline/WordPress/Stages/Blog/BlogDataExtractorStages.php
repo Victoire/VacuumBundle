@@ -30,8 +30,12 @@ class BlogDataExtractorStages implements StageInterface
         if (count($payload->getRawData()->channel) > 1) {
             $payload->throwErrorAndStop("Dump has more than on blog in it.");
         } else {
+
             $channel = $payload->getRawData()->channel;
+
             $blog = new Blog();
+            $blog->setId(1);
+            $blog->setXmlTag("channel");
             $blog->setTitle($payload->getParameters()['blog_name']);
             $blog->setLink($xmlDataFormater->formatString('link', $channel));
             $blog->setPublicationDate($xmlDataFormater->formatDate('pubDate', $channel));

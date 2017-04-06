@@ -5,7 +5,9 @@ namespace Victoire\DevTools\VacuumBundle\Payload;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
+use Victoire\DevTools\VacuumBundle\Entity\VacuumXMlRelationHistory;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
+use Victoire\DevTools\VacuumBundle\Utils\History\XMLHistoryManager;
 
 /**
  * Interface PayloadInterface
@@ -23,7 +25,8 @@ interface CommandPayloadInterface
         array $parameters,
         OutputInterface $output,
         QuestionHelper $questionHelper,
-        \SimpleXMLElement $rawData
+        \SimpleXMLElement $rawData,
+        XMLHistoryManager $XMLHistoryManager
     );
 
     /**
@@ -90,6 +93,18 @@ interface CommandPayloadInterface
     public function setNewVicBlog(\Victoire\Bundle\BlogBundle\Entity\Blog $blog);
 
     /**
+     * @return XMLHistoryManager
+     */
+    public function getXMLHistoryManager();
+
+    /**
+     * @param XMLHistoryManager $XMLHistoryManager
+     * @return CommandPayload
+     */
+    public function setXMLHistoryManager(XMLHistoryManager $XMLHistoryManager);
+
+
+    /**
      * @param null $value
      * @return mixed
      */
@@ -117,4 +132,6 @@ interface CommandPayloadInterface
      * @return mixed
      */
     public function jumpLine();
+
+
 }

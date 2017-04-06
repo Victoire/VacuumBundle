@@ -18,10 +18,13 @@ services:
             - "%kernel.root_dir%"
             - "@victoire.vacuum_bundle.media_formater.utils"
             - "@victoire.vacuum_bundle.curl_tools.utils"
+            - "@victoire.vacuum_bundle.xml_history_manager.utils"
 
     ############################
     #### UTILS
     ############################
+
+    #### Formatter
 
     victoire.vacuum_bundle.media_formater.utils:
         class: Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater
@@ -30,7 +33,16 @@ services:
             - "%kernel.root_dir%"
             - "@victoire.vacuum_bundle.curl_tools.utils"
 
+    #### Curl
+
     victoire.vacuum_bundle.curl_tools.utils:
         class: Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools
         arguments:
             - "%kernel.root_dir%"
+
+    #### History
+
+    victoire.vacuum_bundle.xml_history_manager.utils:
+        class: Victoire\DevTools\VacuumBundle\Utils\History\XMLHistoryManager
+        arguments:
+            - "@doctrine.orm.entity_manager"

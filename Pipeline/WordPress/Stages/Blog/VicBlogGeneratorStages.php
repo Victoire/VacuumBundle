@@ -79,7 +79,11 @@ class VicBlogGeneratorStages implements PersisterStageInterface
             }
         }
 
+        $blogHistory = $payload->getXMLHistoryManager()->generateHistory($payload->getTmpBlog(),$blog);
+
         $this->entityManager->persist($blog);
+        $this->entityManager->flush();
+
         $payload->getNewSuccessMessage(" success");
         $payload->jumpLine();
 

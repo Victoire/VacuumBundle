@@ -1,6 +1,7 @@
 <?php
 
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
+
 use Victoire\Bundle\MediaBundle\Entity\Folder;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 
@@ -8,7 +9,7 @@ use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
  * Class Blog
  * @package Victoire\DevTools\VacuumBundle\Entity\WordPress
  */
-class Blog
+class Blog extends AbstractXMLEntity
 {
     /**
      * @var Folder
