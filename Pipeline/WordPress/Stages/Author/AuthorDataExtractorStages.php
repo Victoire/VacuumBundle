@@ -5,9 +5,8 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\Table;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Author;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
 /**
@@ -35,17 +34,17 @@ class AuthorDataExtractorStages implements PersisterStageInterface
      * If there is no match, it throw an error and ask for creation of author
      * account before blog import.
      *
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    public function __invoke(CommandPlayloadInterface $playload)
+    public function __invoke(CommandPayloadInterface $payload)
     {
         $xmlDataFormater = new XmlDataFormater();
 
-        $channel = $playload->getRawData()->channel;
+        $channel = $payload->getRawData()->channel;
 
-        $progress = $playload->getNewProgressBar(count($channel->author));
-        $playload->getNewStageTitleMessage("Author data extraction:");
+        $progress = $payload->getNewProgressBar(count($channel->author));
+        $payload->getNewStageTitleMessage("Author data extraction:");
 
         $missingAuthor = [];
 
@@ -68,30 +67,30 @@ class AuthorDataExtractorStages implements PersisterStageInterface
                 array_push($missingAuthor, $row);
             } else {
                 if (null != $authorByUsername) {
-                    $playload->getTmpBlog()->addAuthors($authorByUsername);
+                    $payload->getTmpBlog()->addAuthors($authorByUsername);
                     $progress->advance();
                 } elseif (null != $authorByEmail) {
-                    $playload->getTmpBlog()->addAuthors($authorByEmail);
+                    $payload->getTmpBlog()->addAuthors($authorByEmail);
                     $progress->advance();
                 }
             }
         }
 
         if (!empty($missingAuthor)) {
-            $missingAuthorListe = new Table($playload->getOutput());
+            $missingAuthorListe = new Table($payload->getOutput());
             $missingAuthorListe->setHeaders(['id', 'login', 'email', 'display name', 'firstname', 'lastname']);
             foreach ($missingAuthor as $author) {
                 $missingAuthorListe->addRow($author);
             }
             $missingAuthorListe->render();
-            $playload->throwErrorAndStop("Some Author can't be found ! Please create them before importing this blog again.");
+            $payload->throwErrorAndStop("Some Author can't be found ! Please create them before importing this blog again.");
         }
 
         $progress->finish();
-        $playload->getNewSuccessMessage(" success");
-        $playload->jumpLine();
+        $payload->getNewSuccessMessage(" success");
+        $payload->jumpLine();
 
         unset($xmlDataFormater);
-        return $playload;
+        return $payload;
     }
 }

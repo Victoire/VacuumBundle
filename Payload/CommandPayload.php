@@ -1,6 +1,6 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Playload;
+namespace Victoire\DevTools\VacuumBundle\Payload;
 
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -11,10 +11,10 @@ use Victoire\Bundle\MediaBundle\Entity\Folder;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 
 /**
- * Class WordPressPlayload
+ * Class WordPressPayload
  * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress
  */
-class CommandPlayload implements CommandPlayloadInterface
+class CommandPayload implements CommandPayloadInterface
 {
     /**
      * @var array
@@ -105,7 +105,7 @@ class CommandPlayload implements CommandPlayloadInterface
 
     /**
      * @param array $parameters
-     * @return CommandPlayload
+     * @return CommandPayload
      */
     public function setParameters(array $parameters)
     {
@@ -123,7 +123,7 @@ class CommandPlayload implements CommandPlayloadInterface
 
     /**
      * @param OutputInterface $output
-     * @return CommandPlayload
+     * @return CommandPayload
      */
     public function setOutput(OutputInterface $output)
     {
@@ -141,7 +141,7 @@ class CommandPlayload implements CommandPlayloadInterface
 
     /**
      * @param QuestionHelper $questionHelper
-     * @return CommandPlayload
+     * @return CommandPayload
      */
     public function setQuestionHelper(QuestionHelper $questionHelper)
     {
@@ -159,7 +159,7 @@ class CommandPlayload implements CommandPlayloadInterface
 
     /**
      * @param \SimpleXMLElement $rawData
-     * @return CommandPlayload
+     * @return CommandPayload
      */
     public function setRawData(\SimpleXMLElement $rawData)
     {
@@ -177,9 +177,9 @@ class CommandPlayload implements CommandPlayloadInterface
 
     /**
      * @param \Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog $tmpBlog
-     * @return CommandPlayload
+     * @return CommandPayload
      */
-    public function setTmpBlog(\Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog $tmpBlog): CommandPlayload
+    public function setTmpBlog(\Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog $tmpBlog): CommandPayload
     {
         $this->tmpBlog = $tmpBlog;
         return $this;
@@ -195,9 +195,9 @@ class CommandPlayload implements CommandPlayloadInterface
 
     /**
      * @param Blog $newVicBlog
-     * @return CommandPlayload
+     * @return CommandPayload
      */
-    public function setNewVicBlog(Blog $newVicBlog): CommandPlayload
+    public function setNewVicBlog(Blog $newVicBlog): CommandPayload
     {
         $this->newVicBlog = $newVicBlog;
         return $this;

@@ -3,9 +3,8 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category;
 
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Category;
-use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
 /**
@@ -17,17 +16,17 @@ class CategoryDataExtractorStages implements StageInterface
     /**
      * Extract and add category from raw Data to tmpBlog
      *
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    public function __invoke(CommandPlayloadInterface $playload)
+    public function __invoke(CommandPayloadInterface $payload)
     {
         $xmlDataFormater = new XmlDataFormater();
 
-        $channel = $playload->getRawData()->channel;
+        $channel = $payload->getRawData()->channel;
 
-        $progress = $playload->getNewProgressBar(count($channel->category));
-        $playload->getNewStageTitleMessage("Category data extraction:");
+        $progress = $payload->getNewProgressBar(count($channel->category));
+        $payload->getNewStageTitleMessage("Category data extraction:");
 
         foreach ($channel->category as $wpCategory) {
             $category = new Category();
@@ -35,15 +34,15 @@ class CategoryDataExtractorStages implements StageInterface
             $category->setCategoryNicename($xmlDataFormater->formatString('category_nicename', $wpCategory));
             $category->setCategoryParent($xmlDataFormater->formatInteger('category_parent', $wpCategory));
 
-            $playload->getTmpBlog()->addCategory($category);
+            $payload->getTmpBlog()->addCategory($category);
             $progress->advance();
         }
         $progress->finish();
 
-        $playload->getNewSuccessMessage(" success");
-        $playload->jumpLine();
+        $payload->getNewSuccessMessage(" success");
+        $payload->jumpLine();
 
         unset($xmlDataFormater);
-        return $playload;
+        return $payload;
     }
 }

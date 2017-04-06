@@ -6,8 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Blog;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 
 /**
  * Class VicBlogGeneratorStages
@@ -55,24 +54,24 @@ class VicBlogGeneratorStages implements PersisterStageInterface
      * Instantiate an new VictoireBlog and hydrate it with base info
      * from tmpBlog, then persist it.
      *
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    public function __invoke(CommandPlayloadInterface $playload)
+    public function __invoke(CommandPayloadInterface $payload)
     {
-        $parameters = $playload->getParameters();
+        $parameters = $payload->getParameters();
 
-        $playload->getNewStageTitleMessage("Victoire Blog generation:");
+        $payload->getNewStageTitleMessage("Victoire Blog generation:");
 
         $blog = new Blog();
-        $blog->setDefaultLocale($playload->getTmpBlog()->getLocale());
+        $blog->setDefaultLocale($payload->getTmpBlog()->getLocale());
         $blog->setCurrentLocale($blog->getDefaultLocale());
         $blog->setName($parameters['blog_name'], $blog->getDefaultLocale());
         $blog->setTemplate(self::getBaseTemplate($parameters['blog_template']));
         $blog->setParent(self::getParentPage($parameters['blog_parent_id']));
-        $blog->setPublishedAt($playload->getTmpBlog()->getPublicationDate());
-        $blog->setCreatedAt($playload->getTmpBlog()->getPublicationDate());
-        $playload->setNewVicBlog($blog);
+        $blog->setPublishedAt($payload->getTmpBlog()->getPublicationDate());
+        $blog->setCreatedAt($payload->getTmpBlog()->getPublicationDate());
+        $payload->setNewVicBlog($blog);
 
         foreach ($blog->getTranslations() as $key => $translation) {
             if ($key != $blog->getDefaultLocale()) {
@@ -81,9 +80,9 @@ class VicBlogGeneratorStages implements PersisterStageInterface
         }
 
         $this->entityManager->persist($blog);
-        $playload->getNewSuccessMessage(" success");
-        $playload->jumpLine();
+        $payload->getNewSuccessMessage(" success");
+        $payload->jumpLine();
 
-        return $playload;
+        return $payload;
     }
 }

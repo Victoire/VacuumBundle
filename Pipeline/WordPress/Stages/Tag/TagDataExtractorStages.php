@@ -3,9 +3,8 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag;
 
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Tag;
-use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
 /**
@@ -17,32 +16,32 @@ class TagDataExtractorStages implements StageInterface
     /**
      * Extract and add tag from raw Data to tmpBlog
      *
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    public function __invoke(CommandPlayloadInterface $playload)
+    public function __invoke(CommandPayloadInterface $payload)
     {
         $xmlDataFormater = new XmlDataFormater();
 
-        $channel = $playload->getRawData()->channel;
+        $channel = $payload->getRawData()->channel;
 
-        $progress = $playload->getNewProgressBar(count($channel->tag));
-        $playload->getNewStageTitleMessage("Tag data extraction:");
+        $progress = $payload->getNewProgressBar(count($channel->tag));
+        $payload->getNewStageTitleMessage("Tag data extraction:");
 
         foreach ($channel->tag as $wpTag) {
             $tag = new Tag();
             $tag->setTagName($xmlDataFormater->formatString('tag_name', $wpTag));
             $tag->setTagSlug($xmlDataFormater->formatString('tag_slug', $wpTag));
 
-            $playload->getTmpBlog()->addTag($tag);
+            $payload->getTmpBlog()->addTag($tag);
             $progress->advance();
         }
 
         $progress->finish();
-        $playload->getNewSuccessMessage(" success");
-        $playload->jumpLine();
+        $payload->getNewSuccessMessage(" success");
+        $payload->jumpLine();
 
         unset($xmlDataFormater);
-        return $playload;
+        return $payload;
     }
 }

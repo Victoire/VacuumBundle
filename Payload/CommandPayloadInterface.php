@@ -1,6 +1,6 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Playload;
+namespace Victoire\DevTools\VacuumBundle\Payload;
 
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -8,10 +8,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 
 /**
- * Interface PlayloadInterface
+ * Interface PayloadInterface
  * @package Victoire\DevTools\VacuumBundle\Pipeline
  */
-interface CommandPlayloadInterface
+interface CommandPayloadInterface
 {
     /**
      * WordPressPlayload constructor.
@@ -38,7 +38,7 @@ interface CommandPlayloadInterface
     public function getParameter($key);
 
     /**
-     * @return CommandPlayloadInterface
+     * @return CommandPayloadInterface
      */
     public function setParameters(array $parameters);
 
@@ -48,7 +48,7 @@ interface CommandPlayloadInterface
     public function getQuestionHelper();
 
     /**
-     * @return CommandPlayloadInterface
+     * @return CommandPayloadInterface
      */
     public function setQuestionHelper(QuestionHelper $questionHelper);
 
@@ -58,7 +58,7 @@ interface CommandPlayloadInterface
     public function getRawData();
 
     /**
-     * @return CommandPlayloadInterface
+     * @return CommandPayloadInterface
      */
     public function setRawData(\SimpleXMLElement $rawData);
 

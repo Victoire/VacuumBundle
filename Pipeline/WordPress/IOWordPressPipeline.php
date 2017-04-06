@@ -22,7 +22,7 @@ use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\SEO\VicSEOGenerator
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\VicTagGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Template\VicArticleTemplateBuilder;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayload;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayload;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
@@ -83,7 +83,7 @@ class IOWordPressPipeline
         $raw = str_replace(["wp:","dc:",":encoded"],"",$raw);
         $rawData = simplexml_load_string($raw);
 
-        $playload = new CommandPlayload($commandParameter, $output, $questionHelper, $rawData);
+        $payload = new CommandPayload($commandParameter, $output, $questionHelper, $rawData);
 
         $pipeline = new WordPressPipeline([], new WordPressProcessor());
 
@@ -96,15 +96,15 @@ class IOWordPressPipeline
             ->pipe(new VicCategoryGeneratorStages($this->entityManager))
             ->pipe(new VicTagGeneratorStages($this->entityManager))
             ->pipe(new ArticleDataExtractorStages())
-//            ->pipe(new VicArticleAttachmentStages($this->mediaFormater))
-//            ->pipe(new VicArticleContentStages($this->mediaFormater))
+            ->pipe(new VicArticleAttachmentStages($this->mediaFormater))
+            ->pipe(new VicArticleContentStages($this->mediaFormater))
             ->pipe(new VicArticleGeneratorStages($this->entityManager))
             ->pipe(new VicArticleTemplateBuilder($this->entityManager))
             ->pipe(new VicArticlesBusinessPagesStages($this->entityManager))
             ->pipe(new FinalStages($this->entityManager))
             ->pipe(new VicSEOGenerator($this->entityManager))
             ->pipe(new FinalStages($this->entityManager))
-        ->process($playload);
+        ->process($payload);
     }
 
     /**

@@ -4,10 +4,8 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
 use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayload;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
 /**
@@ -36,17 +34,17 @@ class VicArticleAttachmentStages implements StageInterface
      * Generate a Victoire Media Entity based on
      * article attachment url.
      *
-     * @param CommandPlayloadInterface $playload
-     * @return CommandPlayloadInterface
+     * @param CommandPayloadInterface $payload
+     * @return CommandPayloadInterface
      */
-    public function __invoke(CommandPlayloadInterface $playload)
+    public function __invoke(CommandPayloadInterface $payload)
     {
-        $blogFolder = $this->mediaFormater->generateBlogFolder($playload);
+        $blogFolder = $this->mediaFormater->generateBlogFolder($payload);
 
-        $progress = $playload->getNewProgressBar(count($playload->getTmpBlog()->getArticles()));
-        $playload->getNewStageTitleMessage('Victoire Article Media generation:');
+        $progress = $payload->getNewProgressBar(count($payload->getTmpBlog()->getArticles()));
+        $payload->getNewStageTitleMessage('Victoire Article Media generation:');
 
-        foreach ($playload->getTmpBlog()->getArticles() as $plArticle) {
+        foreach ($payload->getTmpBlog()->getArticles() as $plArticle) {
             if (null != $plArticle->getAttachmentUrl()) {
                 $articleFolder = $this->mediaFormater->generateFoler($plArticle->getTitle(), $blogFolder);
                 $distantPath = $this->mediaFormater->cleanUrl($plArticle->getAttachmentUrl());
@@ -55,8 +53,8 @@ class VicArticleAttachmentStages implements StageInterface
             }
         }
 
-        $playload->jumpLine();
-        $playload->getNewSuccessMessage(" success");
-        return $playload;
+        $payload->jumpLine();
+        $payload->getNewSuccessMessage(" success");
+        return $payload;
     }
 }

@@ -7,8 +7,7 @@ use Victoire\Bundle\BlogBundle\Entity\Article;
 use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\Bundle\PageBundle\Entity\PageStatus;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 
 /**
  * Class VicArticleGeneratorStages
@@ -31,17 +30,17 @@ class VicArticleGeneratorStages implements PersisterStageInterface
     }
 
     /**
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    public function __invoke(CommandPlayloadInterface $playload)
+    public function __invoke(CommandPayloadInterface $payload)
     {
-        $locale = $playload->getNewVicBlog()->getDefaultLocale();
+        $locale = $payload->getNewVicBlog()->getDefaultLocale();
 
-        $progress = $playload->getNewProgressBar(count($playload->getTmpBlog()->getArticles()));
-        $playload->getNewStageTitleMessage('Victoire Article generation:');
+        $progress = $payload->getNewProgressBar(count($payload->getTmpBlog()->getArticles()));
+        $payload->getNewStageTitleMessage('Victoire Article generation:');
 
-        foreach ($playload->getTmpBlog()->getArticles() as $plArticle) {
+        foreach ($payload->getTmpBlog()->getArticles() as $plArticle) {
 
             if (null != $plArticle->getTitle()) {
                 $article = new Article();
@@ -71,7 +70,7 @@ class VicArticleGeneratorStages implements PersisterStageInterface
 
                 $article->setAuthor($plArticle->getCreator());
 
-                $playload->getNewVicBlog()->addArticle($article);
+                $payload->getNewVicBlog()->addArticle($article);
 
                 // remove default "en" ArticleTranslation to avoid error when flushing
                 foreach ($article->getTranslations() as $key => $translation) {
@@ -84,9 +83,9 @@ class VicArticleGeneratorStages implements PersisterStageInterface
         }
 
         $progress->finish();
-        $playload->getNewSuccessMessage(" success");
-        $playload->jumpLine();
+        $payload->getNewSuccessMessage(" success");
+        $payload->jumpLine();
 
-        return $playload;
+        return $payload;
     }
 }

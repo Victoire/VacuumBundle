@@ -6,8 +6,7 @@ use Gedmo\Tree\Mapping\Driver\Xml;
 use Victoire\Bundle\SeoBundle\Entity\PageSeo;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayload;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
 /**
@@ -17,17 +16,17 @@ use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 class ArticleDataExtractorStages implements StageInterface
 {
     /**
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    public function __invoke(CommandPlayloadInterface $playload)
+    public function __invoke(CommandPayloadInterface $payload)
     {
         $xmlDataFormater = new XmlDataFormater();
 
         $typePost = [];
         $typeAttachement = [];
 
-        $channel = $playload->getRawData()->channel;
+        $channel = $payload->getRawData()->channel;
 
         foreach ($channel->item as $wpArticle) {
             $postType = $xmlDataFormater->formatString('post_type', $wpArticle);
@@ -38,42 +37,42 @@ class ArticleDataExtractorStages implements StageInterface
             }
         }
 
-        $progress = $playload->getNewProgressBar(count($typePost));
-        $playload->getNewStageTitleMessage("Article Data extraction:");
+        $progress = $payload->getNewProgressBar(count($typePost));
+        $payload->getNewStageTitleMessage("Article Data extraction:");
 
         foreach ($typePost as $wpArticle) {
 
             $article = new Article();
 
-            $article = self::hydrateArticle($article, $wpArticle, $playload, $xmlDataFormater);
+            $article = self::hydrateArticle($article, $wpArticle, $payload, $xmlDataFormater);
             $article = self::manageArticleAttachment($article, $typeAttachement, $xmlDataFormater);
-            $article = self::setCategoryAndTag($article, $wpArticle, $xmlDataFormater, $playload);
+            $article = self::setCategoryAndTag($article, $wpArticle, $xmlDataFormater, $payload);
 
-            $playload->getTmpBlog()->addArticle($article);
+            $payload->getTmpBlog()->addArticle($article);
             $progress->advance();
         }
 
         $progress->finish();
-        $playload->getNewSuccessMessage(" success");
-        $playload->jumpLine();
+        $payload->getNewSuccessMessage(" success");
+        $payload->jumpLine();
 
         unset($xmlDataFormater);
-        return $playload;
+        return $payload;
     }
 
     /**
      * @param $article
      * @param $wpArticle
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    private function hydrateArticle(Article $article, $wpArticle, CommandPlayload $playload, $xmlDataFormater)
+    private function hydrateArticle(Article $article, $wpArticle, CommandPayloadInterface $payload, $xmlDataFormater)
     {
         $article->setTitle($xmlDataFormater->formatString('title', $wpArticle));
         $article->setSlug($xmlDataFormater->formatString('post_name', $wpArticle));
         $article->setLink($xmlDataFormater->formatString('link', $wpArticle));
         $article->setPubDate($xmlDataFormater->formatDate('pubDate', $wpArticle));
-        $article->setCreator($playload->getTmpBlog()->getAuthor($xmlDataFormater->formatString('creator', $wpArticle)));
+        $article->setCreator($payload->getTmpBlog()->getAuthor($xmlDataFormater->formatString('creator', $wpArticle)));
 
         if (null != $xmlDataFormater->formatString('excerpt', $wpArticle)) {
             $article->setDescription($xmlDataFormater->formatString('excerpt', $wpArticle));
@@ -117,9 +116,9 @@ class ArticleDataExtractorStages implements StageInterface
      * @param Article $article
      * @param $wpArticle
      * @param $xmlDataFormater
-     * @param $playload
+     * @param $payload
      */
-    private function setCategoryAndTag(Article $article, $wpArticle, XmlDataFormater $xmlDataFormater, CommandPlayload $playload)
+    private function setCategoryAndTag(Article $article, $wpArticle, XmlDataFormater $xmlDataFormater, CommandPayloadInterface $payload)
     {
         foreach ($wpArticle->category as $cat) {
             foreach ($cat->attributes() as $key => $attribute) {
@@ -131,13 +130,13 @@ class ArticleDataExtractorStages implements StageInterface
             }
 
             if ($domain == "post_tag") {
-                foreach ($playload->getNewVicBlog()->getTags() as $tag) {
+                foreach ($payload->getNewVicBlog()->getTags() as $tag) {
                     if ($tag->getSlug() == $nicename) {
                         $article->addTag($tag);
                     }
                 }
             } elseif ($domain == "category") {
-                foreach ($playload->getNewVicBlog()->getCategories() as $category) {
+                foreach ($payload->getNewVicBlog()->getCategories() as $category) {
                     if ($category->getSlug() == $nicename) {
                         $article->setCategory($category);
                     }

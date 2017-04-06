@@ -8,15 +8,15 @@ class WordPressProcessor implements ProcessorInterface
 {
     /**
      * @param array $stages
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    public function process(array $stages, $playload)
+    public function process(array $stages, $payload)
     {
         foreach ($stages as $stage) {
-            $playload = call_user_func($stage, $playload);
+            $payload = call_user_func($stage, $payload);
         }
 
-        return $playload;
+        return $payload;
     }
 }

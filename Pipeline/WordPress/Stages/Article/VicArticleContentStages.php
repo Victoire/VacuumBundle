@@ -5,9 +5,8 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 use Behat\Mink\Exception\Exception;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
 use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
@@ -33,22 +32,22 @@ class VicArticleContentStages implements StageInterface
      * Parse article content create Media entity for
      * picture found in it and update link accordingly.
      *
-     * @param CommandPlayloadInterface $playload
-     * @return CommandPlayloadInterface
+     * @param CommandPayloadInterface $payload
+     * @return CommandPayloadInterface
      */
-    public function __invoke(CommandPlayloadInterface $playload)
+    public function __invoke(CommandPayloadInterface $payload)
     {
-        $progress = $playload->getNewProgressBar(count($playload->getTmpBlog()->getArticles()));
-        $playload->getNewStageTitleMessage('Victoire Article Content generation:');
+        $progress = $payload->getNewProgressBar(count($payload->getTmpBlog()->getArticles()));
+        $payload->getNewStageTitleMessage('Victoire Article Content generation:');
 
-        foreach ($playload->getTmpBlog()->getArticles() as $plArticle) {
+        foreach ($payload->getTmpBlog()->getArticles() as $plArticle) {
             if (null != $plArticle->getContent()) {
 
                 $content = $plArticle->getContent();
                 $document = self::generateDOMDocument($content);
 
                 if ($document) {
-                    $document = self::handleImg($document, $plArticle, $playload);
+                    $document = self::handleImg($document, $plArticle, $payload);
                 }
 
                 if ($document) {
@@ -59,9 +58,9 @@ class VicArticleContentStages implements StageInterface
             }
         }
 
-        $playload->jumpLine();
-        $playload->getNewSuccessMessage(" success");
-        return $playload;
+        $payload->jumpLine();
+        $payload->getNewSuccessMessage(" success");
+        return $payload;
     }
 
     /**
@@ -90,7 +89,7 @@ class VicArticleContentStages implements StageInterface
      * @param \DOMDocument $document
      * @return bool
      */
-    private function handleImg(\DOMDocument $document, Article $article, $playload) {
+    private function handleImg(\DOMDocument $document, Article $article, $payload) {
 
         if (null != $document->getElementsByTagName("img")) {
             $xpath = new \DOMXPath($document);
@@ -102,7 +101,7 @@ class VicArticleContentStages implements StageInterface
                 if (null != $article->getAttachment()) {
                     $folder = $article->getAttachment()->getFolder();
                 } else {
-                    $blogFolder = $this->mediaFormater->generateBlogFolder($playload);
+                    $blogFolder = $this->mediaFormater->generateBlogFolder($payload);
                     $folder = $this->mediaFormater->generateFoler($article->getTitle(), $blogFolder);
                 }
                 $image = $this->mediaFormater->generateImageMedia($distantPath, $folder);

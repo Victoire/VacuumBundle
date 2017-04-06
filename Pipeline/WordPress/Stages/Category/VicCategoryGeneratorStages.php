@@ -5,8 +5,7 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category;
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Category;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\PlayloadInterface;
-use Victoire\DevTools\VacuumBundle\Playload\CommandPlayloadInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 
 /**
  * Class VicCategoryGeneratorStages
@@ -31,28 +30,28 @@ class VicCategoryGeneratorStages implements PersisterStageInterface
     }
 
     /**
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    public function __invoke(CommandPlayloadInterface $playload)
+    public function __invoke(CommandPayloadInterface $payload)
     {
-        $progress = $playload->getNewProgressBar(count($playload->getTmpBlog()->getCategories()));
-        $playload->getNewStageTitleMessage('Victoire Category generation:');
+        $progress = $payload->getNewProgressBar(count($payload->getTmpBlog()->getCategories()));
+        $payload->getNewStageTitleMessage('Victoire Category generation:');
 
-        foreach ($playload->getTmpBlog()->getCategories() as $plCategory) {
+        foreach ($payload->getTmpBlog()->getCategories() as $plCategory) {
             $category = new Category();
             $category->setTitle($plCategory->getCategoryName());
             $category->setSlug($plCategory->getCategoryNiceName());
-            $playload->getNewVicBlog()->addCategorie($category);
+            $payload->getNewVicBlog()->addCategorie($category);
 
             $this->entityManager->persist($category);
             $progress->advance();
         }
 
         $progress->finish();
-        $playload->getNewSuccessMessage(" success");
-        $playload->jumpLine();
+        $payload->getNewSuccessMessage(" success");
+        $payload->jumpLine();
 
-        return $playload;
+        return $payload;
     }
 }
