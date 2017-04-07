@@ -2,10 +2,11 @@
 
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
 
-
-class Article
+class Article extends AbstractXMLEntity
 {
     private $title;
+
+    private $slug;
 
     private $link;
 
@@ -35,6 +36,12 @@ class Article
 
     private $attachmentUrl;
 
+    private $attachment;
+
+    private $category;
+
+    private $tags = [];
+
     /**
      * @return mixed
      */
@@ -45,11 +52,33 @@ class Article
 
     /**
      * @param mixed $title
+     *
      * @return Article
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     *
+     * @return Article
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
         return $this;
     }
 
@@ -63,11 +92,13 @@ class Article
 
     /**
      * @param mixed $link
+     *
      * @return Article
      */
     public function setLink($link)
     {
         $this->link = $link;
+
         return $this;
     }
 
@@ -81,11 +112,13 @@ class Article
 
     /**
      * @param mixed $pubDate
+     *
      * @return Article
      */
     public function setPubDate($pubDate)
     {
         $this->pubDate = $pubDate;
+
         return $this;
     }
 
@@ -99,11 +132,13 @@ class Article
 
     /**
      * @param mixed $creator
+     *
      * @return Article
      */
     public function setCreator($creator)
     {
         $this->creator = $creator;
+
         return $this;
     }
 
@@ -117,11 +152,13 @@ class Article
 
     /**
      * @param mixed $description
+     *
      * @return Article
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -135,11 +172,13 @@ class Article
 
     /**
      * @param mixed $content
+     *
      * @return Article
      */
     public function setContent($content)
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -153,11 +192,13 @@ class Article
 
     /**
      * @param mixed $excerpt
+     *
      * @return Article
      */
     public function setExcerpt($excerpt)
     {
         $this->excerpt = $excerpt;
+
         return $this;
     }
 
@@ -171,11 +212,13 @@ class Article
 
     /**
      * @param mixed $postId
+     *
      * @return Article
      */
     public function setPostId($postId)
     {
         $this->postId = $postId;
+
         return $this;
     }
 
@@ -189,11 +232,13 @@ class Article
 
     /**
      * @param mixed $postDate
+     *
      * @return Article
      */
     public function setPostDate($postDate)
     {
         $this->postDate = $postDate;
+
         return $this;
     }
 
@@ -207,11 +252,13 @@ class Article
 
     /**
      * @param mixed $postDateGmt
+     *
      * @return Article
      */
     public function setPostDateGmt($postDateGmt)
     {
         $this->postDateGmt = $postDateGmt;
+
         return $this;
     }
 
@@ -225,11 +272,13 @@ class Article
 
     /**
      * @param mixed $status
+     *
      * @return Article
      */
     public function setStatus($status)
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -243,11 +292,13 @@ class Article
 
     /**
      * @param mixed $postParent
+     *
      * @return Article
      */
     public function setPostParent($postParent)
     {
         $this->postParent = $postParent;
+
         return $this;
     }
 
@@ -261,11 +312,13 @@ class Article
 
     /**
      * @param mixed $menuOrder
+     *
      * @return Article
      */
     public function setMenuOrder($menuOrder)
     {
         $this->menuOrder = $menuOrder;
+
         return $this;
     }
 
@@ -279,11 +332,13 @@ class Article
 
     /**
      * @param mixed $postType
+     *
      * @return Article
      */
     public function setPostType($postType)
     {
         $this->postType = $postType;
+
         return $this;
     }
 
@@ -297,11 +352,85 @@ class Article
 
     /**
      * @param mixed $attachmentUrl
+     *
      * @return Article
      */
     public function setAttachmentUrl($attachmentUrl)
     {
         $this->attachmentUrl = $attachmentUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttachment()
+    {
+        return $this->attachment;
+    }
+
+    /**
+     * @param mixed $attachment
+     *
+     * @return Article
+     */
+    public function setAttachment($attachment)
+    {
+        $this->attachment = $attachment;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     *
+     * @return Article
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param $tag
+     *
+     * @return $this
+     */
+    public function addTag($tag)
+    {
+        array_push($this->tags, $tag);
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $tags
+     *
+     * @return Article
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+
         return $this;
     }
 }

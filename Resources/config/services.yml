@@ -11,12 +11,38 @@ services:
     #### PIPELINE
     ############################
 
-    victoire.vacuum_bundle.word_press.pipeline:
-        class: Victoire\DevTools\VacuumBundle\Pipeline\Pipeline\WordPressPipeline
+    victoire.vacuum_bundle.io_word_press.pipeline:
+        class: Victoire\DevTools\VacuumBundle\Pipeline\WordPress\IOWordPressPipeline
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "%kernel.root_dir%"
+            - "@victoire.vacuum_bundle.media_formater.utils"
+            - "@victoire.vacuum_bundle.curl_tools.utils"
+            - "@victoire.vacuum_bundle.xml_history_manager.utils"
 
     ############################
-    #### STAGES
+    #### UTILS
     ############################
 
-    victoire.vacuum_bundle.article_generator.stage:
-        class: Victoire\DevTools\VacuumBundle\Pipeline\Stages\ArticleGeneratorStages
+    #### Formatter
+
+    victoire.vacuum_bundle.media_formater.utils:
+        class: Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "%kernel.root_dir%"
+            - "@victoire.vacuum_bundle.curl_tools.utils"
+
+    #### Curl
+
+    victoire.vacuum_bundle.curl_tools.utils:
+        class: Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools
+        arguments:
+            - "%kernel.root_dir%"
+
+    #### History
+
+    victoire.vacuum_bundle.xml_history_manager.utils:
+        class: Victoire\DevTools\VacuumBundle\Utils\History\XMLHistoryManager
+        arguments:
+            - "@doctrine.orm.entity_manager"

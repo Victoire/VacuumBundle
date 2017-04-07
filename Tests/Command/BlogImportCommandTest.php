@@ -21,14 +21,14 @@ class BlogImportCommandTest extends KernelTestCase
 
         $commandTester->execute([
             'command' => $command->getName(),
-            '--help' => ''
+            '--help'  => '',
         ]);
 
         $output = $commandTester->getDisplay();
         $this->assertContains('
         Usage:
             victoire:blog-import [options]
-            
+
             Options:
               -b, --blog=BLOG          The name of the blog to populate
               -d, --dump=DUMP          Path to the dump who should bee imported
@@ -44,23 +44,23 @@ class BlogImportCommandTest extends KernelTestCase
                   --no-debug           Switches off debug mode.
               -new, --new[=NEW]        Force new blog generation
               -v|vv|vvv, --verbose     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-            
+
             Help:
                   The victoire:blog-import command helps you to import blog contents from a dump.
-              
+
                   Any passed option will be used as a default value for the interaction
-                  
+
                   Required option
-                  
+
                   -b --blog is required it expect a blog name
                   -d --dump is required it expect a path to the dump
-                  
+
                   php app/console victoire:blog-import --blog=MyVictoireBlog --dump=/Path/To/My/Dump
-                  
+
                   Other option
-                  
-                  -new --new will generate a new blog 
-                  
+
+                  -new --new will generate a new blog
+
                   If you want to disable any user interaction, use --no-interaction but don\'t forget to pass all needed options:
         ', $output);
     }

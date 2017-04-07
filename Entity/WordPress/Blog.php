@@ -1,10 +1,29 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
+namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
 
-class WordPressPlayload
+use Victoire\Bundle\MediaBundle\Entity\Folder;
+use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
+
+/**
+ * Class Blog.
+ */
+class Blog extends AbstractXMLEntity
 {
-    private $rawData;
+    /**
+     * @var Folder
+     */
+    private $blogFolder;
+
+    /**
+     * @var WidgetMap
+     */
+    private $contentWidgetMap;
+
+    /**
+     * @var string
+     */
+    private $locale;
 
     /**
      * @var string
@@ -25,11 +44,6 @@ class WordPressPlayload
      * @var \DateTime
      */
     private $publicationDate;
-
-    /**
-     * @var string
-     */
-    private $language;
 
     /**
      * @var string
@@ -67,6 +81,76 @@ class WordPressPlayload
     private $terms = [];
 
     /**
+     * @var array
+     */
+    private $seos = [];
+
+    /**
+     * @var array
+     */
+    private $articles = [];
+
+    /**
+     * @return Folder
+     */
+    public function getBlogFolder()
+    {
+        return $this->blogFolder;
+    }
+
+    /**
+     * @param Folder $blogFolder
+     *
+     * @return Blog
+     */
+    public function setBlogFolder(Folder $blogFolder)
+    {
+        $this->blogFolder = $blogFolder;
+
+        return $this;
+    }
+
+    /**
+     * @return WidgetMap
+     */
+    public function getContentWidgetMap()
+    {
+        return $this->contentWidgetMap;
+    }
+
+    /**
+     * @param WidgetMap $contentWidgetMap
+     *
+     * @return Blog
+     */
+    public function setContentWidgetMap(WidgetMap $contentWidgetMap)
+    {
+        $this->contentWidgetMap = $contentWidgetMap;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return Blog
+     */
+    public function setLocale(string $locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getTitle()
@@ -76,11 +160,13 @@ class WordPressPlayload
 
     /**
      * @param string $title
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
     public function setTitle(string $title)
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -94,11 +180,13 @@ class WordPressPlayload
 
     /**
      * @param string $link
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
-    public function setLink($link)
+    public function setLink(string $link)
     {
         $this->link = $link;
+
         return $this;
     }
 
@@ -112,11 +200,13 @@ class WordPressPlayload
 
     /**
      * @param string $description
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -130,29 +220,13 @@ class WordPressPlayload
 
     /**
      * @param \DateTime $publicationDate
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
-    public function setPublicationDate($publicationDate)
+    public function setPublicationDate(\DateTime $publicationDate)
     {
         $this->publicationDate = $publicationDate;
-        return $this;
-    }
 
-    /**
-     * @return string
-     */
-    public function getLanguage()
-    {
-        return $this->language;
-    }
-
-    /**
-     * @param string $language
-     * @return WordPressPlayload
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
         return $this;
     }
 
@@ -166,11 +240,13 @@ class WordPressPlayload
 
     /**
      * @param string $baseSiteUrl
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
-    public function setBaseSiteUrl($baseSiteUrl)
+    public function setBaseSiteUrl(string $baseSiteUrl)
     {
         $this->baseSiteUrl = $baseSiteUrl;
+
         return $this;
     }
 
@@ -184,21 +260,13 @@ class WordPressPlayload
 
     /**
      * @param string $baseBlogUrl
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
-    public function setBaseBlogUrl($baseBlogUrl)
+    public function setBaseBlogUrl(string $baseBlogUrl)
     {
         $this->baseBlogUrl = $baseBlogUrl;
-        return $this;
-    }
 
-    /**
-     * @param $author
-     * @return $this
-     */
-    public function addAuthor($author)
-    {
-        array_push($this->authors, $author);
         return $this;
     }
 
@@ -211,13 +279,14 @@ class WordPressPlayload
     }
 
     /**
-     * @param $authorLogin
+     * @param $login
+     *
      * @return mixed
      */
-    public function getAuthor($authorLogin)
+    public function getAuthor($username)
     {
         foreach ($this->authors as $author) {
-            if ($author->getAuthorLogin() == $authorLogin) {
+            if ($author->getUsername() == $username) {
                 return $author;
             }
         }
@@ -225,21 +294,25 @@ class WordPressPlayload
 
     /**
      * @param array $authors
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
     public function setAuthors(array $authors)
     {
         $this->authors = $authors;
+
         return $this;
     }
 
     /**
-     * @param $category
+     * @param $author
+     *
      * @return $this
      */
-    public function addCategory($category)
+    public function addAuthors($author)
     {
-        array_push($this->categories, $category);
+        array_push($this->authors, $author);
+
         return $this;
     }
 
@@ -253,21 +326,25 @@ class WordPressPlayload
 
     /**
      * @param array $categories
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
     public function setCategories(array $categories)
     {
         $this->categories = $categories;
+
         return $this;
     }
 
     /**
-     * @param $tag
+     * @param $category
+     *
      * @return $this
      */
-    public function addTag($tag)
+    public function addCategory($category)
     {
-        array_push($this->tags, $tag);
+        array_push($this->categories, $category);
+
         return $this;
     }
 
@@ -281,21 +358,25 @@ class WordPressPlayload
 
     /**
      * @param array $tags
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
     public function setTags(array $tags)
     {
         $this->tags = $tags;
+
         return $this;
     }
 
     /**
-     * @param $item
+     * @param $tag
+     *
      * @return $this
      */
-    public function addItem($item)
+    public function addTag($tag)
     {
-        array_push($this->items, $item);
+        array_push($this->tags, $tag);
+
         return $this;
     }
 
@@ -309,53 +390,14 @@ class WordPressPlayload
 
     /**
      * @param array $items
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
     public function setItems(array $items)
     {
         $this->items = $items;
+
         return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRawData()
-    {
-        return $this->rawData;
-    }
-
-    /**
-     * @param mixed $rawData
-     * @return WordPressPlayload
-     */
-    public function setRawData($rawData)
-    {
-        $this->rawData = $rawData;
-        return $this;
-    }
-
-    /**
-     * @param $term
-     * @return $this
-     */
-    public function addTerm($term)
-    {
-        array_push($this->terms, $term);
-        return $this;
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function getTerm($id)
-    {
-        foreach ($this->getTerms() as $term) {
-            if ($id == $term->getTermId()) {
-                return $term;
-            }
-        }
     }
 
     /**
@@ -368,11 +410,65 @@ class WordPressPlayload
 
     /**
      * @param array $terms
-     * @return WordPressPlayload
+     *
+     * @return Blog
      */
     public function setTerms(array $terms)
     {
         $this->terms = $terms;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSeos()
+    {
+        return $this->seos;
+    }
+
+    /**
+     * @param array $seos
+     *
+     * @return Blog
+     */
+    public function setSeos(array $seos)
+    {
+        $this->seos = $seos;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArticles(): array
+    {
+        return $this->articles;
+    }
+
+    /**
+     * @param array $articles
+     *
+     * @return Blog
+     */
+    public function setArticles(array $articles): Blog
+    {
+        $this->articles = $articles;
+
+        return $this;
+    }
+
+    /**
+     * @param $article
+     *
+     * @return $this
+     */
+    public function addArticle($article)
+    {
+        array_push($this->articles, $article);
+
         return $this;
     }
 }

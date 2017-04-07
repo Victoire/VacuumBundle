@@ -2,7 +2,7 @@
 
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
 
-class Category
+class Category extends AbstractXMLEntity
 {
     /**
      * @var Term
@@ -34,11 +34,13 @@ class Category
 
     /**
      * @param Term $term
+     *
      * @return Category
      */
     public function setTerm($term)
     {
         $this->term = $term;
+
         return $this;
     }
 
@@ -52,11 +54,13 @@ class Category
 
     /**
      * @param mixed $categoryNicename
+     *
      * @return Category
      */
     public function setCategoryNicename($categoryNicename)
     {
         $this->categoryNicename = $categoryNicename;
+
         return $this;
     }
 
@@ -70,11 +74,13 @@ class Category
 
     /**
      * @param mixed $categoryParent
+     *
      * @return Category
      */
     public function setCategoryParent($categoryParent)
     {
         $this->categoryParent = $categoryParent;
+
         return $this;
     }
 
@@ -88,11 +94,13 @@ class Category
 
     /**
      * @param mixed $categoryName
+     *
      * @return Category
      */
     public function setCategoryName($categoryName)
     {
         $this->categoryName = $categoryName;
+
         return $this;
     }
 }

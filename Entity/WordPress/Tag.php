@@ -2,7 +2,7 @@
 
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
 
-class Tag
+class Tag extends AbstractXMLEntity
 {
     /**
      * @var Term
@@ -29,11 +29,13 @@ class Tag
 
     /**
      * @param mixed $term
+     *
      * @return Tag
      */
     public function setTerm($term)
     {
         $this->term = $term;
+
         return $this;
     }
 
@@ -47,11 +49,13 @@ class Tag
 
     /**
      * @param mixed $tagSlug
+     *
      * @return Tag
      */
     public function setTagSlug($tagSlug)
     {
         $this->tagSlug = $tagSlug;
+
         return $this;
     }
 
@@ -65,11 +69,13 @@ class Tag
 
     /**
      * @param mixed $tagName
+     *
      * @return Tag
      */
     public function setTagName($tagName)
     {
         $this->tagName = $tagName;
+
         return $this;
     }
 }
