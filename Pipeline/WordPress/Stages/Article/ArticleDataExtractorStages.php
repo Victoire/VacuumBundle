@@ -66,8 +66,10 @@ class ArticleDataExtractorStages implements StageInterface
      * @param $payload
      * @return mixed
      */
-    private function hydrateArticle(Article $article, $wpArticle, CommandPayloadInterface $payload, $xmlDataFormater)
+    private function hydrateArticle(Article $article, $wpArticle, CommandPayloadInterface $payload, XmlDataFormater $xmlDataFormater)
     {
+        $article->setId($xmlDataFormater->formatInteger('post_id', $wpArticle));
+        $article->setXmlTag("article");
         $article->setTitle($xmlDataFormater->formatString('title', $wpArticle));
         $article->setSlug($xmlDataFormater->formatString('post_name', $wpArticle));
         $article->setLink($xmlDataFormater->formatString('link', $wpArticle));

@@ -3,7 +3,7 @@
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
 
 
-class Article
+class Article extends AbstractXMLEntity
 {
     private $title;
 

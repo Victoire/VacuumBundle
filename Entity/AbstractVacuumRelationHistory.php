@@ -37,7 +37,7 @@ abstract class AbstractVacuumRelationHistory
     /**
      * @var int
      *
-     * @ORM\Column(name="vic_id", type="integer")
+     * @ORM\Column(name="vic_id", type="integer", nullable=true)
      */
     private $vicId;
 

@@ -29,10 +29,6 @@ class XMLHistoryManager implements HistoryManagerInterface
     )
     {
         $this->entityManager = $entityManager;
-        $this->histories = $this->entityManager
-            ->getRepository('VictoireVacuumBundle:VacuumXMlRelationHistory')
-            ->findAll()
-        ;
     }
 
     /**
@@ -45,6 +41,46 @@ class XMLHistoryManager implements HistoryManagerInterface
             ->getRepository('VictoireVacuumBundle:VacuumXMlRelationHistory')
             ->findAll()
         ;
+    }
+
+    /**
+     * @param AbstractXMLEntity $source
+     * @param $vicClass
+     * @return mixed|null|VacuumXMlRelationHistory
+     */
+    public function searchHistory(AbstractXMLEntity $source, $vicClass)
+    {
+        foreach ($this->histories as $history) {
+            if ($history->getTagName() == $source->getXmlTag() &&
+                $history->getTagId() == $source->getId() &&
+                $history->getVicClass() == $vicClass
+            ) {
+                return $history;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param AbstractVacuumRelationHistory $history
+     * @return null|object
+     * @throws XMLHistoryException
+     */
+    public function getVicEntity(AbstractVacuumRelationHistory $history)
+    {
+        $repo = $this->entityManager->getRepository($history->getVicClass());
+        $entity = $repo->find($history->getVicId());
+
+        if (null == $entity) {
+            $message = sprintf('Can\'t found history linked entity with following parameters ID: "%s", ClassName: "%s"',
+                $history->getVicId(),
+                $history->getVicClass()
+            );
+            throw new XMLHistoryException($message);
+        }
+
+        return $entity;
     }
 
     /**
@@ -62,47 +98,19 @@ class XMLHistoryManager implements HistoryManagerInterface
             $history->setVicId($refined->getId());
         }
 
-        if (!$this->isReferenceExist($history)) {
-            $this->entityManager->persist($history);
-        }
-
         return $history;
     }
 
     /**
-     * @param AbstractVacuumRelationHistory $history
-     * @return bool
-     * @throws XMLHistoryException
+     * @param $entity
+     * @param VacuumXMlRelationHistory $history
      */
-    public function isReferenceExist(AbstractVacuumRelationHistory $history)
+    public function flushHistory($entity, VacuumXMlRelationHistory $history)
     {
-        if (get_class($history) == VacuumXMlRelationHistory::class) {
-            $refClass = new \ReflectionClass($history);
-            foreach ($this->histories as $currentHistory) {
-                if ($currentHistory == $history) {
-                    return true;
-                } else {
-                    $matchingArg = 0;
-                    foreach ($refClass->getMethods() as $method) {
-                        $testedHistoryMethodResult = call_user_func([get_class($history), $method->getName()]);
-                        $currentHistoryMethodResult = call_user_func([VacuumXMlRelationHistory::class, $method->getName()]);
-                        if ( $testedHistoryMethodResult == $currentHistoryMethodResult ) {
-                            $matchingArg++;
-                        }
-                    }
-                    if ($matchingArg >= 3) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            $message = sprintf('Wrong History class given. Should be "%s" instead of "%s"',
-                VacuumXMlRelationHistory::class,
-                get_class($history)
-            );
-            throw new XMLHistoryException($message);
-        }
-
-        return false;
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+        $history->setVicId($entity->getId());
+        $this->entityManager->persist($history);
+        $this->entityManager->flush();
     }
 }

@@ -61,28 +61,34 @@ class VicBlogGeneratorStages implements PersisterStageInterface
     {
         $parameters = $payload->getParameters();
 
-        $payload->getNewStageTitleMessage("Victoire Blog generation:");
+        $payload->getXMLHistoryManager()->reload();
+        $history = $payload->getXMLHistoryManager()->searchHistory($payload->getTmpBlog(), Blog::class);
 
-        $blog = new Blog();
-        $blog->setDefaultLocale($payload->getTmpBlog()->getLocale());
-        $blog->setCurrentLocale($blog->getDefaultLocale());
-        $blog->setName($parameters['blog_name'], $blog->getDefaultLocale());
-        $blog->setTemplate(self::getBaseTemplate($parameters['blog_template']));
-        $blog->setParent(self::getParentPage($parameters['blog_parent_id']));
-        $blog->setPublishedAt($payload->getTmpBlog()->getPublicationDate());
-        $blog->setCreatedAt($payload->getTmpBlog()->getPublicationDate());
-        $payload->setNewVicBlog($blog);
+        if (null != $history) {
+            $payload->getNewStageTitleMessage("Victoire Blog update:");
+            $blog = $payload->getXMLHistoryManager()->getVicEntity($history);
+        } else {
+            $payload->getNewStageTitleMessage("Victoire Blog generation:");
+            $blog = new Blog();
+            $blog->setDefaultLocale($payload->getTmpBlog()->getLocale());
+            $blog->setCurrentLocale($blog->getDefaultLocale());
+            $blog->setName($parameters['blog_name'], $blog->getDefaultLocale());
+            $blog->setTemplate(self::getBaseTemplate($parameters['blog_template']));
+            $blog->setParent(self::getParentPage($parameters['blog_parent_id']));
+            $blog->setPublishedAt($payload->getTmpBlog()->getPublicationDate());
+            $blog->setCreatedAt($payload->getTmpBlog()->getPublicationDate());
+            $history = $payload->getXMLHistoryManager()->generateHistory($payload->getTmpBlog(),$blog);
 
-        foreach ($blog->getTranslations() as $key => $translation) {
-            if ($key != $blog->getDefaultLocale()) {
-                $blog->removeTranslation($translation);
+            foreach ($blog->getTranslations() as $key => $translation) {
+                if ($key != $blog->getDefaultLocale()) {
+                    $blog->removeTranslation($translation);
+                }
             }
+
+            $payload->getXMLHistoryManager()->flushHistory($blog, $history);
         }
 
-        $blogHistory = $payload->getXMLHistoryManager()->generateHistory($payload->getTmpBlog(),$blog);
-
-        $this->entityManager->persist($blog);
-        $this->entityManager->flush();
+        $payload->setNewVicBlog($blog);
 
         $payload->getNewSuccessMessage(" success");
         $payload->jumpLine();

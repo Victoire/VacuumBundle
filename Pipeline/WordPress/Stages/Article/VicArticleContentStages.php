@@ -41,19 +41,24 @@ class VicArticleContentStages implements StageInterface
         $payload->getNewStageTitleMessage('Victoire Article Content generation:');
 
         foreach ($payload->getTmpBlog()->getArticles() as $plArticle) {
-            if (null != $plArticle->getContent()) {
 
-                $content = $plArticle->getContent();
-                $document = self::generateDOMDocument($content);
+            $history = $payload->getXMLHistoryManager()->searchHistory($plArticle, \Victoire\Bundle\BlogBundle\Entity\Article::class);
 
-                if ($document) {
-                    $document = self::handleImg($document, $plArticle, $payload);
-                }
+            if (null == $history) {
+                if (null != $plArticle->getContent()) {
 
-                if ($document) {
-                    $content = $document->saveHTML();
-                    $plArticle->setContent($content);
-                    $progress->advance();
+                    $content = $plArticle->getContent();
+                    $document = self::generateDOMDocument($content);
+
+                    if ($document) {
+                        $document = self::handleImg($document, $plArticle, $payload);
+                    }
+
+                    if ($document) {
+                        $content = $document->saveHTML();
+                        $plArticle->setContent($content);
+                        $progress->advance();
+                    }
                 }
             }
         }

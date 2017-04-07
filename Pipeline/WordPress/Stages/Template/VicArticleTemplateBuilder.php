@@ -94,7 +94,9 @@ class VicArticleTemplateBuilder implements PersisterStageInterface
         $template->addWidgetMap($widgetMapCKEditor);
 
         foreach ($payload->getNewVicBlog()->getArticles() as $article) {
-            $article->setTemplate($template);
+            if (null == $article->getTemplate()) {
+                $article->setTemplate($template);
+            }
         }
 
         $payload->addParameter("article_content_widget_map", $widgetMapCKEditor);

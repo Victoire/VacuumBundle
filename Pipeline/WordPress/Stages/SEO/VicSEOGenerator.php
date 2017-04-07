@@ -31,12 +31,13 @@ class VicSEOGenerator implements PersisterStageInterface
     public function __invoke(CommandPayloadInterface $payload)
     {
         $xmlDataFormater = new XmlDataFormater();
-        $articles = $this->entityManager->getRepository('VictoireBlogBundle:Article')->findAll();
+        $articles = $this->entityManager->getRepository('VictoireBlogBundle:Article')->findBy(["blog" => $payload->getNewVicBlog()]);
 
         $progress = $payload->getNewProgressBar();
         $payload->getNewStageTitleMessage('Victoire SEO generation:');
 
         foreach ($articles as $article) {
+            $seo = null;
             foreach ($payload->getRawData()->channel as $blog) {
                 foreach ($blog->item as $wpArticle) {
                     if ($article->getName() == $xmlDataFormater->formatString('title', $wpArticle) ) {
@@ -58,6 +59,12 @@ class VicSEOGenerator implements PersisterStageInterface
                                 ->findOneBy(['article' => $article->getId()]);
                             $bp = $this->entityManager->getRepository('VictoireBusinessPageBundle:BusinessPage')
                                 ->findOneBy(['entityProxy' => $ep->getId()]);
+
+                            if (null != $bp->getSeo()) {
+                                $this->entityManager->remove($bp->getSeo());
+                            }
+                        }
+                        if (null != $seo) {
                             $bp->setSeo($seo);
                             $this->entityManager->persist($bp);
                             $progress->advance();

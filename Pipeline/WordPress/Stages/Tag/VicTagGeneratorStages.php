@@ -39,18 +39,23 @@ class VicTagGeneratorStages implements PersisterStageInterface
     {
         $progress = $payload->getNewProgressBar(count($payload->getTmpBlog()->getTags()));
         $payload->getNewStageTitleMessage("Victoire Tag generation:");
+        $payload->getXMLHistoryManager()->reload();
 
         foreach ($payload->getTmpBlog()->getTags() as $wpTag) {
-            $tag = new Tag();
-            $tag->setTitle($wpTag->getTagName());
-            $tag->setSlug(($wpTag->getTagSlug()));
-            $payload->getNewVicBlog()->addTag($tag);
 
-            $this->entityManager->persist($tag);
-            $progress->advance();
+            $history = $payload->getXMLHistoryManager()->searchHistory($wpTag, Tag::class);
+
+            if (null == $history) {
+                $tag = new Tag();
+                $tag->setTitle($wpTag->getTagName());
+                $tag->setSlug(($wpTag->getTagSlug()));
+                $payload->getNewVicBlog()->addTag($tag);
+                $history = $payload->getXMLHistoryManager()->generateHistory($wpTag, $tag);
+                $payload->getXMLHistoryManager()->flushHistory($tag, $history);
+                $progress->advance();
+            }
         }
 
-        $progress->finish();
         $payload->getNewSuccessMessage(" success");
         $payload->jumpLine();
 

@@ -4,6 +4,8 @@ namespace Victoire\DevTools\VacuumBundle\Utils\History;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\DevTools\VacuumBundle\Entity\AbstractVacuumRelationHistory;
+use Victoire\DevTools\VacuumBundle\Entity\WordPress\AbstractXMLEntity;
+use Victoire\DevTools\VacuumBundle\Utils\History\Exception\XMLHistoryException;
 
 /**
  * Class ReaderInterface
@@ -23,12 +25,19 @@ interface HistoryManagerInterface
     public function reload();
 
     /**
-     * Will search for history.
-     * return true when a match is made
-     * false if not.
+     * Search History entry by xmlTag and dump id
+     * return null if nothing found or
+     * return VacuumXMLRelationHistory Entity
      *
-     * @param AbstractVacuumRelationHistory $history
-     * @return boolean
+     * @param AbstractXMLEntity $source
+     * @return mixed
      */
-    public function isReferenceExist(AbstractVacuumRelationHistory $history);
+    public function searchHistory(AbstractXMLEntity $source, $vicClass);
+
+    /**
+     * @param AbstractVacuumRelationHistory $history
+     * @return null|object
+     * @throws XMLHistoryException
+     */
+    public function getVicEntity(AbstractVacuumRelationHistory $history);
 }

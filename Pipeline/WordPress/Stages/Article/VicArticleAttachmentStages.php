@@ -2,6 +2,7 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
+use Victoire\Bundle\BlogBundle\Entity\Article;
 use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
@@ -45,11 +46,15 @@ class VicArticleAttachmentStages implements StageInterface
         $payload->getNewStageTitleMessage('Victoire Article Media generation:');
 
         foreach ($payload->getTmpBlog()->getArticles() as $plArticle) {
-            if (null != $plArticle->getAttachmentUrl()) {
-                $articleFolder = $this->mediaFormater->generateFoler($plArticle->getTitle(), $blogFolder);
-                $distantPath = $this->mediaFormater->cleanUrl($plArticle->getAttachmentUrl());
-                $plArticle->setAttachment($this->mediaFormater->generateImageMedia($distantPath, $articleFolder));
-                $progress->advance();
+            $history = $payload->getXMLHistoryManager()->searchHistory($plArticle, Article::class);
+
+            if (null == $history) {
+                if (null != $plArticle->getAttachmentUrl()) {
+                    $articleFolder = $this->mediaFormater->generateFoler($plArticle->getTitle(), $blogFolder);
+                    $distantPath = $this->mediaFormater->cleanUrl($plArticle->getAttachmentUrl());
+                    $plArticle->setAttachment($this->mediaFormater->generateImageMedia($distantPath, $articleFolder));
+                    $progress->advance();
+                }
             }
         }
 

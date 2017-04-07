@@ -42,47 +42,53 @@ class VicArticleGeneratorStages implements PersisterStageInterface
 
         foreach ($payload->getTmpBlog()->getArticles() as $plArticle) {
 
-            if (null != $plArticle->getTitle()) {
-                $article = new Article();
-                $article->setName($plArticle->getTitle(), $locale);
-                $article->setSlug($plArticle->getSlug(), $locale);
+            $history = $payload->getXMLHistoryManager()->searchHistory($plArticle, Article::class);
 
-                if (null != $plArticle->getDescription()) {
-                    $article->setDescription($plArticle->getDescription(), $locale);
-                }
+            if (null == $history) {
+                if (null != $plArticle->getTitle()) {
+                    $article = new Article();
+                    $article->setName($plArticle->getTitle(), $locale);
+                    $article->setSlug($plArticle->getSlug(), $locale);
 
-                $article->setPublishedAt($plArticle->getPubDate());
-                if ($plArticle->getStatus() == "publish") {
-                    $article->setStatus(PageStatus::PUBLISHED);
-                }
-                if (null != $plArticle->getAttachment()) {
-                    $article->setImage($plArticle->getAttachment(), $locale);
-                }
-                $article->setLocale($locale);
-
-                if (null != $plArticle->getCategory()) {
-                    $article->setCategory($plArticle->getCategory());
-                }
-
-                if (null != $plArticle->getTags()) {
-                    $article->setTags($plArticle->getTags());
-                }
-
-                $article->setAuthor($plArticle->getCreator());
-
-                $payload->getNewVicBlog()->addArticle($article);
-
-                // remove default "en" ArticleTranslation to avoid error when flushing
-                foreach ($article->getTranslations() as $key => $translation) {
-                    if ($key != $locale) {
-                        $article->removeTranslation($translation);
+                    if (null != $plArticle->getDescription()) {
+                        $article->setDescription($plArticle->getDescription(), $locale);
                     }
+
+                    $article->setPublishedAt($plArticle->getPubDate());
+                    if ($plArticle->getStatus() == "publish") {
+                        $article->setStatus(PageStatus::PUBLISHED);
+                    }
+                    if (null != $plArticle->getAttachment()) {
+                        $article->setImage($plArticle->getAttachment(), $locale);
+                    }
+                    $article->setLocale($locale);
+
+                    if (null != $plArticle->getCategory()) {
+                        $article->setCategory($plArticle->getCategory());
+                    }
+
+                    if (null != $plArticle->getTags()) {
+                        $article->setTags($plArticle->getTags());
+                    }
+
+                    $article->setAuthor($plArticle->getCreator());
+
+                    $payload->getNewVicBlog()->addArticle($article);
+
+                    // remove default "en" ArticleTranslation to avoid error when flushing
+                    foreach ($article->getTranslations() as $key => $translation) {
+                        if ($key != $locale) {
+                            $article->removeTranslation($translation);
+                        }
+                    }
+
+                    $history = $payload->getXMLHistoryManager()->generateHistory($plArticle, $article);
+                    $payload->getXMLHistoryManager()->flushHistory($article, $history);
+                    $progress->advance();
                 }
-                $progress->advance();
             }
         }
 
-        $progress->finish();
         $payload->getNewSuccessMessage(" success");
         $payload->jumpLine();
 

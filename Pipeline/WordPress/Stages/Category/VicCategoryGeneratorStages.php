@@ -36,19 +36,25 @@ class VicCategoryGeneratorStages implements PersisterStageInterface
     public function __invoke(CommandPayloadInterface $payload)
     {
         $progress = $payload->getNewProgressBar(count($payload->getTmpBlog()->getCategories()));
+
         $payload->getNewStageTitleMessage('Victoire Category generation:');
 
         foreach ($payload->getTmpBlog()->getCategories() as $plCategory) {
-            $category = new Category();
-            $category->setTitle($plCategory->getCategoryName());
-            $category->setSlug($plCategory->getCategoryNiceName());
-            $payload->getNewVicBlog()->addCategorie($category);
 
-            $this->entityManager->persist($category);
-            $progress->advance();
+            $payload->getXMLHistoryManager()->reload();
+            $history = $payload->getXMLHistoryManager()->searchHistory($plCategory, Category::class);
+
+            if (null == $history) {
+                $category = new Category();
+                $category->setTitle($plCategory->getCategoryName());
+                $category->setSlug($plCategory->getCategoryNiceName());
+                $payload->getNewVicBlog()->addCategorie($category);
+                $history = $payload->getXMLHistoryManager()->generateHistory($plCategory, $category);
+                $payload->getXMLHistoryManager()->flushHistory($category, $history);
+                $progress->advance();
+            }
         }
 
-        $progress->finish();
         $payload->getNewSuccessMessage(" success");
         $payload->jumpLine();
 

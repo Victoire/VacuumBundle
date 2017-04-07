@@ -30,6 +30,8 @@ class CategoryDataExtractorStages implements StageInterface
 
         foreach ($channel->category as $wpCategory) {
             $category = new Category();
+            $category->setId($xmlDataFormater->formatInteger('term_id', $wpCategory));
+            $category->setXmlTag("category");
             $category->setCategoryName($xmlDataFormater->formatString('cat_name', $wpCategory));
             $category->setCategoryNicename($xmlDataFormater->formatString('category_nicename', $wpCategory));
             $category->setCategoryParent($xmlDataFormater->formatInteger('category_parent', $wpCategory));

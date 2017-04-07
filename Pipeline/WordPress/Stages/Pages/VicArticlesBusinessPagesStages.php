@@ -43,44 +43,58 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
 
         foreach ($payload->getNewVicBlog()->getArticles() as  $article) {
 
-            $overWriteWidgetMap = $payload->getParameter('article_content_widget_map');
+            $businessPage = null;
 
-            $entityProxy = new EntityProxy();
-            $entityProxy->setEntity($article, "article");
-            $this->entityManager->persist($entityProxy);
-
-            $widgetMapCKEditor = new WidgetMap();
-            $widgetMapCKEditor->setAction(WidgetMap::ACTION_OVERWRITE);
-            $widgetMapCKEditor->setReplaced($overWriteWidgetMap);
-            $widgetMapCKEditor->setSlot($overWriteWidgetMap->getSlot());
-
-            $widgetCKEditor = new WidgetCKEditor();
-            $widgetCKEditor->setWidgetMap($widgetMapCKEditor);
-
-            foreach ($payload->getTmpBlog()->getArticles() as $wpArticle) {
-                if ($wpArticle->getTitle() == $article->getName()) {
-                    $widgetCKEditor->setContent($wpArticle->getContent());
+            if (null != $article->getId()) {
+                $ep = $this->entityManager
+                    ->getRepository('Victoire\Bundle\CoreBundle\Entity\EntityProxy')
+                    ->findOneBy(['article' => $article->getId()]);
+                if (null != $ep) {
+                    $businessPage = $this->entityManager->getRepository('VictoireBusinessPageBundle:BusinessPage')
+                        ->findOneBy(['entityProxy' => $ep->getId()]);
                 }
             }
 
-            $businessPage = new BusinessPage();
-            $businessPage->setTemplate($article->getTemplate());
-            $businessPage->setName($article->getName(), $payload->getNewVicBlog()->getCurrentLocale());
-            $businessPage->setslug($article->getslug(), $payload->getNewVicBlog()->getCurrentLocale());
+            if (null == $businessPage) {
+                $overWriteWidgetMap = $payload->getParameter('article_content_widget_map');
 
-            foreach ($businessPage->getTranslations() as $key => $translation) {
-                if ($key != $payload->getNewVicBlog()->getCurrentLocale()) {
-                    $businessPage->removeTranslation($translation);
+                $entityProxy = new EntityProxy();
+                $entityProxy->setEntity($article, "article");
+                $this->entityManager->persist($entityProxy);
+
+                $widgetMapCKEditor = new WidgetMap();
+                $widgetMapCKEditor->setAction(WidgetMap::ACTION_OVERWRITE);
+                $widgetMapCKEditor->setReplaced($overWriteWidgetMap);
+                $widgetMapCKEditor->setSlot($overWriteWidgetMap->getSlot());
+
+                $widgetCKEditor = new WidgetCKEditor();
+                $widgetCKEditor->setWidgetMap($widgetMapCKEditor);
+
+                foreach ($payload->getTmpBlog()->getArticles() as $wpArticle) {
+                    if ($wpArticle->getTitle() == $article->getName()) {
+                        $widgetCKEditor->setContent($wpArticle->getContent());
+                    }
                 }
+
+                $businessPage = new BusinessPage();
+                $businessPage->setTemplate($article->getTemplate());
+                $businessPage->setName($article->getName(), $payload->getNewVicBlog()->getCurrentLocale());
+                $businessPage->setslug($article->getslug(), $payload->getNewVicBlog()->getCurrentLocale());
+
+                foreach ($businessPage->getTranslations() as $key => $translation) {
+                    if ($key != $payload->getNewVicBlog()->getCurrentLocale()) {
+                        $businessPage->removeTranslation($translation);
+                    }
+                }
+
+                $businessPage->setParent($payload->getNewVicBlog());
+                $businessPage->addWidgetMap($widgetMapCKEditor);
+                $businessPage->setEntityProxy($entityProxy);
+                $businessPage->setStatus("published");
+
+                $this->entityManager->persist($businessPage);
+                $progress->advance();
             }
-
-            $businessPage->setParent($payload->getNewVicBlog());
-            $businessPage->addWidgetMap($widgetMapCKEditor);
-            $businessPage->setEntityProxy($entityProxy);
-            $businessPage->setStatus("published");
-
-            $this->entityManager->persist($businessPage);
-            $progress->advance();
         }
 
         $this->entityManager->persist($payload->getNewVicBlog());

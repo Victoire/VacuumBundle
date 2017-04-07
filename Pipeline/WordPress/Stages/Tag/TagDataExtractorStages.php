@@ -30,6 +30,8 @@ class TagDataExtractorStages implements StageInterface
 
         foreach ($channel->tag as $wpTag) {
             $tag = new Tag();
+            $tag->setId($xmlDataFormater->formatString('term_id', $wpTag));
+            $tag->setXmlTag("tag");
             $tag->setTagName($xmlDataFormater->formatString('tag_name', $wpTag));
             $tag->setTagSlug($xmlDataFormater->formatString('tag_slug', $wpTag));
 
