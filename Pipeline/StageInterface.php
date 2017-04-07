@@ -8,6 +8,7 @@ interface StageInterface
 {
     /**
      * @param CommandPayloadInterface $payload
+     *
      * @return $payload
      */
     public function __invoke(CommandPayloadInterface $payload);

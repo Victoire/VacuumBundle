@@ -5,12 +5,11 @@ namespace Victoire\DevTools\VacuumBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class VacuumRelationHistoric
- * @package Victoire\DevTools\VacuumBundle\Entity
+ * Class VacuumRelationHistoric.
  *
  * @ORM\Entity
  */
-class VacuumXMlRelationHistory extends AbstractVacuumRelationHistory
+class VacuumXMLRelationHistory extends AbstractVacuumRelationHistory
 {
     /**
      * @var string
@@ -36,11 +35,13 @@ class VacuumXMlRelationHistory extends AbstractVacuumRelationHistory
 
     /**
      * @param string $tagName
+     *
      * @return VacuumXMlRelationHistory
      */
     public function setTagName(string $tagName)
     {
         $this->tagName = $tagName;
+
         return $this;
     }
 
@@ -54,11 +55,13 @@ class VacuumXMlRelationHistory extends AbstractVacuumRelationHistory
 
     /**
      * @param int $tagId
+     *
      * @return VacuumXMlRelationHistory
      */
     public function setTagId(int $tagId)
     {
         $this->tagId = $tagId;
+
         return $this;
     }
 }

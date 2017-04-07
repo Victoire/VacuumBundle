@@ -3,8 +3,7 @@
 namespace Victoire\DevTools\VacuumBundle\Utils\Curl;
 
 /**
- * Class CurlsTools
- * @package Victoire\DevTools\VacuumBundle\Utils\Curl
+ * Class CurlsTools.
  */
 class CurlsTools
 {
@@ -15,12 +14,12 @@ class CurlsTools
 
     /**
      * CurlsTools constructor.
+     *
      * @param $kernelRootDir
      */
     public function __construct(
         $kernelRootDir
-    )
-    {
+    ) {
         $this->kernelRootDir = $kernelRootDir;
     }
 
@@ -28,20 +27,20 @@ class CurlsTools
      * @param $fileName
      * @param $directory
      * @param $distantPath
+     *
      * @return bool|string
      */
     public function getDistantPicture($fileName, $distantPath)
     {
         try {
-
             $filePath = sprintf(
-                "%s/../web/uploads/media/%s",
+                '%s/../web/uploads/media/%s',
                     $this->kernelRootDir,
                     $fileName
             );
 
             if (!file_exists($filePath)) {
-                $lfile = fopen($filePath, "w");
+                $lfile = fopen($filePath, 'w');
 
                 $header = header('Content-Type: text/html; charset=utf-8');
 
@@ -63,7 +62,6 @@ class CurlsTools
             }
 
             return $filePath;
-
         } catch (\Exception $e) {
             return false;
         } catch (\Throwable $e) {

@@ -4,12 +4,11 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Tag;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
 /**
- * Class VicTagGeneratorStages
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag
+ * Class VicTagGeneratorStages.
  */
 class VicTagGeneratorStages implements PersisterStageInterface
 {
@@ -20,12 +19,12 @@ class VicTagGeneratorStages implements PersisterStageInterface
 
     /**
      * TagGeneratorStages constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(
         EntityManager $entityManager
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
     }
 
@@ -33,16 +32,16 @@ class VicTagGeneratorStages implements PersisterStageInterface
      * Transfer tag form tmpBlog to Victoire blog.
      *
      * @param $payload
+     *
      * @return mixed
      */
     public function __invoke(CommandPayloadInterface $payload)
     {
         $progress = $payload->getNewProgressBar(count($payload->getTmpBlog()->getTags()));
-        $payload->getNewStageTitleMessage("Victoire Tag generation:");
+        $payload->getNewStageTitleMessage('Victoire Tag generation:');
         $payload->getXMLHistoryManager()->reload();
 
         foreach ($payload->getTmpBlog()->getTags() as $wpTag) {
-
             $history = $payload->getXMLHistoryManager()->searchHistory($wpTag, Tag::class);
 
             if (null == $history) {
@@ -56,7 +55,7 @@ class VicTagGeneratorStages implements PersisterStageInterface
             }
         }
 
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
         $payload->jumpLine();
 
         return $payload;

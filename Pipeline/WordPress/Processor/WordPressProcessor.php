@@ -9,6 +9,7 @@ class WordPressProcessor implements ProcessorInterface
     /**
      * @param array $stages
      * @param $payload
+     *
      * @return mixed
      */
     public function process(array $stages, $payload)

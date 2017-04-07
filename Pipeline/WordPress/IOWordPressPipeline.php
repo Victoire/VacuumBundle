@@ -5,6 +5,7 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayload;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Pipeline\WordPressPipeline;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Processor\WordPressProcessor;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\ArticleDataExtractorStages;
@@ -22,14 +23,12 @@ use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\SEO\VicSEOGenerator
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\VicTagGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Template\VicArticleTemplateBuilder;
-use Victoire\DevTools\VacuumBundle\Payload\CommandPayload;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 use Victoire\DevTools\VacuumBundle\Utils\History\XMLHistoryManager;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
 /**
- * Class IOWordPressPipeline
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress
+ * Class IOWordPressPipeline.
  */
 class IOWordPressPipeline
 {
@@ -51,7 +50,7 @@ class IOWordPressPipeline
     /**
      * @var MediaFormater
      */
-    private  $mediaFormater;
+    private $mediaFormater;
 
     /**
      * @var CurlsTools
@@ -65,6 +64,7 @@ class IOWordPressPipeline
 
     /**
      * IOWordPressPipeline constructor.
+     *
      * @param $data
      */
     public function __construct(
@@ -73,8 +73,7 @@ class IOWordPressPipeline
         MediaFormater $mediaFormater,
         CurlsTools $curlsTools,
         XMLHistoryManager $XMLHistoryManager
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->kernelRootDir = $kernelRootDir;
         $this->mediaFormater = $mediaFormater;
@@ -88,7 +87,7 @@ class IOWordPressPipeline
     public function preparePipeline($commandParameter, OutputInterface $output, QuestionHelper $questionHelper)
     {
         $raw = file_get_contents($commandParameter['dump']);
-        $raw = str_replace(["wp:","dc:",":encoded"],"",$raw);
+        $raw = str_replace(['wp:', 'dc:', ':encoded'], '', $raw);
         $rawData = simplexml_load_string($raw);
 
         $payload = new CommandPayload(

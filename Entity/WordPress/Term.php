@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: made
  * Date: 16/03/17
- * Time: 17:21
+ * Time: 17:21.
  */
 
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
-
 
 class Term
 {
@@ -29,11 +28,13 @@ class Term
 
     /**
      * @param mixed $termId
+     *
      * @return Term
      */
     public function setTermId($termId)
     {
         $this->termId = $termId;
+
         return $this;
     }
 
@@ -47,11 +48,13 @@ class Term
 
     /**
      * @param mixed $termTaxonomy
+     *
      * @return Term
      */
     public function setTermTaxonomy($termTaxonomy)
     {
         $this->termTaxonomy = $termTaxonomy;
+
         return $this;
     }
 
@@ -65,11 +68,13 @@ class Term
 
     /**
      * @param mixed $termSlug
+     *
      * @return Term
      */
     public function setTermSlug($termSlug)
     {
         $this->termSlug = $termSlug;
+
         return $this;
     }
 
@@ -83,11 +88,13 @@ class Term
 
     /**
      * @param mixed $parent
+     *
      * @return Term
      */
     public function setParent($parent)
     {
         $this->parent = $parent;
+
         return $this;
     }
 }

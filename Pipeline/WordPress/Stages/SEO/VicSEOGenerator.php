@@ -4,8 +4,8 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\SEO;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\SeoBundle\Entity\PageSeo;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
 class VicSEOGenerator implements PersisterStageInterface
@@ -17,6 +17,7 @@ class VicSEOGenerator implements PersisterStageInterface
 
     /**
      * VicSEOGenerator constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
@@ -26,12 +27,13 @@ class VicSEOGenerator implements PersisterStageInterface
 
     /**
      * @param CommandPayloadInterface $payload
+     *
      * @return CommandPayloadInterface
      */
     public function __invoke(CommandPayloadInterface $payload)
     {
         $xmlDataFormater = new XmlDataFormater();
-        $articles = $this->entityManager->getRepository('VictoireBlogBundle:Article')->findBy(["blog" => $payload->getNewVicBlog()]);
+        $articles = $this->entityManager->getRepository('VictoireBlogBundle:Article')->findBy(['blog' => $payload->getNewVicBlog()]);
 
         $progress = $payload->getNewProgressBar();
         $payload->getNewStageTitleMessage('Victoire SEO generation:');
@@ -40,16 +42,14 @@ class VicSEOGenerator implements PersisterStageInterface
             $seo = null;
             foreach ($payload->getRawData()->channel as $blog) {
                 foreach ($blog->item as $wpArticle) {
-                    if ($article->getName() == $xmlDataFormater->formatString('title', $wpArticle) ) {
-
+                    if ($article->getName() == $xmlDataFormater->formatString('title', $wpArticle)) {
                         $seo = self::generateNewSEOPage($payload, $wpArticle, $xmlDataFormater, $article);
 
                         if (null != $seo) {
-
                             if (null != $article->getTags()) {
-                                $keyword = "";
+                                $keyword = '';
                                 foreach ($article->getTags() as $tag) {
-                                    $keyword .= $tag->getTitle() . ",";
+                                    $keyword .= $tag->getTitle().',';
                                 }
                                 $seo->setKeyword($keyword, $payload->getNewVicBlog()->getDefaultLocale());
                             }
@@ -73,8 +73,9 @@ class VicSEOGenerator implements PersisterStageInterface
                 }
             }
         }
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
         $payload->jumpLine();
+
         return $payload;
     }
 
@@ -83,6 +84,7 @@ class VicSEOGenerator implements PersisterStageInterface
      * @param $wpArticle
      * @param $xmlDataFormater
      * @param $article
+     *
      * @return null|PageSeo
      */
     private function generateNewSEOPage(CommandPayloadInterface $payload, $wpArticle, XmlDataFormater $xmlDataFormater, $article)
@@ -91,59 +93,58 @@ class VicSEOGenerator implements PersisterStageInterface
             $seo = new PageSeo();
             $seo->setDefaultLocale($payload->getNewVicBlog()->getDefaultLocale());
             foreach ($wpArticle->postmeta as $meta) {
-
                 $key = $xmlDataFormater->formatString('meta_key', $meta);
                 $value = $xmlDataFormater->formatString('meta_value', $meta);
 
                 switch ($key) {
-                    case ("_yoast_wpseo_title"):
+                    case '_yoast_wpseo_title':
                         $seo->setMetaTitle($value, $payload->getNewVicBlog()->getDefaultLocale());
                         break;
-                    case ("_yoast_wpseo_metadesc"):
+                    case '_yoast_wpseo_metadesc':
                         $seo->setMetaDescription($value, $payload->getNewVicBlog()->getDefaultLocale());
                         break;
-                    case ("_yoast_wpseo_meta-robots-noindex"):
-                        $value = (boolean)$value;
+                    case '_yoast_wpseo_meta-robots-noindex':
+                        $value = (bool) $value;
                         if ($value) {
-                            $value = "index";
+                            $value = 'index';
                         } else {
-                            $value = "noindex";
+                            $value = 'noindex';
                         }
                         $seo->setMetaRobotsIndex($value, $payload->getNewVicBlog()->getDefaultLocale());
                         break;
-                    case ("_yoast_wpseo_meta-robots-nofollow"):
-                        $value = (boolean)$value;
+                    case '_yoast_wpseo_meta-robots-nofollow':
+                        $value = (bool) $value;
                         if ($value) {
-                            $value = "follow";
+                            $value = 'follow';
                         } else {
-                            $value = "nofollow";
+                            $value = 'nofollow';
                         }
                         $seo->setMetaRobotsFollow($value, $payload->getNewVicBlog()->getDefaultLocale());
                         break;
-                    case ("_yoast_wpseo_meta-robots-adv"):
-                        if ($value == "none") {
+                    case '_yoast_wpseo_meta-robots-adv':
+                        if ($value == 'none') {
                             $value = null;
                         }
                         $seo->setMetaRobotsAdvanced($value, $payload->getNewVicBlog()->getDefaultLocale());
                         break;
-                    case ("_yoast_wpseo_sitemap-include"):
-                        if ($value != "-") {
-                            $value = (boolean)$value;
+                    case '_yoast_wpseo_sitemap-include':
+                        if ($value != '-') {
+                            $value = (bool) $value;
                             $seo->setSitemapIndexed($value, $payload->getNewVicBlog()->getDefaultLocale());
                         }
                         break;
-                    case ("_yoast_wpseo_sitemap-prio"):
-                        if ($value != "-") {
+                    case '_yoast_wpseo_sitemap-prio':
+                        if ($value != '-') {
                             $seo->setSitemapPriority($value, $payload->getNewVicBlog()->getDefaultLocale());
                         }
                         break;
-                    case ("_yoast_wpseo_canonical"):
+                    case '_yoast_wpseo_canonical':
                         $seo->setRelCanonical($value, $payload->getNewVicBlog()->getDefaultLocale());
                         break;
-                    case ("_yoast_wpseo_opengraph-description"):
+                    case '_yoast_wpseo_opengraph-description':
                         $seo->setOgDescription($value, $payload->getNewVicBlog()->getDefaultLocale());
                         break;
-                    case ("_thumbnail_id"):
+                    case '_thumbnail_id':
                         $seo->setOgImage($article->getImage(), $payload->getNewVicBlog()->getDefaultLocale());
                         break;
                 }

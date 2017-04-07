@@ -4,14 +4,12 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
 use Victoire\Bundle\BlogBundle\Entity\Article;
 use Victoire\Bundle\MediaBundle\Entity\Media;
-use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
 /**
- * Class VicArticleMediaBuilderStages
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article
+ * Class VicArticleMediaBuilderStages.
  */
 class VicArticleAttachmentStages implements StageInterface
 {
@@ -22,12 +20,12 @@ class VicArticleAttachmentStages implements StageInterface
 
     /**
      * VicArticleAttachmentStages constructor.
+     *
      * @param MediaFormater $mediaFormater
      */
     public function __construct(
         MediaFormater $mediaFormater
-    )
-    {
+    ) {
         $this->mediaFormater = $mediaFormater;
     }
 
@@ -36,6 +34,7 @@ class VicArticleAttachmentStages implements StageInterface
      * article attachment url.
      *
      * @param CommandPayloadInterface $payload
+     *
      * @return CommandPayloadInterface
      */
     public function __invoke(CommandPayloadInterface $payload)
@@ -59,7 +58,8 @@ class VicArticleAttachmentStages implements StageInterface
         }
 
         $payload->jumpLine();
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
+
         return $payload;
     }
 }

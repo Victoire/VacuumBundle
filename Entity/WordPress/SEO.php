@@ -11,6 +11,4 @@ class SEO
     private $noIndex;
 
     private $noFollow;
-
-
 }

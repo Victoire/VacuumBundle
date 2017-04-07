@@ -5,8 +5,7 @@ namespace Victoire\DevTools\VacuumBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class VacuumRelationHistoric
- * @package Victoire\DevTools\VacuumBundle\Entity
+ * Class VacuumRelationHistoric.
  *
  * @ORM\Entity
  * @ORM\InheritanceType("SINGLE_TABLE")
@@ -51,11 +50,13 @@ abstract class AbstractVacuumRelationHistory
 
     /**
      * @param int $id
+     *
      * @return AbstractVacuumRelationHistory
      */
     public function setId(int $id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -69,11 +70,13 @@ abstract class AbstractVacuumRelationHistory
 
     /**
      * @param string $vicClass
+     *
      * @return AbstractVacuumRelationHistory
      */
     public function setVicClass(string $vicClass)
     {
         $this->vicClass = $vicClass;
+
         return $this;
     }
 
@@ -87,11 +90,13 @@ abstract class AbstractVacuumRelationHistory
 
     /**
      * @param int $vicId
+     *
      * @return AbstractVacuumRelationHistory
      */
     public function setVicId(int $vicId)
     {
         $this->vicId = $vicId;
+
         return $this;
     }
 }

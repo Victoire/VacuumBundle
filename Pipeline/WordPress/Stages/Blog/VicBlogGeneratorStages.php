@@ -4,13 +4,11 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Blog;
-use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
 /**
- * Class VicBlogGeneratorStages
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog
+ * Class VicBlogGeneratorStages.
  */
 class VicBlogGeneratorStages implements PersisterStageInterface
 {
@@ -21,32 +19,36 @@ class VicBlogGeneratorStages implements PersisterStageInterface
 
     /**
      * VicBlogGeneratorStages constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(
         EntityManager $entityManager
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
     }
 
     /**
      * @param $id
+     *
      * @return null|object|\Victoire\Bundle\TemplateBundle\Entity\Template
      */
     private function getBaseTemplate($id)
     {
         $template = $this->entityManager->getRepository('VictoireTemplateBundle:Template')->find($id);
+
         return $template;
     }
 
     /**
      * @param $id
+     *
      * @return null|object|\Victoire\Bundle\PageBundle\Entity\Page
      */
     private function getParentPage($id)
     {
         $page = $this->entityManager->getRepository('VictoirePageBundle:Page')->find($id);
+
         return $page;
     }
 
@@ -55,6 +57,7 @@ class VicBlogGeneratorStages implements PersisterStageInterface
      * from tmpBlog, then persist it.
      *
      * @param $payload
+     *
      * @return mixed
      */
     public function __invoke(CommandPayloadInterface $payload)
@@ -65,10 +68,10 @@ class VicBlogGeneratorStages implements PersisterStageInterface
         $history = $payload->getXMLHistoryManager()->searchHistory($payload->getTmpBlog(), Blog::class);
 
         if (null != $history) {
-            $payload->getNewStageTitleMessage("Victoire Blog update:");
+            $payload->getNewStageTitleMessage('Victoire Blog update:');
             $blog = $payload->getXMLHistoryManager()->getVicEntity($history);
         } else {
-            $payload->getNewStageTitleMessage("Victoire Blog generation:");
+            $payload->getNewStageTitleMessage('Victoire Blog generation:');
             $blog = new Blog();
             $blog->setDefaultLocale($payload->getTmpBlog()->getLocale());
             $blog->setCurrentLocale($blog->getDefaultLocale());
@@ -77,7 +80,7 @@ class VicBlogGeneratorStages implements PersisterStageInterface
             $blog->setParent(self::getParentPage($parameters['blog_parent_id']));
             $blog->setPublishedAt($payload->getTmpBlog()->getPublicationDate());
             $blog->setCreatedAt($payload->getTmpBlog()->getPublicationDate());
-            $history = $payload->getXMLHistoryManager()->generateHistory($payload->getTmpBlog(),$blog);
+            $history = $payload->getXMLHistoryManager()->generateHistory($payload->getTmpBlog(), $blog);
 
             foreach ($blog->getTranslations() as $key => $translation) {
                 if ($key != $blog->getDefaultLocale()) {
@@ -90,7 +93,7 @@ class VicBlogGeneratorStages implements PersisterStageInterface
 
         $payload->setNewVicBlog($blog);
 
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
         $payload->jumpLine();
 
         return $payload;

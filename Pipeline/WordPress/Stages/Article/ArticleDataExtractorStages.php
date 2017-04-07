@@ -2,21 +2,19 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
-use Gedmo\Tree\Mapping\Driver\Xml;
-use Victoire\Bundle\SeoBundle\Entity\PageSeo;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
-use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
 /**
- * Class ArticleDataExtractorStages
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article
+ * Class ArticleDataExtractorStages.
  */
 class ArticleDataExtractorStages implements StageInterface
 {
     /**
      * @param $payload
+     *
      * @return mixed
      */
     public function __invoke(CommandPayloadInterface $payload)
@@ -30,18 +28,17 @@ class ArticleDataExtractorStages implements StageInterface
 
         foreach ($channel->item as $wpArticle) {
             $postType = $xmlDataFormater->formatString('post_type', $wpArticle);
-            if ($postType == "post") {
+            if ($postType == 'post') {
                 array_push($typePost, $wpArticle);
-            } elseif ($postType == "attachment") {
+            } elseif ($postType == 'attachment') {
                 array_push($typeAttachement, $wpArticle);
             }
         }
 
         $progress = $payload->getNewProgressBar(count($typePost));
-        $payload->getNewStageTitleMessage("Article Data extraction:");
+        $payload->getNewStageTitleMessage('Article Data extraction:');
 
         foreach ($typePost as $wpArticle) {
-
             $article = new Article();
 
             $article = self::hydrateArticle($article, $wpArticle, $payload, $xmlDataFormater);
@@ -53,10 +50,11 @@ class ArticleDataExtractorStages implements StageInterface
         }
 
         $progress->finish();
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
         $payload->jumpLine();
 
         unset($xmlDataFormater);
+
         return $payload;
     }
 
@@ -64,12 +62,13 @@ class ArticleDataExtractorStages implements StageInterface
      * @param $article
      * @param $wpArticle
      * @param $payload
+     *
      * @return mixed
      */
     private function hydrateArticle(Article $article, $wpArticle, CommandPayloadInterface $payload, XmlDataFormater $xmlDataFormater)
     {
         $article->setId($xmlDataFormater->formatInteger('post_id', $wpArticle));
-        $article->setXmlTag("article");
+        $article->setXmlTag('article');
         $article->setTitle($xmlDataFormater->formatString('title', $wpArticle));
         $article->setSlug($xmlDataFormater->formatString('post_name', $wpArticle));
         $article->setLink($xmlDataFormater->formatString('link', $wpArticle));
@@ -95,6 +94,7 @@ class ArticleDataExtractorStages implements StageInterface
      * @param $article
      * @param array $typeAttachement
      * @param $xmlDataFormater
+     *
      * @return mixed
      */
     private function manageArticleAttachment($article, array  $typeAttachement, $xmlDataFormater)
@@ -103,7 +103,7 @@ class ArticleDataExtractorStages implements StageInterface
             foreach ($attachment->postmeta as $postMeta) {
                 $value = $postMeta->meta_value;
                 // should be update for multiple word press widget
-                if ($xmlDataFormater->formatString(0, $value) == "grande-image") {
+                if ($xmlDataFormater->formatString(0, $value) == 'grande-image') {
                     if ($article->getPostId() == $xmlDataFormater->formatInteger('post_parent', $attachment)) {
                         $article->setAttachmentUrl($xmlDataFormater->formatString('attachment_url', $attachment));
                     }
@@ -124,20 +124,20 @@ class ArticleDataExtractorStages implements StageInterface
     {
         foreach ($wpArticle->category as $cat) {
             foreach ($cat->attributes() as $key => $attribute) {
-                if ($key == "domain") {
+                if ($key == 'domain') {
                     $domain = $attribute;
-                } elseif ($key == "nicename") {
+                } elseif ($key == 'nicename') {
                     $nicename = $xmlDataFormater->formatString(0, $attribute);
                 }
             }
 
-            if ($domain == "post_tag") {
+            if ($domain == 'post_tag') {
                 foreach ($payload->getNewVicBlog()->getTags() as $tag) {
                     if ($tag->getSlug() == $nicename) {
                         $article->addTag($tag);
                     }
                 }
-            } elseif ($domain == "category") {
+            } elseif ($domain == 'category') {
                 foreach ($payload->getNewVicBlog()->getCategories() as $category) {
                     if ($category->getSlug() == $nicename) {
                         $article->setCategory($category);

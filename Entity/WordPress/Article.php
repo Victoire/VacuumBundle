@@ -2,7 +2,6 @@
 
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
 
-
 class Article extends AbstractXMLEntity
 {
     private $title;
@@ -53,11 +52,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $title
+     *
      * @return Article
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -71,11 +72,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $slug
+     *
      * @return Article
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
+
         return $this;
     }
 
@@ -89,11 +92,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $link
+     *
      * @return Article
      */
     public function setLink($link)
     {
         $this->link = $link;
+
         return $this;
     }
 
@@ -107,11 +112,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $pubDate
+     *
      * @return Article
      */
     public function setPubDate($pubDate)
     {
         $this->pubDate = $pubDate;
+
         return $this;
     }
 
@@ -125,11 +132,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $creator
+     *
      * @return Article
      */
     public function setCreator($creator)
     {
         $this->creator = $creator;
+
         return $this;
     }
 
@@ -143,11 +152,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $description
+     *
      * @return Article
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -161,11 +172,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $content
+     *
      * @return Article
      */
     public function setContent($content)
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -179,11 +192,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $excerpt
+     *
      * @return Article
      */
     public function setExcerpt($excerpt)
     {
         $this->excerpt = $excerpt;
+
         return $this;
     }
 
@@ -197,11 +212,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $postId
+     *
      * @return Article
      */
     public function setPostId($postId)
     {
         $this->postId = $postId;
+
         return $this;
     }
 
@@ -215,11 +232,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $postDate
+     *
      * @return Article
      */
     public function setPostDate($postDate)
     {
         $this->postDate = $postDate;
+
         return $this;
     }
 
@@ -233,11 +252,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $postDateGmt
+     *
      * @return Article
      */
     public function setPostDateGmt($postDateGmt)
     {
         $this->postDateGmt = $postDateGmt;
+
         return $this;
     }
 
@@ -251,11 +272,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $status
+     *
      * @return Article
      */
     public function setStatus($status)
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -269,11 +292,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $postParent
+     *
      * @return Article
      */
     public function setPostParent($postParent)
     {
         $this->postParent = $postParent;
+
         return $this;
     }
 
@@ -287,11 +312,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $menuOrder
+     *
      * @return Article
      */
     public function setMenuOrder($menuOrder)
     {
         $this->menuOrder = $menuOrder;
+
         return $this;
     }
 
@@ -305,11 +332,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $postType
+     *
      * @return Article
      */
     public function setPostType($postType)
     {
         $this->postType = $postType;
+
         return $this;
     }
 
@@ -323,11 +352,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $attachmentUrl
+     *
      * @return Article
      */
     public function setAttachmentUrl($attachmentUrl)
     {
         $this->attachmentUrl = $attachmentUrl;
+
         return $this;
     }
 
@@ -341,11 +372,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $attachment
+     *
      * @return Article
      */
     public function setAttachment($attachment)
     {
         $this->attachment = $attachment;
+
         return $this;
     }
 
@@ -359,11 +392,13 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param mixed $category
+     *
      * @return Article
      */
     public function setCategory($category)
     {
         $this->category = $category;
+
         return $this;
     }
 
@@ -377,21 +412,25 @@ class Article extends AbstractXMLEntity
 
     /**
      * @param $tag
+     *
      * @return $this
      */
     public function addTag($tag)
     {
         array_push($this->tags, $tag);
+
         return $this;
     }
 
     /**
      * @param mixed $tags
+     *
      * @return Article
      */
     public function setTags($tags)
     {
         $this->tags = $tags;
+
         return $this;
     }
 }

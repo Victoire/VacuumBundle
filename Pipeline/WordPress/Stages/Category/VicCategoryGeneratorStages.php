@@ -4,12 +4,11 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Category;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
 /**
- * Class VicCategoryGeneratorStages
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category
+ * Class VicCategoryGeneratorStages.
  */
 class VicCategoryGeneratorStages implements PersisterStageInterface
 {
@@ -20,17 +19,18 @@ class VicCategoryGeneratorStages implements PersisterStageInterface
 
     /**
      * CategoryGeneratorStages constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(
         EntityManager $entityManager
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
     }
 
     /**
      * @param $payload
+     *
      * @return mixed
      */
     public function __invoke(CommandPayloadInterface $payload)
@@ -40,7 +40,6 @@ class VicCategoryGeneratorStages implements PersisterStageInterface
         $payload->getNewStageTitleMessage('Victoire Category generation:');
 
         foreach ($payload->getTmpBlog()->getCategories() as $plCategory) {
-
             $payload->getXMLHistoryManager()->reload();
             $history = $payload->getXMLHistoryManager()->searchHistory($plCategory, Category::class);
 
@@ -55,7 +54,7 @@ class VicCategoryGeneratorStages implements PersisterStageInterface
             }
         }
 
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
         $payload->jumpLine();
 
         return $payload;

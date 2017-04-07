@@ -26,11 +26,13 @@ class Author
 
     /**
      * @param mixed $wpAuthorId
+     *
      * @return Author
      */
     public function setWpAuthorId($wpAuthorId)
     {
         $this->wpAuthorId = $wpAuthorId;
+
         return $this;
     }
 
@@ -44,11 +46,13 @@ class Author
 
     /**
      * @param mixed $authorLogin
+     *
      * @return Author
      */
     public function setAuthorLogin($authorLogin)
     {
         $this->authorLogin = $authorLogin;
+
         return $this;
     }
 
@@ -62,11 +66,13 @@ class Author
 
     /**
      * @param mixed $authorEmail
+     *
      * @return Author
      */
     public function setAuthorEmail($authorEmail)
     {
         $this->authorEmail = $authorEmail;
+
         return $this;
     }
 
@@ -80,11 +86,13 @@ class Author
 
     /**
      * @param mixed $authorDisplayName
+     *
      * @return Author
      */
     public function setAuthorDisplayName($authorDisplayName)
     {
         $this->authorDisplayName = $authorDisplayName;
+
         return $this;
     }
 
@@ -98,11 +106,13 @@ class Author
 
     /**
      * @param mixed $authorFirstName
+     *
      * @return Author
      */
     public function setAuthorFirstName($authorFirstName)
     {
         $this->authorFirstName = $authorFirstName;
+
         return $this;
     }
 
@@ -116,11 +126,13 @@ class Author
 
     /**
      * @param mixed $authorLastName
+     *
      * @return Author
      */
     public function setAuthorLastName($authorLastName)
     {
         $this->authorLastName = $authorLastName;
+
         return $this;
     }
 }

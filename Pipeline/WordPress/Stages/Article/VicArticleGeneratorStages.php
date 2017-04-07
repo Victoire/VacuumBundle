@@ -4,14 +4,12 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BlogBundle\Entity\Article;
-use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\Bundle\PageBundle\Entity\PageStatus;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
 /**
- * Class VicArticleGeneratorStages
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article
+ * Class VicArticleGeneratorStages.
  */
 class VicArticleGeneratorStages implements PersisterStageInterface
 {
@@ -22,6 +20,7 @@ class VicArticleGeneratorStages implements PersisterStageInterface
 
     /**
      * VicArticleGeneratorStages constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
@@ -31,6 +30,7 @@ class VicArticleGeneratorStages implements PersisterStageInterface
 
     /**
      * @param $payload
+     *
      * @return mixed
      */
     public function __invoke(CommandPayloadInterface $payload)
@@ -41,7 +41,6 @@ class VicArticleGeneratorStages implements PersisterStageInterface
         $payload->getNewStageTitleMessage('Victoire Article generation:');
 
         foreach ($payload->getTmpBlog()->getArticles() as $plArticle) {
-
             $history = $payload->getXMLHistoryManager()->searchHistory($plArticle, Article::class);
 
             if (null == $history) {
@@ -55,7 +54,7 @@ class VicArticleGeneratorStages implements PersisterStageInterface
                     }
 
                     $article->setPublishedAt($plArticle->getPubDate());
-                    if ($plArticle->getStatus() == "publish") {
+                    if ($plArticle->getStatus() == 'publish') {
                         $article->setStatus(PageStatus::PUBLISHED);
                     }
                     if (null != $plArticle->getAttachment()) {
@@ -89,7 +88,7 @@ class VicArticleGeneratorStages implements PersisterStageInterface
             }
         }
 
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
         $payload->jumpLine();
 
         return $payload;

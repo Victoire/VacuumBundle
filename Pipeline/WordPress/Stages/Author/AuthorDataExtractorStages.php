@@ -1,17 +1,16 @@
 <?php
+
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\Table;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Author;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Xml\XmlDataFormater;
 
 /**
- * Class AuthorDataExtractorStages
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author
+ * Class AuthorDataExtractorStages.
  */
 class AuthorDataExtractorStages implements PersisterStageInterface
 {
@@ -22,6 +21,7 @@ class AuthorDataExtractorStages implements PersisterStageInterface
 
     /**
      * AuthorDataExtractorStages constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
@@ -35,6 +35,7 @@ class AuthorDataExtractorStages implements PersisterStageInterface
      * account before blog import.
      *
      * @param $payload
+     *
      * @return mixed
      */
     public function __invoke(CommandPayloadInterface $payload)
@@ -44,7 +45,7 @@ class AuthorDataExtractorStages implements PersisterStageInterface
         $channel = $payload->getRawData()->channel;
 
         $progress = $payload->getNewProgressBar(count($channel->author));
-        $payload->getNewStageTitleMessage("Author data extraction:");
+        $payload->getNewStageTitleMessage('Author data extraction:');
 
         $missingAuthor = [];
 
@@ -52,17 +53,16 @@ class AuthorDataExtractorStages implements PersisterStageInterface
             $email = $xmlDataFormater->formatString('author_email', $wpAuthor);
 
             $authorByUsername = $this->entityManager->getRepository('AppBundle:User\User')->findOneBy(['username' => $email]);
-            $authorByEmail =  $this->entityManager->getRepository('AppBundle:User\User')->findOneBy(['email' => $email]);
+            $authorByEmail = $this->entityManager->getRepository('AppBundle:User\User')->findOneBy(['email' => $email]);
 
             if (empty($authorByUsername) && empty($authorByEmail)) {
-
                 $row = [
                     $xmlDataFormater->formatInteger('author_id', $wpAuthor),
                     $xmlDataFormater->formatString('author_login', $wpAuthor),
                     $xmlDataFormater->formatString('author_email', $wpAuthor),
                     $xmlDataFormater->formatString('author_display_name', $wpAuthor),
                     $xmlDataFormater->formatString('author_first_name', $wpAuthor),
-                    $xmlDataFormater->formatString('author_last_name', $wpAuthor)
+                    $xmlDataFormater->formatString('author_last_name', $wpAuthor),
                 ];
                 array_push($missingAuthor, $row);
             } else {
@@ -87,10 +87,11 @@ class AuthorDataExtractorStages implements PersisterStageInterface
         }
 
         $progress->finish();
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
         $payload->jumpLine();
 
         unset($xmlDataFormater);
+
         return $payload;
     }
 }

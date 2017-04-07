@@ -2,11 +2,9 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article;
 
-use Behat\Mink\Exception\Exception;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
-use Victoire\DevTools\VacuumBundle\Pipeline\FileStageInterface;
-use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\StageInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
@@ -19,12 +17,12 @@ class VicArticleContentStages implements StageInterface
 
     /**
      * VicArticleContentStages constructor.
+     *
      * @param CurlsTools $curlsTools
      */
     public function __construct(
         MediaFormater $mediaFormater
-    )
-    {
+    ) {
         $this->mediaFormater = $mediaFormater;
     }
 
@@ -33,6 +31,7 @@ class VicArticleContentStages implements StageInterface
      * picture found in it and update link accordingly.
      *
      * @param CommandPayloadInterface $payload
+     *
      * @return CommandPayloadInterface
      */
     public function __invoke(CommandPayloadInterface $payload)
@@ -41,12 +40,10 @@ class VicArticleContentStages implements StageInterface
         $payload->getNewStageTitleMessage('Victoire Article Content generation:');
 
         foreach ($payload->getTmpBlog()->getArticles() as $plArticle) {
-
             $history = $payload->getXMLHistoryManager()->searchHistory($plArticle, \Victoire\Bundle\BlogBundle\Entity\Article::class);
 
             if (null == $history) {
                 if (null != $plArticle->getContent()) {
-
                     $content = $plArticle->getContent();
                     $document = self::generateDOMDocument($content);
 
@@ -64,17 +61,20 @@ class VicArticleContentStages implements StageInterface
         }
 
         $payload->jumpLine();
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
+
         return $payload;
     }
 
     /**
-     * convert content in DOMDocument
+     * convert content in DOMDocument.
      *
      * @param $content
+     *
      * @return bool|\DOMDocument
      */
-    private function generateDOMDocument($content) {
+    private function generateDOMDocument($content)
+    {
         $document = new \DOMDocument();
         try {
             $document->loadHTML(
@@ -92,15 +92,15 @@ class VicArticleContentStages implements StageInterface
 
     /**
      * @param \DOMDocument $document
+     *
      * @return bool
      */
-    private function handleImg(\DOMDocument $document, Article $article, $payload) {
-
-        if (null != $document->getElementsByTagName("img")) {
+    private function handleImg(\DOMDocument $document, Article $article, $payload)
+    {
+        if (null != $document->getElementsByTagName('img')) {
             $xpath = new \DOMXPath($document);
-            $nodes = $xpath->query("//a//img");
+            $nodes = $xpath->query('//a//img');
             foreach ($nodes as $node) {
-
                 $distantPath = $this->mediaFormater->cleanUrl($node->getAttribute('src'));
 
                 if (null != $article->getAttachment()) {

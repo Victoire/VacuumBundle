@@ -4,15 +4,14 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Pages;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\BusinessPageBundle\Entity\BusinessPage;
-use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
-use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
-use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
-use Victoire\Widget\CKEditorBundle\Entity\WidgetCKEditor;
 use Victoire\Bundle\CoreBundle\Entity\EntityProxy;
+use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
+use Victoire\Widget\CKEditorBundle\Entity\WidgetCKEditor;
 
 /**
- * Class VicArticlesBusinessPagesStages
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Pages
+ * Class VicArticlesBusinessPagesStages.
  */
 class VicArticlesBusinessPagesStages implements PersisterStageInterface
 {
@@ -23,17 +22,18 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
 
     /**
      * VicArticlesBusinessPagesStages constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(
         EntityManager $entityManager
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
     }
 
     /**
      * @param $payload CommandPayloadInterface
+     *
      * @return mixed
      */
     public function __invoke(CommandPayloadInterface $payload)
@@ -42,7 +42,6 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
         $payload->getNewStageTitleMessage('Victoire BusinessPage generation:');
 
         foreach ($payload->getNewVicBlog()->getArticles() as  $article) {
-
             $businessPage = null;
 
             if (null != $article->getId()) {
@@ -59,7 +58,7 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
                 $overWriteWidgetMap = $payload->getParameter('article_content_widget_map');
 
                 $entityProxy = new EntityProxy();
-                $entityProxy->setEntity($article, "article");
+                $entityProxy->setEntity($article, 'article');
                 $this->entityManager->persist($entityProxy);
 
                 $widgetMapCKEditor = new WidgetMap();
@@ -90,7 +89,7 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
                 $businessPage->setParent($payload->getNewVicBlog());
                 $businessPage->addWidgetMap($widgetMapCKEditor);
                 $businessPage->setEntityProxy($entityProxy);
-                $businessPage->setStatus("published");
+                $businessPage->setStatus('published');
 
                 $this->entityManager->persist($businessPage);
                 $progress->advance();
@@ -100,7 +99,7 @@ class VicArticlesBusinessPagesStages implements PersisterStageInterface
         $this->entityManager->persist($payload->getNewVicBlog());
         $progress->finish();
 
-        $payload->getNewSuccessMessage(" success");
+        $payload->getNewSuccessMessage(' success');
         $payload->jumpLine();
 
         return $payload;

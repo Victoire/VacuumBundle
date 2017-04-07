@@ -6,8 +6,7 @@ use Victoire\Bundle\MediaBundle\Entity\Folder;
 use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 
 /**
- * Class Blog
- * @package Victoire\DevTools\VacuumBundle\Entity\WordPress
+ * Class Blog.
  */
 class Blog extends AbstractXMLEntity
 {
@@ -101,11 +100,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param Folder $blogFolder
+     *
      * @return Blog
      */
     public function setBlogFolder(Folder $blogFolder)
     {
         $this->blogFolder = $blogFolder;
+
         return $this;
     }
 
@@ -119,11 +120,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param WidgetMap $contentWidgetMap
+     *
      * @return Blog
      */
     public function setContentWidgetMap(WidgetMap $contentWidgetMap)
     {
         $this->contentWidgetMap = $contentWidgetMap;
+
         return $this;
     }
 
@@ -137,11 +140,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param string $locale
+     *
      * @return Blog
      */
     public function setLocale(string $locale)
     {
         $this->locale = $locale;
+
         return $this;
     }
 
@@ -155,11 +160,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param string $title
+     *
      * @return Blog
      */
     public function setTitle(string $title)
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -173,11 +180,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param string $link
+     *
      * @return Blog
      */
     public function setLink(string $link)
     {
         $this->link = $link;
+
         return $this;
     }
 
@@ -191,11 +200,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param string $description
+     *
      * @return Blog
      */
     public function setDescription(string $description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -209,11 +220,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param \DateTime $publicationDate
+     *
      * @return Blog
      */
     public function setPublicationDate(\DateTime $publicationDate)
     {
         $this->publicationDate = $publicationDate;
+
         return $this;
     }
 
@@ -227,11 +240,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param string $baseSiteUrl
+     *
      * @return Blog
      */
     public function setBaseSiteUrl(string $baseSiteUrl)
     {
         $this->baseSiteUrl = $baseSiteUrl;
+
         return $this;
     }
 
@@ -245,11 +260,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param string $baseBlogUrl
+     *
      * @return Blog
      */
     public function setBaseBlogUrl(string $baseBlogUrl)
     {
         $this->baseBlogUrl = $baseBlogUrl;
+
         return $this;
     }
 
@@ -263,6 +280,7 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param $login
+     *
      * @return mixed
      */
     public function getAuthor($username)
@@ -276,21 +294,25 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param array $authors
+     *
      * @return Blog
      */
     public function setAuthors(array $authors)
     {
         $this->authors = $authors;
+
         return $this;
     }
 
     /**
      * @param $author
+     *
      * @return $this
      */
     public function addAuthors($author)
     {
         array_push($this->authors, $author);
+
         return $this;
     }
 
@@ -304,21 +326,25 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param array $categories
+     *
      * @return Blog
      */
     public function setCategories(array $categories)
     {
         $this->categories = $categories;
+
         return $this;
     }
 
     /**
      * @param $category
+     *
      * @return $this
      */
     public function addCategory($category)
     {
         array_push($this->categories, $category);
+
         return $this;
     }
 
@@ -332,21 +358,25 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param array $tags
+     *
      * @return Blog
      */
     public function setTags(array $tags)
     {
         $this->tags = $tags;
+
         return $this;
     }
 
     /**
      * @param $tag
+     *
      * @return $this
      */
     public function addTag($tag)
     {
         array_push($this->tags, $tag);
+
         return $this;
     }
 
@@ -360,11 +390,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param array $items
+     *
      * @return Blog
      */
     public function setItems(array $items)
     {
         $this->items = $items;
+
         return $this;
     }
 
@@ -378,11 +410,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param array $terms
+     *
      * @return Blog
      */
     public function setTerms(array $terms)
     {
         $this->terms = $terms;
+
         return $this;
     }
 
@@ -396,11 +430,13 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param array $seos
+     *
      * @return Blog
      */
     public function setSeos(array $seos)
     {
         $this->seos = $seos;
+
         return $this;
     }
 
@@ -414,21 +450,25 @@ class Blog extends AbstractXMLEntity
 
     /**
      * @param array $articles
+     *
      * @return Blog
      */
     public function setArticles(array $articles): Blog
     {
         $this->articles = $articles;
+
         return $this;
     }
 
     /**
      * @param $article
+     *
      * @return $this
      */
     public function addArticle($article)
     {
         array_push($this->articles, $article);
+
         return $this;
     }
 }

@@ -9,17 +9,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\IOWordPressPipeline;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
- * Class BlogImportCommand
- * @package Victoire\VacuumBundle\Command
+ * Class BlogImportCommand.
  */
 class BlogImportCommand extends ContainerAwareCommand
 {
@@ -36,7 +30,7 @@ class BlogImportCommand extends ContainerAwareCommand
                 new InputOption('article_template_layout', '-atl', InputOption::VALUE_OPTIONAL, 'article template layout designation'),
                 new InputOption('article_template_parent_id', '-atpid', InputOption::VALUE_OPTIONAL, 'article template parent id'),
                 new InputOption('article_template_id', '-ati', InputOption::VALUE_OPTIONAL, 'Id of an existing article template'),
-                new InputOption('article_template_first_slot', '-atfs', InputOption::VALUE_OPTIONAL, 'slot designation for root widget map in article template')
+                new InputOption('article_template_first_slot', '-atfs', InputOption::VALUE_OPTIONAL, 'slot designation for root widget map in article template'),
             ])
             ->setDescription('Import blog form dump')
             ->setHelp(<<<'EOT'
@@ -61,7 +55,7 @@ EOT
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -69,7 +63,7 @@ EOT
         $questionHelper = $this->getQuestionHelper();
         $commandParameters = [];
 
-        $requiredParameter = ["blog_name", "dump", "article_template_first_slot"];
+        $requiredParameter = ['blog_name', 'dump', 'article_template_first_slot'];
 
         foreach ($requiredParameter as $parameter) {
             if (null == $input->getOption($parameter)) {
@@ -103,9 +97,9 @@ EOT
         }
 
         if ($input->isInteractive()) {
-            $message = "";
+            $message = '';
             foreach ($commandParameters as $key => $parameter) {
-                $message .= "<info>".$key.":</info> ".$parameter."\n";
+                $message .= '<info>'.$key.':</info> '.$parameter."\n";
             }
 
             //summary
@@ -122,13 +116,13 @@ EOT
 
             $question = new ConfirmationQuestion(
                 $questionHelper->getQuestion(
-                    'do you wish to continue ?'
-                    , 'yes', '?'),
+                    'do you wish to continue ?', 'yes', '?'),
                     true
             );
 
             if (!$questionHelper->ask($input, $output, $question)) {
                 $output->writeln('<error>Command aborted</error>');
+
                 return 1;
             }
         }
@@ -138,7 +132,7 @@ EOT
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     protected function interact(InputInterface $input, OutputInterface $output)
@@ -155,7 +149,7 @@ EOT
         // blog name
         $question = new Question($questionHelper->getQuestion('blog name', $input->getOption('blog_name')));
         $question->setValidator(function ($answer) {
-           return self::validateBlogName($answer);
+            return self::validateBlogName($answer);
         });
 
         $blogName = (string) $questionHelper->ask($input, $output, $question);
@@ -164,7 +158,7 @@ EOT
         // blog template id
         $question = new Question($questionHelper->getQuestion('blog template id', $input->getOption('blog_template')));
         $question->setValidator(function ($answer) {
-           return self::validateTemplateId($answer);
+            return self::validateTemplateId($answer);
         });
 
         $blogTemplateId = (int) $questionHelper->ask($input, $output, $question);
@@ -182,7 +176,7 @@ EOT
         // path to dump
         $question = new Question($questionHelper->getQuestion('path to dump', $input->getOption('dump')));
         $question->setValidator(function ($answer) {
-           return self::validatePath($answer);
+            return self::validatePath($answer);
         });
 
         $pathToDump = (string) $questionHelper->ask($input, $output, $question);
@@ -209,7 +203,7 @@ EOT
             // ArticleTemplate parent_id
             $question = new Question($questionHelper->getQuestion('Article template parent id', $input->getOption('article_template_parent_id')));
             $question->setValidator(function ($answer) {
-               return self::validateTemplateId($answer);
+                return self::validateTemplateId($answer);
             });
 
             $articleTemplateParentId = (int) $questionHelper->ask($input, $output, $question);
@@ -219,7 +213,6 @@ EOT
             $question = new Question($questionHelper->getQuestion('Article Template first slot', $input->getOption('article_template_first_slot')));
             $articleTemplateFirstSlot = (string) $questionHelper->ask($input, $output, $question);
             $input->setOption('article_template_first_slot', $articleTemplateFirstSlot);
-
         } else {
 
             // ArticleTemplate Id
@@ -240,6 +233,7 @@ EOT
 
     /**
      * @param $id int
+     *
      * @return int
      */
     private function validateView($id)
@@ -278,7 +272,7 @@ EOT
             throw new RuntimeException(sprintf('Wrong path the file "%s" can\'t be found', $path));
         }
 
-        if (mime_content_type($path) != "application/xml") {
+        if (mime_content_type($path) != 'application/xml') {
             throw new RuntimeException('Wrong file format. Format accepted "xml"');
         }
 
@@ -309,6 +303,7 @@ EOT
 
     /**
      * @param $name
+     *
      * @return ConfirmationQuestion
      */
     private function validateLayout($name)

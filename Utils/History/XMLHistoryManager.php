@@ -22,30 +22,30 @@ class XMLHistoryManager implements HistoryManagerInterface
 
     /**
      * Reader constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(
         EntityManager $entityManager
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
     }
 
     /**
-     * Reload Histories
+     * Reload Histories.
      */
     public function reload()
     {
         unset($this->histories);
         $this->histories = $this->entityManager
             ->getRepository('VictoireVacuumBundle:VacuumXMlRelationHistory')
-            ->findAll()
-        ;
+            ->findAll();
     }
 
     /**
      * @param AbstractXMLEntity $source
      * @param $vicClass
+     *
      * @return mixed|null|VacuumXMlRelationHistory
      */
     public function searchHistory(AbstractXMLEntity $source, $vicClass)
@@ -58,14 +58,14 @@ class XMLHistoryManager implements HistoryManagerInterface
                 return $history;
             }
         }
-
-        return null;
     }
 
     /**
      * @param AbstractVacuumRelationHistory $history
-     * @return null|object
+     *
      * @throws XMLHistoryException
+     *
+     * @return null|object
      */
     public function getVicEntity(AbstractVacuumRelationHistory $history)
     {
@@ -86,6 +86,7 @@ class XMLHistoryManager implements HistoryManagerInterface
     /**
      * @param AbstractXMLEntity $source
      * @param $refined
+     *
      * @return VacuumXMlRelationHistory
      */
     public function generateHistory(AbstractXMLEntity $source, $refined)

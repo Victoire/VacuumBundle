@@ -8,36 +8,39 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\AbstractXMLEntity;
 use Victoire\DevTools\VacuumBundle\Utils\History\Exception\XMLHistoryException;
 
 /**
- * Class ReaderInterface
- * @package Victoire\DevTools\VacuumBundle\Utils\History
+ * Class ReaderInterface.
  */
 interface HistoryManagerInterface
 {
     /**
      * ReaderInterface constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager);
 
     /**
-     * Only this function should be used to reload History
+     * Only this function should be used to reload History.
      */
     public function reload();
 
     /**
      * Search History entry by xmlTag and dump id
      * return null if nothing found or
-     * return VacuumXMLRelationHistory Entity
+     * return VacuumXMLRelationHistory Entity.
      *
      * @param AbstractXMLEntity $source
+     *
      * @return mixed
      */
     public function searchHistory(AbstractXMLEntity $source, $vicClass);
 
     /**
      * @param AbstractVacuumRelationHistory $history
-     * @return null|object
+     *
      * @throws XMLHistoryException
+     *
+     * @return null|object
      */
     public function getVicEntity(AbstractVacuumRelationHistory $history);
 }

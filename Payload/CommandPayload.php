@@ -7,13 +7,10 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 use Victoire\Bundle\BlogBundle\Entity\Blog;
-use Victoire\Bundle\MediaBundle\Entity\Folder;
-use Victoire\Bundle\WidgetMapBundle\Entity\WidgetMap;
 use Victoire\DevTools\VacuumBundle\Utils\History\XMLHistoryManager;
 
 /**
- * Class WordPressPayload
- * @package Victoire\DevTools\VacuumBundle\Pipeline\WordPress
+ * Class WordPressPayload.
  */
 class CommandPayload implements CommandPayloadInterface
 {
@@ -54,8 +51,9 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * WordPressPlayload constructor.
-     * @param array $parameters
-     * @param ProgressBar $progressBar
+     *
+     * @param array          $parameters
+     * @param ProgressBar    $progressBar
      * @param QuestionHelper $questionHelper
      */
     public function __construct(
@@ -64,8 +62,7 @@ class CommandPayload implements CommandPayloadInterface
         QuestionHelper $questionHelper,
         \SimpleXMLElement $rawData,
         XMLHistoryManager $XMLHistoryManager
-    )
-    {
+    ) {
         $this->parameters = $parameters;
         $this->questionHelper = $questionHelper;
         $this->output = $output;
@@ -75,7 +72,7 @@ class CommandPayload implements CommandPayloadInterface
     }
 
     /**
-     * Generate custom style for command dispatch
+     * Generate custom style for command dispatch.
      */
     private function loadCustomStyle()
     {
@@ -85,6 +82,7 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * @param string $key
+     *
      * @return mixed
      */
     public function getParameter($key)
@@ -95,11 +93,13 @@ class CommandPayload implements CommandPayloadInterface
     /**
      * @param $key
      * @param $value
+     *
      * @return $this
      */
     public function addParameter($key, $value)
     {
         $this->parameters[$key] = $value;
+
         return $this;
     }
 
@@ -113,11 +113,13 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * @param array $parameters
+     *
      * @return CommandPayload
      */
     public function setParameters(array $parameters)
     {
         $this->parameters = $parameters;
+
         return $this;
     }
 
@@ -131,11 +133,13 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * @param OutputInterface $output
+     *
      * @return CommandPayload
      */
     public function setOutput(OutputInterface $output)
     {
         $this->output = $output;
+
         return $this;
     }
 
@@ -149,11 +153,13 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * @param QuestionHelper $questionHelper
+     *
      * @return CommandPayload
      */
     public function setQuestionHelper(QuestionHelper $questionHelper)
     {
         $this->questionHelper = $questionHelper;
+
         return $this;
     }
 
@@ -167,11 +173,13 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * @param \SimpleXMLElement $rawData
+     *
      * @return CommandPayload
      */
     public function setRawData(\SimpleXMLElement $rawData)
     {
         $this->rawData = $rawData;
+
         return $this;
     }
 
@@ -185,11 +193,13 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * @param \Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog $tmpBlog
+     *
      * @return CommandPayload
      */
     public function setTmpBlog(\Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog $tmpBlog)
     {
         $this->tmpBlog = $tmpBlog;
+
         return $this;
     }
 
@@ -203,11 +213,13 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * @param Blog $newVicBlog
+     *
      * @return CommandPayload
      */
     public function setNewVicBlog(Blog $newVicBlog)
     {
         $this->newVicBlog = $newVicBlog;
+
         return $this;
     }
 
@@ -221,16 +233,19 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * @param XMLHistoryManager $XMLHistoryManager
+     *
      * @return CommandPayload
      */
     public function setXMLHistoryManager(XMLHistoryManager $XMLHistoryManager)
     {
         $this->XMLHistoryManager = $XMLHistoryManager;
+
         return $this;
     }
 
     /**
      * @param null $value
+     *
      * @return ProgressBar
      */
     public function getNewProgressBar($value = null)
@@ -247,7 +262,7 @@ class CommandPayload implements CommandPayloadInterface
      */
     public function getNewStageTitleMessage($message)
     {
-        $this->output->writeln("<stageTitle>".$message."</stageTitle>");
+        $this->output->writeln('<stageTitle>'.$message.'</stageTitle>');
     }
 
     /**
@@ -255,12 +270,12 @@ class CommandPayload implements CommandPayloadInterface
      */
     public function getNewSuccessMessage($message)
     {
-        $this->output->writeln("<info>".$message."</info>");
+        $this->output->writeln('<info>'.$message.'</info>');
     }
 
     public function jumpLine()
     {
-        $this->output->writeln("");
+        $this->output->writeln('');
     }
 
     /**
@@ -268,7 +283,7 @@ class CommandPayload implements CommandPayloadInterface
      */
     public function throwErrorAndStop($message)
     {
-        $this->output->writeln("<error>".$message."</error>");
+        $this->output->writeln('<error>'.$message.'</error>');
         exit(1);
     }
 }

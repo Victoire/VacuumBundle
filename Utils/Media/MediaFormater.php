@@ -27,14 +27,14 @@ class MediaFormater
 
     /**
      * MediaFormater constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(
         EntityManager $entityManager,
         $kernelRootDir,
         CurlsTools $curlsTools
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->kernelRootDir = $kernelRootDir;
         $this->curlsTools = $curlsTools;
@@ -42,12 +42,13 @@ class MediaFormater
 
     /**
      * @param $payload
+     *
      * @return mixed
      */
     public function generateBlogFolder(CommandPayloadInterface $payload)
     {
         if (null == $payload->getTmpBlog()->getBlogFolder()) {
-            $blogFolder = $this->generateFoler("blog");
+            $blogFolder = $this->generateFoler('blog');
             $payload->getTmpBlog()->setBlogFolder($blogFolder);
         } else {
             $blogFolder = $payload->getTmpBlog()->getBlogFolder();
@@ -58,18 +59,19 @@ class MediaFormater
 
     /**
      * @param $distantPath
+     *
      * @return mixed|string
      */
     public function cleanUrl($distantPath)
     {
         $distantPath = trim($distantPath);
         $url = parse_url($distantPath);
-        $distantPath = sprintf("%s://%s%s",
+        $distantPath = sprintf('%s://%s%s',
             $url['scheme'],
             $url['host'],
             urlencode($url['path'])
         );
-        $distantPath = str_replace("%2F","/", $distantPath);
+        $distantPath = str_replace('%2F', '/', $distantPath);
 
         return $distantPath;
     }
@@ -77,21 +79,22 @@ class MediaFormater
     /**
      * @param $newFolderName
      * @param $parentFolderName
+     *
      * @return mixed
      */
     public function generateFoler($newFolderName, $parentFolderName = null)
     {
-        if (!file_exists($this->kernelRootDir."/../web/uploads/media")) {
-            mkdir($this->kernelRootDir."/../web/uploads/media", 0777, true);
+        if (!file_exists($this->kernelRootDir.'/../web/uploads/media')) {
+            mkdir($this->kernelRootDir.'/../web/uploads/media', 0777, true);
         }
 
         $folder = new Folder();
-        $folder->setName($newFolderName != null ? $newFolderName : "unknown");
+        $folder->setName($newFolderName != null ? $newFolderName : 'unknown');
         if ($parentFolderName == null) {
-            $parentFolderName = $this->entityManager->getRepository("VictoireMediaBundle:Folder")->find(1);
+            $parentFolderName = $this->entityManager->getRepository('VictoireMediaBundle:Folder')->find(1);
         }
         $folder->setParent($parentFolderName);
-        $folder->setRel("media");
+        $folder->setRel('media');
         $this->entityManager->persist($folder);
 
         return $folder;
@@ -99,33 +102,34 @@ class MediaFormater
 
     /**
      * @param $path
+     *
      * @return Media
      */
     public function generateImageMedia($path, Folder $folder)
     {
         if (null != $path) {
-
             $attachment = new Media();
             $distantPath = $path;
-            $fileName = explode("/", $distantPath);
+            $fileName = explode('/', $distantPath);
             $fileName = end($fileName);
             $attachment->setName($fileName);
             $fileExtension = null;
-            $fileExtension = explode(".", $fileName);
+            $fileExtension = explode('.', $fileName);
             $fileExtension = end($fileExtension);
             // this persist will generate the uuid for attachment
             $this->entityManager->persist($attachment);
-            $fileName = $attachment->getUuid().".".$fileExtension;
+            $fileName = $attachment->getUuid().'.'.$fileExtension;
 
             $filePath = $this->curlsTools->getDistantPicture($fileName, $distantPath);
 
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $attachment->setContentType(finfo_file($finfo, $filePath));
-            $attachment->setLocation("local");
+            $attachment->setLocation('local');
             $attachment->setUrl('/uploads/media/'.$fileName);
             $attachment->setFolder($folder);
 
             $this->entityManager->persist($attachment);
+
             return $attachment;
         }
     }

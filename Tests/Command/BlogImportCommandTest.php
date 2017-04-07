@@ -21,7 +21,7 @@ class BlogImportCommandTest extends KernelTestCase
 
         $commandTester->execute([
             'command' => $command->getName(),
-            '--help' => ''
+            '--help'  => '',
         ]);
 
         $output = $commandTester->getDisplay();
