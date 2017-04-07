@@ -37,3 +37,4 @@ Finally update your schema:
 ### Doc
 
 1. [Basic usage](doc/basic_usage.md)
+1. [How it Works](doc/how_it_works.md)

@@ -12,4 +12,13 @@ interface PipelineInterface extends StageInterface
      * @return static
      */
     public function pipe(callable $operation);
+
+    /**
+     * Execute the processor process method
+     *
+     * @param $payload
+     *
+     * @return mixed
+     */
+    public function process($payload);
 }
