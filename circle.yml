@@ -16,7 +16,7 @@ checkout:
 
 dependencies:
   override:
-    - bash victoire-test-suite/dependencies.sh user/repo
+    - bash victoire-test-suite/dependencies.sh victoire/vacuumbundle
   cache_directories:
     - ~/.composer/cache
 
@@ -24,7 +24,7 @@ test:
   override:
     - bash victoire-test-suite/circle.sh user/repo:
         parallel: true
-    - bash victoire-test-suite/test.sh user/repo
+    - bash victoire-test-suite/test.sh victoire/vacuumbundle
 
 general:
   artifacts:

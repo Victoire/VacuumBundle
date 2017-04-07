@@ -1,3 +1,39 @@
 # VacuumBundle
 
-Converts a wordpress dump into Victoire Blog
+The VacuumBundle offer an Implementation for the import of external data
+to populate a new or an existing Victoire Blog.
+
+## Installation
+
+Install with composer:
+
+    php composer.phar require victoire/vacuum-bundle
+
+Then add it to your AppKernel:
+
+    class AppKernel extends Kernel
+        {
+            public function registerBundles()
+            {
+                $bundles = array(
+                    ...
+                    new Victoire\DevTools\VacuumBundle\VictoireVacuumBundle(),
+                );
+    
+                return $bundles;
+            }
+        }
+        
+Finally update your schema:
+
+    php bin/console doctrine:schema:update --force
+
+#### Import available
+
+| Source    | Format |
+|-----------|--------|
+| WordPress | XML    |
+
+### Doc
+
+1. [Basic usage](doc/basic_usage.md)
