@@ -5,6 +5,7 @@
          backupGlobals="false"
          colors="true"
          bootstrap="./vendor/autoload.php">
+
     <php>
         <ini name="memory_limit" value="-1"/>
         <server name="KERNEL_DIR" value="./vendor/victoire/victoire/Tests/Functionnal/app" />
@@ -15,4 +16,5 @@
             <directory>Tests/</directory>
         </testsuite>
     </testsuites>
+
 </phpunit>

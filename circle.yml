@@ -24,6 +24,7 @@ test:
   override:
     - bash victoire-test-suite/circle.sh user/repo:
         parallel: true
+    - vendor/victoire/victoire/vendor/bin/phpunit
     - bash victoire-test-suite/test.sh victoire/vacuumbundle
 
 general:
