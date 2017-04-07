@@ -22,15 +22,15 @@ class BlogImportCommand extends ContainerAwareCommand
         $this
             ->setName('victoire:blog-import')
             ->setDefinition([
-                new InputOption('blog_name', '-b', InputOption::VALUE_REQUIRED, 'The name of the blog to populate'),
-                new InputOption('blog_template', '-bt', InputOption::VALUE_REQUIRED, 'The id of the blog template'),
-                new InputOption('blog_parent_id', '-bpi', InputOption::VALUE_REQUIRED, 'The id of the blog parent page'),
+                new InputOption('blog-name', '-b', InputOption::VALUE_REQUIRED, 'The name of the blog to populate'),
+                new InputOption('blog-template', '-bt', InputOption::VALUE_REQUIRED, 'The id of the blog template'),
+                new InputOption('blog-parent-id', '-bpi', InputOption::VALUE_REQUIRED, 'The id of the blog parent page'),
                 new InputOption('dump', '-d', InputOption::VALUE_REQUIRED, 'Path to the dump who should bee imported'),
-                new InputOption('article_template_name', '-atn', InputOption::VALUE_OPTIONAL, 'article template name'),
-                new InputOption('article_template_layout', '-atl', InputOption::VALUE_OPTIONAL, 'article template layout designation'),
-                new InputOption('article_template_parent_id', '-atpid', InputOption::VALUE_OPTIONAL, 'article template parent id'),
-                new InputOption('article_template_id', '-ati', InputOption::VALUE_OPTIONAL, 'Id of an existing article template'),
-                new InputOption('article_template_first_slot', '-atfs', InputOption::VALUE_OPTIONAL, 'slot designation for root widget map in article template'),
+                new InputOption('article-template-name', '-atn', InputOption::VALUE_OPTIONAL, 'article template name'),
+                new InputOption('article-template-layout', '-atl', InputOption::VALUE_OPTIONAL, 'article template layout designation'),
+                new InputOption('article-template-parent-id', '-atpid', InputOption::VALUE_OPTIONAL, 'article template parent id'),
+                new InputOption('article-template-id', '-ati', InputOption::VALUE_OPTIONAL, 'Id of an existing article template'),
+                new InputOption('article-template-first-slot', '-atfs', InputOption::VALUE_OPTIONAL, 'slot designation for root widget map in article template'),
             ])
             ->setDescription('Import blog form dump')
             ->setHelp(<<<'EOT'
@@ -63,7 +63,7 @@ EOT
         $questionHelper = $this->getQuestionHelper();
         $commandParameters = [];
 
-        $requiredParameter = ['blog_name', 'dump', 'article_template_first_slot'];
+        $requiredParameter = ['blog-name', 'dump', 'article-template-first-slot'];
 
         foreach ($requiredParameter as $parameter) {
             if (null == $input->getOption($parameter)) {
@@ -75,25 +75,25 @@ EOT
         $commandParameters['dump'] = $input->getOption('dump');
 
         // Blog name
-        $commandParameters['blog_name'] = $input->getOption('blog_name');
+        $commandParameters['blog_name'] = $input->getOption('blog-name');
 
         // Blog template id
-        $commandParameters['blog_template'] = $input->getOption('blog_template');
+        $commandParameters['blog_template'] = $input->getOption('blog-template');
 
         // Blog parent id
-        $commandParameters['blog_parent_id'] = $input->getOption('blog_parent_id');
+        $commandParameters['blog_parent_id'] = $input->getOption('blog-parent-id');
 
         // Article Template
-        if (null !== $input->getOption('article_template_id')) {
+        if (null !== $input->getOption('article-template-id')) {
             $commandParameters['new_article_template'] = false;
-            $commandParameters['article_template_id'] = $input->getOption('article_template_id');
-            $commandParameters['article_template_first_slot'] = $input->getOption('article_template_first_slot');
+            $commandParameters['article_template_id'] = $input->getOption('article-template-id');
+            $commandParameters['article_template_first_slot'] = $input->getOption('article-template-first-slot');
         } else {
             $commandParameters['new_article_template'] = true;
-            $commandParameters['article_template_name'] = $input->getOption('article_template_name');
-            $commandParameters['article_template_layout'] = $input->getOption('article_template_layout');
-            $commandParameters['article_template_parent_id'] = $input->getOption('article_template_parent_id');
-            $commandParameters['article_template_first_slot'] = $input->getOption('article_template_first_slot');
+            $commandParameters['article_template_name'] = $input->getOption('article-template-name');
+            $commandParameters['article_template_layout'] = $input->getOption('article-template-layout');
+            $commandParameters['article_template_parent_id'] = $input->getOption('article-template-parent-id');
+            $commandParameters['article_template_first_slot'] = $input->getOption('article-template-first-slot');
         }
 
         if ($input->isInteractive()) {
@@ -147,31 +147,31 @@ EOT
         ///////////////////////
 
         // blog name
-        $question = new Question($questionHelper->getQuestion('blog name', $input->getOption('blog_name')));
+        $question = new Question($questionHelper->getQuestion('blog name', $input->getOption('blog-name')));
         $question->setValidator(function ($answer) {
             return self::validateBlogName($answer);
         });
 
         $blogName = (string) $questionHelper->ask($input, $output, $question);
-        $input->setOption('blog_name', $blogName);
+        $input->setOption('blog-name', $blogName);
 
         // blog template id
-        $question = new Question($questionHelper->getQuestion('blog template id', $input->getOption('blog_template')));
+        $question = new Question($questionHelper->getQuestion('blog template id', $input->getOption('blog-template')));
         $question->setValidator(function ($answer) {
             return self::validateTemplateId($answer);
         });
 
         $blogTemplateId = (int) $questionHelper->ask($input, $output, $question);
-        $input->setOption('blog_template', $blogTemplateId);
+        $input->setOption('blog-template', $blogTemplateId);
 
         // blog parent id
-        $question = new Question($questionHelper->getQuestion('blog parent id', $input->getOption('blog_parent_id')));
+        $question = new Question($questionHelper->getQuestion('blog parent id', $input->getOption('blog-parent-id')));
         $question->setValidator(function ($answer) {
             return self::validateView($answer);
         });
 
         $blogTemplateId = (int) $questionHelper->ask($input, $output, $question);
-        $input->setOption('blog_parent_id', $blogTemplateId);
+        $input->setOption('blog-parent-id', $blogTemplateId);
 
         // path to dump
         $question = new Question($questionHelper->getQuestion('path to dump', $input->getOption('dump')));
@@ -188,46 +188,46 @@ EOT
         if (!$questionHelper->ask($input, $output, $question)) {
 
             // ArticleTemplate name
-            $question = new Question($questionHelper->getQuestion('Article template name', $input->getOption('article_template_name')));
+            $question = new Question($questionHelper->getQuestion('Article template name', $input->getOption('article-template-name')));
             $articleTemplateName = (string) $questionHelper->ask($input, $output, $question);
-            $input->setOption('article_template_name', $articleTemplateName);
+            $input->setOption('article-template-name', $articleTemplateName);
 
             // ArticleTemplate layout
-            $question = new Question($questionHelper->getQuestion('Article template layout', $input->getOption('article_template_layout')));
+            $question = new Question($questionHelper->getQuestion('Article template layout', $input->getOption('article-template-layout')));
             $question->setValidator(function ($answer) {
                 return self::validateLayout($answer);
             });
             $articleTemplateLayout = (string) $questionHelper->ask($input, $output, $question);
-            $input->setOption('article_template_layout', $articleTemplateLayout);
+            $input->setOption('article-template-layout', $articleTemplateLayout);
 
             // ArticleTemplate parent_id
-            $question = new Question($questionHelper->getQuestion('Article template parent id', $input->getOption('article_template_parent_id')));
+            $question = new Question($questionHelper->getQuestion('Article template parent id', $input->getOption('article-template-parent-id')));
             $question->setValidator(function ($answer) {
                 return self::validateTemplateId($answer);
             });
 
             $articleTemplateParentId = (int) $questionHelper->ask($input, $output, $question);
-            $input->setOption('article_template_parent_id', $articleTemplateParentId);
+            $input->setOption('article-template-parent-id', $articleTemplateParentId);
 
             // ArticleTemplate slot
-            $question = new Question($questionHelper->getQuestion('Article Template first slot', $input->getOption('article_template_first_slot')));
+            $question = new Question($questionHelper->getQuestion('Article Template first slot', $input->getOption('article-template-first-slot')));
             $articleTemplateFirstSlot = (string) $questionHelper->ask($input, $output, $question);
-            $input->setOption('article_template_first_slot', $articleTemplateFirstSlot);
+            $input->setOption('article-template-first-slot', $articleTemplateFirstSlot);
         } else {
 
             // ArticleTemplate Id
-            $question = new Question($questionHelper->getQuestion('Article Template id', $input->getOption('article_template_id')));
+            $question = new Question($questionHelper->getQuestion('Article Template id', $input->getOption('article-template-id')));
             $question->setValidator(function ($answer) {
                 return self::validateArticleTemplateId($answer);
             });
 
             $articleTemplateId = (int) $questionHelper->ask($input, $output, $question);
-            $input->setOption('article_template_id', $articleTemplateId);
+            $input->setOption('article-template-id', $articleTemplateId);
 
             // ArticleTemplate slot
-            $question = new Question($questionHelper->getQuestion('Article Template first slot', $input->getOption('article_template_first_slot')));
+            $question = new Question($questionHelper->getQuestion('Article Template first slot', $input->getOption('article-template-first-slot')));
             $articleTemplateFirstSlot = (string) $questionHelper->ask($input, $output, $question);
-            $input->setOption('article_template_first_slot', $articleTemplateFirstSlot);
+            $input->setOption('article-template-first-slot', $articleTemplateFirstSlot);
         }
     }
 
