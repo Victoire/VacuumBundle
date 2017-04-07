@@ -67,10 +67,12 @@ So once I have some stage a pipeline an a processor we can build an execution ch
 
     $pipeline = new Pipeline(new Processor());
     
+    $payload = new Payload();
+    
     $pipeline
         ->pipe(new Stage1)
         ->pipe(new Stage2)
         ->pipe(new Stage3)
-    ->process()
+    ->process($payload)
     
     
