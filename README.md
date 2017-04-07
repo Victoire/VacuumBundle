@@ -5,7 +5,7 @@ to populate a new or an existing Victoire Blog.
 
 ## Installation
 
-Install with composer:
+Install it with composer:
 
     php composer.phar require victoire/vacuum-bundle
 
