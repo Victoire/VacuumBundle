@@ -2,7 +2,7 @@
 
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
 
-class Category
+class Category extends AbstractXMLEntity
 {
     /**
      * @var Term

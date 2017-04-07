@@ -6,8 +6,8 @@ interface ProcessorInterface
 {
     /**
      * @param array $stages
-     * @param $playload
+     * @param $payload
      * @return mixed
      */
-    public function process(array $stages, $playload);
+    public function process(array $stages, $payload);
 }

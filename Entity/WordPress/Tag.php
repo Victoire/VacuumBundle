@@ -2,7 +2,7 @@
 
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
 
-class Tag
+class Tag extends AbstractXMLEntity
 {
     /**
      * @var Term

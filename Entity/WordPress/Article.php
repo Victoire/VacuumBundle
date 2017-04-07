@@ -3,9 +3,11 @@
 namespace Victoire\DevTools\VacuumBundle\Entity\WordPress;
 
 
-class Article
+class Article extends AbstractXMLEntity
 {
     private $title;
+
+    private $slug;
 
     private $link;
 
@@ -35,6 +37,12 @@ class Article
 
     private $attachmentUrl;
 
+    private $attachment;
+
+    private $category;
+
+    private $tags = [];
+
     /**
      * @return mixed
      */
@@ -50,6 +58,24 @@ class Article
     public function setTitle($title)
     {
         $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     * @return Article
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
         return $this;
     }
 
@@ -302,6 +328,70 @@ class Article
     public function setAttachmentUrl($attachmentUrl)
     {
         $this->attachmentUrl = $attachmentUrl;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttachment()
+    {
+        return $this->attachment;
+    }
+
+    /**
+     * @param mixed $attachment
+     * @return Article
+     */
+    public function setAttachment($attachment)
+    {
+        $this->attachment = $attachment;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     * @return Article
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param $tag
+     * @return $this
+     */
+    public function addTag($tag)
+    {
+        array_push($this->tags, $tag);
+        return $this;
+    }
+
+    /**
+     * @param mixed $tags
+     * @return Article
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
         return $this;
     }
 }

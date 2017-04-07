@@ -2,7 +2,13 @@
 
 namespace Victoire\DevTools\VacuumBundle\Pipeline;
 
+use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
+
 interface StageInterface
 {
-    public function __invoke($playload);
+    /**
+     * @param CommandPayloadInterface $payload
+     * @return $payload
+     */
+    public function __invoke(CommandPayloadInterface $payload);
 }
