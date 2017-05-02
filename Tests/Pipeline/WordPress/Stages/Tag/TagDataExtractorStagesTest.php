@@ -2,17 +2,14 @@
 
 namespace Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\Tag;
 
-use Victoire\DevTools\VacuumBundle\Payload\CommandPayload;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
 
 /**
- * Class TagDataExtractorStagesTest
- * @package Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\Tag
+ * Class TagDataExtractorStagesTest.
  */
 class TagDataExtractorStagesTest extends AbstractBaseStagesTests
 {
-
     public function testPayloadIntegrity()
     {
         $stage = new TagDataExtractorStages();

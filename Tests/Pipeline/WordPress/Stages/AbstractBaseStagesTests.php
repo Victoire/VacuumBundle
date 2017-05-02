@@ -9,8 +9,7 @@ use Victoire\DevTools\VacuumBundle\Payload\CommandPayload;
 use Victoire\DevTools\VacuumBundle\Utils\History\XMLHistoryManager;
 
 /**
- * Class AbstractBaseStagesTests
- * @package Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages
+ * Class AbstractBaseStagesTests.
  */
 class AbstractBaseStagesTests extends \PHPUnit_Framework_TestCase
 {
