@@ -51,9 +51,10 @@ class CommandPayload implements CommandPayloadInterface
 
     /**
      * CommandPayload constructor.
-     * @param array $parameters
-     * @param OutputInterface $output
-     * @param QuestionHelper $questionHelper
+     *
+     * @param array             $parameters
+     * @param OutputInterface   $output
+     * @param QuestionHelper    $questionHelper
      * @param \SimpleXMLElement $rawData
      * @param XMLHistoryManager $XMLHistoryManager
      */
