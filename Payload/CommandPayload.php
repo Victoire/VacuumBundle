@@ -50,11 +50,13 @@ class CommandPayload implements CommandPayloadInterface
     private $XMLHistoryManager;
 
     /**
-     * WordPressPlayload constructor.
+     * CommandPayload constructor.
      *
-     * @param array          $parameters
-     * @param ProgressBar    $progressBar
-     * @param QuestionHelper $questionHelper
+     * @param array             $parameters
+     * @param OutputInterface   $output
+     * @param QuestionHelper    $questionHelper
+     * @param \SimpleXMLElement $rawData
+     * @param XMLHistoryManager $XMLHistoryManager
      */
     public function __construct(
         array $parameters,
