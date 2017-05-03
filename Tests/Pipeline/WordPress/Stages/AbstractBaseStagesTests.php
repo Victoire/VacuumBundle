@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
+use Victoire\DevTools\VacuumBundle\Entity\VacuumXMLRelationHistory;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayload;
 use Victoire\DevTools\VacuumBundle\Utils\History\XMLHistoryManager;
@@ -28,7 +29,11 @@ class AbstractBaseStagesTests extends TestCase
         $output->method('getFormatter')->willReturn($this->createMock(OutputFormatterInterface::class));
         $questionHelper = $this->createMock(QuestionHelper::class);
         $rawData = simplexml_load_string($xml);
+
         $xmlHistory = $this->createMock(XMLHistoryManager::class);
+        $xmlHistory
+            ->method("generateHistory")
+            ->willReturn(new VacuumXMLRelationHistory());
 
         $payload = new CommandPayload(
             $params,

@@ -19,6 +19,15 @@ class BlogDataExtractorStagesTest extends AbstractBaseStagesTests
 
         $payload = call_user_func($stage, $payload);
 
+        $expected = $this->generateBaseBlog();
+
+        $this->assertEquals($payload->getTmpBlog(), $expected);
+    }
+
+    /**
+     * @return Blog
+     */
+    public function generateBaseBlog() {
         $expected = new Blog();
         $expected->setLocale('en');
         $expected->setTitle('Test Blog');
@@ -30,7 +39,7 @@ class BlogDataExtractorStagesTest extends AbstractBaseStagesTests
         $expected->setId(1);
         $expected->setXmlTag('channel');
 
-        $this->assertEquals($payload->getTmpBlog(), $expected);
+        return $expected;
     }
 
     public function testTooManyBlogError()
