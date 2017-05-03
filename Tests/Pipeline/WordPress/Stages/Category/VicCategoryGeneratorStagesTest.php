@@ -9,8 +9,7 @@ use Victoire\DevTools\VacuumBundle\Tests\Utils\CategoryFaker;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\DoctrineMockProvider;
 
 /**
- * Class VicCategoryGeneratorStagesTest
- * @package Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\Category
+ * Class VicCategoryGeneratorStagesTest.
  */
 class VicCategoryGeneratorStagesTest extends AbstractBaseStagesTests
 {
