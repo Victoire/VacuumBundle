@@ -43,9 +43,9 @@ class BlogDataExtractorStagesTest extends AbstractBaseStagesTests
         try {
             call_user_func($stage, $payload);
         } catch (\Throwable $e) {
-            $this->assertEquals("Dump has more than on blog in it.", $e->getMessage());
+            $this->assertEquals('Dump has more than on blog in it.', $e->getMessage());
         } catch (\Exception $e) {
-            $this->assertEquals("Dump has more than on blog in it.", $e->getMessage());
+            $this->assertEquals('Dump has more than on blog in it.', $e->getMessage());
         }
     }
 }
