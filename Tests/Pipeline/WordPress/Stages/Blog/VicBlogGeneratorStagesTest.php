@@ -9,6 +9,7 @@ use Victoire\Bundle\TemplateBundle\Entity\Template;
 use Victoire\Bundle\TemplateBundle\Repository\TemplateRepository;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\VicBlogGeneratorStages;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\BlogFaker;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\DoctrineMockProvider;
 
 /**
@@ -47,26 +48,13 @@ class VicBlogGeneratorStagesTest extends AbstractBaseStagesTests
             'blog_parent_id' => 12,
         ];
 
-        $blogDataExtractorTest = new BlogDataExtractorStagesTest();
+        $blogProvider = new BlogFaker();
 
-        $payload = $this->getFreshPayload($params, $xml, $blogDataExtractorTest->generateBaseBlog());
+        $payload = $this->getFreshPayload($params, $xml, $blogProvider->generateWordPressBlog());
 
         $payload = call_user_func($stage, $payload);
 
-        $expected = new \Victoire\Bundle\BlogBundle\Entity\Blog();
-        $expected->setCurrentLocale('en');
-        $expected->setDefaultLocale('en');
-        $expected->setStatus('published');
-        $expected->setPublishedAt(new \DateTime('Tue, 02 May 2017 13:56:23 +0000'));
-        $translation = new ViewTranslation();
-        $translation->setLocale('en');
-        $translation->setName('blog test');
-        $translation->setTranslatable($expected);
-        $expected->addTranslation($translation);
-        $expected->setTemplate($template);
-        $expected->setParent($page);
-        $expected->setCreatedAt(new \DateTime('now'));
-        $expected->mergeNewTranslations();
+        $expected = $blogProvider->getNewVicBlog($template, $page);
 
         $payload->getNewVicBlog()->setCreatedAt($expected->getCreatedAt());
 
