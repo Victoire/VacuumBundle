@@ -284,7 +284,6 @@ class CommandPayload implements CommandPayloadInterface
      */
     public function throwErrorAndStop($message)
     {
-        $this->output->writeln('<error>'.$message.'</error>');
-        exit(1);
+        throw new \Exception($message);
     }
 }
