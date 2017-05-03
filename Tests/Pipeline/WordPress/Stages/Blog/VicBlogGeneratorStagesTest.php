@@ -2,7 +2,6 @@
 
 namespace Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages;
 
-use Victoire\Bundle\I18nBundle\Entity\ViewTranslation;
 use Victoire\Bundle\PageBundle\Entity\Page;
 use Victoire\Bundle\PageBundle\Repository\PageRepository;
 use Victoire\Bundle\TemplateBundle\Entity\Template;

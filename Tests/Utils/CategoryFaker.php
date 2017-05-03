@@ -6,20 +6,19 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Category;
 
 /**
- * Class CategoryFaker
- * @package Victoire\DevTools\VacuumBundle\Tests\Utils
+ * Class CategoryFaker.
  */
 class CategoryFaker
 {
     /**
-     * Add x categories to a blog
+     * Add x categories to a blog.
      *
      * @param $nb
      * @param Blog $tmpBlog
      */
     public function generateWPCategories($nb, Blog $tmpBlog)
     {
-        for ($ii = 1; $ii < $nb+1; $ii++) {
+        for ($ii = 1; $ii < $nb + 1; $ii++) {
             $category = new Category();
             $category->setCategoryName('Category Test '.$ii);
             $category->setCategoryNicename('category-test-'.$ii);
@@ -31,17 +30,17 @@ class CategoryFaker
     }
 
     /**
-     * Add x Victoire category to a Victoire Blog
+     * Add x Victoire category to a Victoire Blog.
      *
      * @param $nb
      * @param \Victoire\Bundle\BlogBundle\Entity\Blog $vicBlog
      */
     public function generateVictoireCategory($nb, \Victoire\Bundle\BlogBundle\Entity\Blog $vicBlog)
     {
-        for ($ii = 1; $ii < $nb+1; $ii++) {
+        for ($ii = 1; $ii < $nb + 1; $ii++) {
             $category = new \Victoire\Bundle\BlogBundle\Entity\Category();
-            $category->setTitle("Category Test ".$ii);
-            $category->setSlug("category-test-".$ii);
+            $category->setTitle('Category Test '.$ii);
+            $category->setSlug('category-test-'.$ii);
             $vicBlog->addCategorie($category);
         }
     }

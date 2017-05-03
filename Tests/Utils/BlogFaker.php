@@ -8,14 +8,14 @@ use Victoire\Bundle\PageBundle\Entity\Page;
 use Victoire\Bundle\TemplateBundle\Entity\Template;
 
 /**
- * Class BlogFaker
- * @package Victoire\DevTools\VacuumBundle\Tests\Utils
+ * Class BlogFaker.
  */
 class BlogFaker
 {
     /**
      * @param null $template
      * @param null $page
+     *
      * @return Blog
      */
     public function getNewVicBlog($template = null, $page = null)
