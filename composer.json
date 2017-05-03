@@ -28,5 +28,8 @@
   },
   "autoload": {
     "psr-4": { "Victoire\\DevTools\\VacuumBundle\\": "" }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.1"
   }
 }
