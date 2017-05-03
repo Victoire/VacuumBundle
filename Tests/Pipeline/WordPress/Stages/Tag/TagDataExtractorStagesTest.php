@@ -8,7 +8,8 @@ use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtracto
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
 
 /**
- * Class TagDataExtractorStagesTest.
+ * Class TagDataExtractorStagesTest
+ * @package Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\Tag
  */
 class TagDataExtractorStagesTest extends AbstractBaseStagesTests
 {
