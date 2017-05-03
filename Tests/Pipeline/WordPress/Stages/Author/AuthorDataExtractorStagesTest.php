@@ -34,6 +34,26 @@ class AuthorDataExtractorStagesTest extends AbstractBaseStagesTests
 
     public function testUnknownAuthorError()
     {
+        $doctrineMockProvider = new DoctrineMockProvider();
+        $entityManager = $doctrineMockProvider->getEMMock();
 
+        $stage = new AuthorDataExtractorStages($entityManager);
+        $params = [];
+        $xml = file_get_contents('Tests/Resources/xml/author/author_data_extraction.xml');
+        $payload = $this->getFreshPayload($params, $xml, new Blog());
+
+        try {
+            call_user_func($stage, $payload);
+        } catch (\Throwable $e) {
+            $this->assertEquals(
+                "Some Author can't be found ! Please create them before importing this blog again.",
+                $e->getMessage()
+            );
+        } catch (\Exception $e) {
+            $this->assertEquals(
+                "Some Author can't be found ! Please create them before importing this blog again.",
+                $e->getMessage()
+            );
+        }
     }
 }
