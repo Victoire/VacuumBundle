@@ -27,7 +27,8 @@ class BlogDataExtractorStagesTest extends AbstractBaseStagesTests
     /**
      * @return Blog
      */
-    public function generateBaseBlog() {
+    public function generateBaseBlog()
+    {
         $expected = new Blog();
         $expected->setLocale('en');
         $expected->setTitle('Test Blog');
