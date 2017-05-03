@@ -32,4 +32,20 @@ class BlogDataExtractorStagesTest extends AbstractBaseStagesTests
 
         $this->assertEquals($payload->getTmpBlog(), $expected);
     }
+
+    public function testTooManyBlogError()
+    {
+        $stage = new BlogDataExtractorStages();
+        $params = ['blog_name' => 'Test Blog'];
+        $xml = file_get_contents('Tests/Resources/xml/blog/wrong_blog_data_extraction.xml');
+        $payload = $this->getFreshPayload($params, $xml, new Blog());
+
+        try {
+            call_user_func($stage, $payload);
+        } catch (\Throwable $e) {
+            $this->assertEquals("Dump has more than on blog in it.", $e->getMessage());
+        } catch (\Exception $e) {
+            $this->assertEquals("Dump has more than on blog in it.", $e->getMessage());
+        }
+    }
 }
