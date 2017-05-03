@@ -25,17 +25,17 @@ class DoctrineMockProvider extends TestCase
             $emMock->expects($this->any())
                 ->method('getRepository')
                 ->will($this->returnValue($this->getFakeRepository($repositoryReturnValue)));
-        } else if (is_array($repositoryReturnValue)) {
+        } elseif (is_array($repositoryReturnValue)) {
             $emMock->expects($this->any())
                 ->method('getRepository')
                 ->with($this->anything())
-                ->will($this->returnCallback(function($entityName) use ($repositoryReturnValue) {
+                ->will($this->returnCallback(function ($entityName) use ($repositoryReturnValue) {
                     foreach ($repositoryReturnValue as $returnValue) {
-                        if ($entityName == $returnValue["entityName"]) {
-                            $fakeRepository = $this->createMock($returnValue["entityClass"]);
+                        if ($entityName == $returnValue['entityName']) {
+                            $fakeRepository = $this->createMock($returnValue['entityClass']);
                             $fakeRepository
-                                ->method($returnValue["entityMethod"])
-                                ->will($this->returnValue($returnValue["entityExpectedValue"]));
+                                ->method($returnValue['entityMethod'])
+                                ->will($this->returnValue($returnValue['entityExpectedValue']));
 
                             return $fakeRepository;
                         }

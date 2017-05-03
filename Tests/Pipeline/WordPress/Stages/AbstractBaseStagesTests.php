@@ -32,7 +32,7 @@ class AbstractBaseStagesTests extends TestCase
 
         $xmlHistory = $this->createMock(XMLHistoryManager::class);
         $xmlHistory
-            ->method("generateHistory")
+            ->method('generateHistory')
             ->willReturn(new VacuumXMLRelationHistory());
 
         $payload = new CommandPayload(
