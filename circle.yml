@@ -9,24 +9,10 @@ machine:
   php:
     version: 7.0
 
-checkout:
-  post:
-    - git submodule sync
-    - git submodule update --init
-
 dependencies:
   override:
-    - bash victoire-test-suite/dependencies.sh victoire/vacuumbundle
-  cache_directories:
-    - ~/.composer/cache
+    - bash circle/dependencies.sh
 
 test:
   override:
-    - bash victoire-test-suite/circle.sh user/repo:
-        parallel: true
-    - vendor/victoire/victoire/vendor/bin/phpunit
-    - bash victoire-test-suite/test.sh victoire/vacuumbundle
-
-general:
-  artifacts:
-    - "fails"
+    - vendor/bin/phpunit

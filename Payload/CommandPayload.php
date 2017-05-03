@@ -70,13 +70,12 @@ class CommandPayload implements CommandPayloadInterface
         $this->output = $output;
         $this->rawData = $rawData;
         $this->XMLHistoryManager = $XMLHistoryManager;
-        self::loadCustomStyle();
     }
 
     /**
      * Generate custom style for command dispatch.
      */
-    private function loadCustomStyle()
+    public function loadCustomStyle()
     {
         $style = new OutputFormatterStyle('white', 'blue');
         $this->output->getFormatter()->setStyle('stageTitle', $style);
