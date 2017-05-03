@@ -17,28 +17,9 @@ class AbstractBaseStagesTests extends TestCase
 {
     /**
      * @param array $params {
-     * $params = [
-            "dump",
-            "blog_name",
-            "blog_template",
-            "blog_parent_id",
-            "new_article_template",
-            "article_template_name",
-            "article_template_layout",
-            "article_template_parent_id",
-            "article_template_first_slot",
-        ]; OR
-     *  $params = [
-            "dump",
-            "blog_name",
-            "blog_template",
-            "blog_parent_id",
-            "new_article_template",
-            "article_template_id",
-            "article_template_first_slot"
-        ];
-     * }
+     *                      $params = [
      * @param $xml
+     *
      * @return CommandPayload
      */
     public function getFreshPayload(array $params, $xml, Blog $blog = null)
