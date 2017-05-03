@@ -2,7 +2,6 @@
 
 namespace Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\Author;
 
-use Doctrine\ORM\EntityManager;
 use Victoire\Bundle\UserBundle\Entity\User;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author\AuthorDataExtractorStages;
@@ -18,8 +17,8 @@ class AuthorDataExtractorStagesTest extends AbstractBaseStagesTests
     {
         $doctrineMockProvider = new DoctrineMockProvider();
         $author = new User();
-        $author->setEmail("author1@blogtest.com");
-        $author->setUsername("author1@blogtest.com");
+        $author->setEmail('author1@blogtest.com');
+        $author->setUsername('author1@blogtest.com');
         $entityManager = $doctrineMockProvider->getEMMock($author);
 
         $stage = new AuthorDataExtractorStages($entityManager);

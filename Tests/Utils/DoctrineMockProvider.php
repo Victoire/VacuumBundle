@@ -7,19 +7,19 @@ use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class DoctrineMockProvider
+ * Class DoctrineMockProvider.
  */
 class DoctrineMockProvider extends TestCase
 {
     /**
-     * Will return an Moked EntityManager repository
+     * Will return an Moked EntityManager repository.
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     public function getEMMock($repositoryReturnValue = null)
     {
         $emMock = $this->createMock(EntityManager::class,
-            array('getRepository', 'getClassMetadata', 'persist', 'flush'), array(), '', false);
+            ['getRepository', 'getClassMetadata', 'persist', 'flush'], [], '', false);
 
         $emMock->expects($this->any())
             ->method('getRepository')
@@ -27,7 +27,7 @@ class DoctrineMockProvider extends TestCase
 
         $emMock->expects($this->any())
             ->method('getClassMetadata')
-            ->will($this->returnValue((object)array('name' => 'aClass')));
+            ->will($this->returnValue((object) ['name' => 'aClass']));
 
         $emMock->expects($this->any())
             ->method('persist')
@@ -41,9 +41,10 @@ class DoctrineMockProvider extends TestCase
     }
 
     /**
-     * Return an Mocked EntityRepository
+     * Return an Mocked EntityRepository.
      *
      * @param $expectedValue
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     public function getFakeRepository($expectedValue)
