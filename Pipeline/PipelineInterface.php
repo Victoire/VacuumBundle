@@ -14,7 +14,7 @@ interface PipelineInterface extends StageInterface
     public function pipe(callable $operation);
 
     /**
-     * Execute the processor process method
+     * Execute the processor process method.
      *
      * @param $payload
      *

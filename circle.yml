@@ -7,25 +7,12 @@ machine:
   services:
     - redis
   php:
-    version: 7.1.0
-
-checkout:
-  post:
-    - git submodule sync
-    - git submodule update --init
+    version: 7.0.4
 
 dependencies:
   override:
-    - bash victoire-test-suite/dependencies.sh victoire/vacuumbundle
-  cache_directories:
-    - ~/.composer/cache
+    - bash circle/dependencies.sh
 
 test:
   override:
-    - bash victoire-test-suite/circle.sh user/repo:
-        parallel: true
-    - bash victoire-test-suite/test.sh victoire/vacuumbundle
-
-general:
-  artifacts:
-    - "fails"
+    - vendor/bin/phpunit
