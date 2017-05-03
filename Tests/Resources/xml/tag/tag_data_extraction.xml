@@ -6,19 +6,19 @@
      xmlns:dc="http://purl.org/dc/elements/1.1/"
      xmlns:wp="http://wordpress.org/export/1.2/"
 >
-<channel>
-    <title>Test Blog</title>
-    <link>http://www.testblog.com</link>
-    <description>I test this blog</description>
-    <pubDate>Tue, 02 May 2017 13:56:23 +0000</pubDate>
-    <language>en-EN</language>
-    <wxr_version>1.2</wxr_version>
-    <base_site_url>http://www.testblog.com</base_site_url>
-    <base_blog_url>http://www.testblog.com</base_blog_url>
-    <tag><term_id>1</term_id><tag_slug><![CDATA[test-tag1]]></tag_slug><tag_name><![CDATA[Test1]]></tag_name></tag>
-    <tag><term_id>2</term_id><tag_slug><![CDATA[test-tag2]]></tag_slug><tag_name><![CDATA[Test2]]></tag_name></tag>
-    <tag><term_id>3</term_id><tag_slug><![CDATA[test-tag3]]></tag_slug><tag_name><![CDATA[Test3]]></tag_name></tag>
-    <tag><term_id>4</term_id><tag_slug><![CDATA[test-tag4]]></tag_slug><tag_name><![CDATA[Test4]]></tag_name></tag>
-    <tag><term_id>5</term_id><tag_slug><![CDATA[test-tag5]]></tag_slug><tag_name><![CDATA[Test5]]></tag_name></tag>
-</channel>
+    <channel>
+        <title>Test Blog</title>
+        <link>http://www.testblog.com</link>
+        <description>I test this blog</description>
+        <pubDate>Tue, 02 May 2017 13:56:23 +0000</pubDate>
+        <language>en-EN</language>
+        <wxr_version>1.2</wxr_version>
+        <base_site_url>http://www.testblog.com</base_site_url>
+        <base_blog_url>http://www.testblog.com</base_blog_url>
+        <tag><term_id>1</term_id><tag_slug><![CDATA[test-tag1]]></tag_slug><tag_name><![CDATA[Test1]]></tag_name></tag>
+        <tag><term_id>2</term_id><tag_slug><![CDATA[test-tag2]]></tag_slug><tag_name><![CDATA[Test2]]></tag_name></tag>
+        <tag><term_id>3</term_id><tag_slug><![CDATA[test-tag3]]></tag_slug><tag_name><![CDATA[Test3]]></tag_name></tag>
+        <tag><term_id>4</term_id><tag_slug><![CDATA[test-tag4]]></tag_slug><tag_name><![CDATA[Test4]]></tag_name></tag>
+        <tag><term_id>5</term_id><tag_slug><![CDATA[test-tag5]]></tag_slug><tag_name><![CDATA[Test5]]></tag_name></tag>
+    </channel>
 </rss>
