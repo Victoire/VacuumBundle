@@ -13,8 +13,8 @@
     <pubDate>Tue, 02 May 2017 13:56:23 +0000</pubDate>
     <language>en-EN</language>
     <wxr_version>1.2</wxr_version>
-    <base_site_url>http://www.jairendezvousavecmavie.fr</base_site_url>
-    <base_blog_url>http://www.jairendezvousavecmavie.fr</base_blog_url>
+    <base_site_url>http://www.testblog.com</base_site_url>
+    <base_blog_url>http://www.testblog.com</base_blog_url>
     <tag><term_id>1</term_id><tag_slug><![CDATA[test-tag1]]></tag_slug><tag_name><![CDATA[Test1]]></tag_name></tag>
     <tag><term_id>2</term_id><tag_slug><![CDATA[test-tag2]]></tag_slug><tag_name><![CDATA[Test2]]></tag_name></tag>
     <tag><term_id>3</term_id><tag_slug><![CDATA[test-tag3]]></tag_slug><tag_name><![CDATA[Test3]]></tag_name></tag>
