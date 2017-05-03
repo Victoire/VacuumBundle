@@ -16,7 +16,7 @@ class TagDataExtractorStagesTest extends AbstractBaseStagesTests
     {
         $stage = new TagDataExtractorStages();
         $params = [];
-        $xml = file_get_contents("Tests/Resources/xml/tag/tag_data_extraction.xml");
+        $xml = file_get_contents('Tests/Resources/xml/tag/tag_data_extraction.xml');
         $payload = $this->getFreshPayload($params, $xml, new Blog());
 
         $payload = call_user_func($stage, $payload);
@@ -24,9 +24,9 @@ class TagDataExtractorStagesTest extends AbstractBaseStagesTests
         $tmpBlog = new Blog();
         for ($ii = 1; $ii < 6; $ii++) {
             $tag = new Tag();
-            $tag->setTagName("Test".$ii);
-            $tag->setTagSlug("test-tag".$ii);
-            $tag->setXmlTag("tag");
+            $tag->setTagName('Test'.$ii);
+            $tag->setTagSlug('test-tag'.$ii);
+            $tag->setXmlTag('tag');
             $tag->setId($ii);
             $tmpBlog->addTag($tag);
         }
