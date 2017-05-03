@@ -8,8 +8,7 @@ use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\CategoryDa
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
 
 /**
- * Class CategoryDataExtractorStagesTest
- * @package Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\Category
+ * Class CategoryDataExtractorStagesTest.
  */
 class CategoryDataExtractorStagesTest extends AbstractBaseStagesTests
 {
@@ -25,11 +24,11 @@ class CategoryDataExtractorStagesTest extends AbstractBaseStagesTests
         $tmpBlog = new Blog();
         for ($ii = 1; $ii < 6; $ii++) {
             $category = new Category();
-            $category->setCategoryName("Category Test ".$ii);
-            $category->setCategoryNicename("category-test-".$ii);
+            $category->setCategoryName('Category Test '.$ii);
+            $category->setCategoryNicename('category-test-'.$ii);
             $category->setCategoryParent(0);
             $category->setId($ii);
-            $category->setXmlTag("category");
+            $category->setXmlTag('category');
             $tmpBlog->addCategory($category);
         }
 
