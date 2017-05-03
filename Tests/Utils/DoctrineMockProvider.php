@@ -21,9 +21,33 @@ class DoctrineMockProvider extends TestCase
         $emMock = $this->createMock(EntityManager::class,
             ['getRepository', 'getClassMetadata', 'persist', 'flush'], [], '', false);
 
-        $emMock->expects($this->any())
-            ->method('getRepository')
-            ->will($this->returnValue($this->getFakeRepository($repositoryReturnValue)));
+        if (null != $repositoryReturnValue && !is_array($repositoryReturnValue)) {
+            $emMock->expects($this->any())
+                ->method('getRepository')
+                ->will($this->returnValue($this->getFakeRepository($repositoryReturnValue)));
+        } elseif (is_array($repositoryReturnValue)) {
+            $emMock->expects($this->any())
+                ->method('getRepository')
+                ->with($this->anything())
+                ->will($this->returnCallback(function ($entityName) use ($repositoryReturnValue) {
+                    foreach ($repositoryReturnValue as $returnValue) {
+                        if ($entityName == $returnValue['entityName']) {
+                            $fakeRepository = $this->createMock($returnValue['entityClass']);
+                            $fakeRepository
+                                ->method($returnValue['entityMethod'])
+                                ->will($this->returnValue($returnValue['entityExpectedValue']));
+
+                            return $fakeRepository;
+                        }
+                    }
+                }));
+        } else {
+            $fakeRepository = $this->createMock(EntityRepository::class);
+
+            $emMock->expects($this->any())
+                ->method('getRepository')
+                ->will($this->returnValue($fakeRepository));
+        }
 
         $emMock->expects($this->any())
             ->method('getClassMetadata')
