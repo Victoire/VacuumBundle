@@ -4,6 +4,7 @@ namespace Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages;
 
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\BlogDataExtractorStages;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\BlogFaker;
 
 /**
  * Class BlogDataExtractorStagesTest.
@@ -19,28 +20,10 @@ class BlogDataExtractorStagesTest extends AbstractBaseStagesTests
 
         $payload = call_user_func($stage, $payload);
 
-        $expected = $this->generateBaseBlog();
+        $blogProvider = new BlogFaker();
+        $expected = $blogProvider->generateWordPressBlog();
 
         $this->assertEquals($payload->getTmpBlog(), $expected);
-    }
-
-    /**
-     * @return Blog
-     */
-    public function generateBaseBlog()
-    {
-        $expected = new Blog();
-        $expected->setLocale('en');
-        $expected->setTitle('Test Blog');
-        $expected->setLink('http://www.testblog.com');
-        $expected->setDescription('I test this blog');
-        $expected->setPublicationDate(new \DateTime('Tue, 02 May 2017 13:56:23 +0000'));
-        $expected->setBaseSiteUrl('http://www.testblog.com');
-        $expected->setBaseBlogUrl('http://www.testblog.com');
-        $expected->setId(1);
-        $expected->setXmlTag('channel');
-
-        return $expected;
     }
 
     public function testTooManyBlogError()

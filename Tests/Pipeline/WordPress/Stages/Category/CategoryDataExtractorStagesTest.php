@@ -6,6 +6,7 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Category;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\CategoryDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\CategoryFaker;
 
 /**
  * Class CategoryDataExtractorStagesTest.
@@ -22,15 +23,8 @@ class CategoryDataExtractorStagesTest extends AbstractBaseStagesTests
         $payload = call_user_func($stage, $payload);
 
         $tmpBlog = new Blog();
-        for ($ii = 1; $ii < 6; $ii++) {
-            $category = new Category();
-            $category->setCategoryName('Category Test '.$ii);
-            $category->setCategoryNicename('category-test-'.$ii);
-            $category->setCategoryParent(0);
-            $category->setId($ii);
-            $category->setXmlTag('category');
-            $tmpBlog->addCategory($category);
-        }
+        $categoriesFaker = new CategoryFaker();
+        $categoriesFaker->generateWPCategories(5, $tmpBlog);
 
         foreach ($tmpBlog->getCategories() as $key => $category) {
             $expectedTag = $payload->getTmpBlog()->getCategories()[$key];
