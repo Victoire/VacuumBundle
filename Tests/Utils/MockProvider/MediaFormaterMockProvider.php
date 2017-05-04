@@ -32,8 +32,23 @@ class MediaFormaterMockProvider extends DoctrineMockProvider
 
         $mediaFormaterMock
             ->method('generateImageMedia')
-            ->willReturn($this->createMock(Media::class));
+            ->willReturn($this->generateVicMediaMock());
 
         return $mediaFormaterMock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    public function generateVicMediaMock()
+    {
+        $mediaMock = $this->createMock(Media::class);
+
+        $mediaMock
+            ->method("getUrl")
+            ->willReturn("/uploads/media/test-blog/abstract")
+        ;
+
+        return $mediaMock;
     }
 }
