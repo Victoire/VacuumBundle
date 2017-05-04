@@ -6,10 +6,10 @@ use Victoire\Bundle\UserBundle\Entity\User;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Article\ArticleDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\ArticleFaker;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\BlogFaker;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\CategoryFaker;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\TagFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\ArticleFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\BlogFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\CategoryFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\TagFaker;
 
 /**
  * Class ArticleDataExtractorStagesTest.

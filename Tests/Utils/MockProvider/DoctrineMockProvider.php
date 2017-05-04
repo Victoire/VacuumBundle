@@ -1,6 +1,6 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Tests\Utils;
+namespace Victoire\DevTools\VacuumBundle\Tests\Utils\MockProvider;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
