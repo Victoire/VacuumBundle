@@ -117,8 +117,9 @@ class ArticleDataExtractorStages implements StageInterface
     /**
      * @param Article $article
      * @param $wpArticle
-     * @param $xmlDataFormater
-     * @param $payload
+     * @param XmlDataFormater $xmlDataFormater
+     * @param CommandPayloadInterface $payload
+     * @return Article
      */
     private function setCategoryAndTag(Article $article, $wpArticle, XmlDataFormater $xmlDataFormater, CommandPayloadInterface $payload)
     {
