@@ -12,7 +12,7 @@ use Victoire\DevTools\VacuumBundle\Tests\Utils\CategoryFaker;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\TagFaker;
 
 /**
- * Class ArticleDataExtractorStagesTest
+ * Class ArticleDataExtractorStagesTest.
  */
 class ArticleDataExtractorStagesTest extends AbstractBaseStagesTests
 {
@@ -24,7 +24,7 @@ class ArticleDataExtractorStagesTest extends AbstractBaseStagesTests
 
         $tmpBlog = new Blog();
         $author = new User();
-        $author->setUsername("author1");
+        $author->setUsername('author1');
 
         $payload = $this->getFreshPayload($params, $xml, $tmpBlog);
 

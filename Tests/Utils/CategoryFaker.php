@@ -47,6 +47,7 @@ class CategoryFaker
 
     /**
      * @param $id
+     *
      * @return \Victoire\Bundle\BlogBundle\Entity\Category
      */
     public function getOneVicCategory($id)
