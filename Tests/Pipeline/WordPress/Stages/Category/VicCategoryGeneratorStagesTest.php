@@ -4,9 +4,9 @@ namespace Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\Categor
 
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\VicCategoryGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\BlogFaker;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\CategoryFaker;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\DoctrineMockProvider;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\BlogFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\CategoryFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\MockProvider\DoctrineMockProvider;
 
 /**
  * Class VicCategoryGeneratorStagesTest.

@@ -4,7 +4,7 @@ namespace Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages;
 
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\BlogDataExtractorStages;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\BlogFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\BlogFaker;
 
 /**
  * Class BlogDataExtractorStagesTest.

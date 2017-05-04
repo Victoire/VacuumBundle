@@ -8,8 +8,8 @@ use Victoire\Bundle\TemplateBundle\Entity\Template;
 use Victoire\Bundle\TemplateBundle\Repository\TemplateRepository;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Blog\VicBlogGeneratorStages;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\BlogFaker;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\DoctrineMockProvider;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\BlogFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\MockProvider\DoctrineMockProvider;
 
 /**
  * Class VicBlogGeneratorStagesTest.

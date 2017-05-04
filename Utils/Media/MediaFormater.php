@@ -8,6 +8,12 @@ use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 use Victoire\DevTools\VacuumBundle\Utils\Curl\CurlsTools;
 
+/**
+ * Media Formater is a tool for Victoire Media and MediaFolder
+ * generation and management.
+ *
+ * Class MediaFormater
+ */
 class MediaFormater
 {
     /**
