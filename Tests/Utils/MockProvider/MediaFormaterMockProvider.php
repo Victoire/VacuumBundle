@@ -45,9 +45,8 @@ class MediaFormaterMockProvider extends DoctrineMockProvider
         $mediaMock = $this->createMock(Media::class);
 
         $mediaMock
-            ->method("getUrl")
-            ->willReturn("/uploads/media/test-blog/abstract")
-        ;
+            ->method('getUrl')
+            ->willReturn('/uploads/media/test-blog/abstract');
 
         return $mediaMock;
     }
