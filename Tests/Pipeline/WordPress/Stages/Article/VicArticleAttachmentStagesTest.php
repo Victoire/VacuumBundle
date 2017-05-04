@@ -10,7 +10,7 @@ use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\BlogFaker;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\MockProvider\MediaFormaterMockProvider;
 
 /**
- * Class VicArticleAttachmentStagesTest
+ * Class VicArticleAttachmentStagesTest.
  */
 class VicArticleAttachmentStagesTest extends AbstractBaseStagesTests
 {
