@@ -7,7 +7,7 @@ use Victoire\Bundle\MediaBundle\Entity\Media;
 use Victoire\DevTools\VacuumBundle\Utils\Media\MediaFormater;
 
 /**
- * Class MediaFormaterMockProvider
+ * Class MediaFormaterMockProvider.
  */
 class MediaFormaterMockProvider extends DoctrineMockProvider
 {
@@ -19,24 +19,20 @@ class MediaFormaterMockProvider extends DoctrineMockProvider
         $mediaFormaterMock = $this->createMock(MediaFormater::class);
 
         $mediaFormaterMock
-            ->method("generateBlogFolder")
-            ->willReturn($this->createMock(Folder::class))
-        ;
+            ->method('generateBlogFolder')
+            ->willReturn($this->createMock(Folder::class));
 
         $mediaFormaterMock
-            ->method("generateFoler")
-            ->willReturn($this->createMock(Folder::class))
-        ;
+            ->method('generateFoler')
+            ->willReturn($this->createMock(Folder::class));
 
         $mediaFormaterMock
-            ->method("cleanUrl")
-            ->willReturn("http://lorempixel.com/300/200/abstract")
-        ;
+            ->method('cleanUrl')
+            ->willReturn('http://lorempixel.com/300/200/abstract');
 
         $mediaFormaterMock
-            ->method("generateImageMedia")
-            ->willReturn($this->createMock(Media::class))
-        ;
+            ->method('generateImageMedia')
+            ->willReturn($this->createMock(Media::class));
 
         return $mediaFormaterMock;
     }
