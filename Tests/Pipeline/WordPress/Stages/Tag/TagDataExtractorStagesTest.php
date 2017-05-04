@@ -6,6 +6,7 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Tag;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\TagDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\TagFaker;
 
 /**
  * Class TagDataExtractorStagesTest.
@@ -22,14 +23,8 @@ class TagDataExtractorStagesTest extends AbstractBaseStagesTests
         $payload = call_user_func($stage, $payload);
 
         $tmpBlog = new Blog();
-        for ($ii = 1; $ii < 6; $ii++) {
-            $tag = new Tag();
-            $tag->setTagName('Test'.$ii);
-            $tag->setTagSlug('test-tag'.$ii);
-            $tag->setXmlTag('tag');
-            $tag->setId($ii);
-            $tmpBlog->addTag($tag);
-        }
+        $tagFaker = new TagFaker();
+        $tagFaker->generateWPTag(5, $tmpBlog);
 
         foreach ($tmpBlog->getTags() as $key => $tag) {
             $expectedTag = $payload->getTmpBlog()->getTags()[$key];

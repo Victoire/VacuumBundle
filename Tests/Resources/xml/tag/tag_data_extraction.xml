@@ -15,10 +15,10 @@
         <wxr_version>1.2</wxr_version>
         <base_site_url>http://www.testblog.com</base_site_url>
         <base_blog_url>http://www.testblog.com</base_blog_url>
-        <tag><term_id>1</term_id><tag_slug><![CDATA[test-tag1]]></tag_slug><tag_name><![CDATA[Test1]]></tag_name></tag>
-        <tag><term_id>2</term_id><tag_slug><![CDATA[test-tag2]]></tag_slug><tag_name><![CDATA[Test2]]></tag_name></tag>
-        <tag><term_id>3</term_id><tag_slug><![CDATA[test-tag3]]></tag_slug><tag_name><![CDATA[Test3]]></tag_name></tag>
-        <tag><term_id>4</term_id><tag_slug><![CDATA[test-tag4]]></tag_slug><tag_name><![CDATA[Test4]]></tag_name></tag>
-        <tag><term_id>5</term_id><tag_slug><![CDATA[test-tag5]]></tag_slug><tag_name><![CDATA[Test5]]></tag_name></tag>
+        <tag><term_id>1</term_id><tag_slug><![CDATA[test-tag-1]]></tag_slug><tag_name><![CDATA[Test 1]]></tag_name></tag>
+        <tag><term_id>2</term_id><tag_slug><![CDATA[test-tag-2]]></tag_slug><tag_name><![CDATA[Test 2]]></tag_name></tag>
+        <tag><term_id>3</term_id><tag_slug><![CDATA[test-tag-3]]></tag_slug><tag_name><![CDATA[Test 3]]></tag_name></tag>
+        <tag><term_id>4</term_id><tag_slug><![CDATA[test-tag-4]]></tag_slug><tag_name><![CDATA[Test 4]]></tag_name></tag>
+        <tag><term_id>5</term_id><tag_slug><![CDATA[test-tag-5]]></tag_slug><tag_name><![CDATA[Test 5]]></tag_name></tag>
     </channel>
 </rss>
