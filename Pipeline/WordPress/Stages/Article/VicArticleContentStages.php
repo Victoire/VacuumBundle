@@ -53,7 +53,7 @@ class VicArticleContentStages implements StageInterface
 
                     if ($document) {
                         $content = preg_replace('/^<!DOCTYPE.+?>/', '',
-                            str_replace( array('<html>', '</html>', '<body>', '</body>'), array('', '', '', ''),
+                            str_replace(['<html>', '</html>', '<body>', '</body>'], ['', '', '', ''],
                                 $document->saveHTML()
                         ));
 
