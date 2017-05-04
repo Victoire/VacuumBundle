@@ -7,6 +7,4 @@ if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
   echo "xdebug enabled"
 fi
 
-dpkg -l | grep libxml2
-
 php -d memory_limit=-1 /usr/local/bin/composer install --prefer-dist
