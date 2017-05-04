@@ -9,7 +9,7 @@ use Victoire\DevTools\VacuumBundle\Tests\Utils\DoctrineMockProvider;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\TagFaker;
 
 /**
- * Class VicTagGeneratorStagesTest
+ * Class VicTagGeneratorStagesTest.
  */
 class VicTagGeneratorStagesTest extends AbstractBaseStagesTests
 {
