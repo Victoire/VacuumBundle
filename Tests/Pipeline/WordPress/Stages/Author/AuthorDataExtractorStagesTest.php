@@ -6,6 +6,8 @@ use Victoire\Bundle\UserBundle\Entity\User;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author\AuthorDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\ArticleFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\BlogFaker;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\MockProvider\DoctrineMockProvider;
 
 /**
@@ -24,6 +26,7 @@ class AuthorDataExtractorStagesTest extends AbstractBaseStagesTests
         $stage = new AuthorDataExtractorStages($entityManager);
         $params = [];
         $xml = file_get_contents('Tests/Resources/xml/author/author_data_extraction.xml');
+
         $payload = $this->getFreshPayload($params, $xml, new Blog());
 
         $payload = call_user_func($stage, $payload);

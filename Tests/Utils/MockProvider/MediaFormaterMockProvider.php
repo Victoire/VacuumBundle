@@ -24,6 +24,11 @@ class MediaFormaterMockProvider extends DoctrineMockProvider
         ;
 
         $mediaFormaterMock
+            ->method("generateFoler")
+            ->willReturn($this->createMock(Folder::class))
+        ;
+
+        $mediaFormaterMock
             ->method("cleanUrl")
             ->willReturn("http://lorempixel.com/300/200/abstract")
         ;
