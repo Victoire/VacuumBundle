@@ -14,9 +14,9 @@ class CategoryFaker
      * Add x categories to a blog.
      *
      * @param $nb
-     * @param Blog $tmpBlog
+     * @param $tmpBlog
      */
-    public function generateWPCategories($nb, Blog $tmpBlog)
+    public function generateWPCategories($nb, $tmpBlog)
     {
         for ($ii = 1; $ii < $nb + 1; $ii++) {
             $category = new Category();
@@ -33,9 +33,9 @@ class CategoryFaker
      * Add x Victoire category to a Victoire Blog.
      *
      * @param $nb
-     * @param \Victoire\Bundle\BlogBundle\Entity\Blog $vicBlog
+     * @param $vicBlog
      */
-    public function generateVictoireCategory($nb, \Victoire\Bundle\BlogBundle\Entity\Blog $vicBlog)
+    public function generateVictoireCategory($nb, $vicBlog)
     {
         for ($ii = 1; $ii < $nb + 1; $ii++) {
             $category = new \Victoire\Bundle\BlogBundle\Entity\Category();
@@ -43,5 +43,19 @@ class CategoryFaker
             $category->setSlug('category-test-'.$ii);
             $vicBlog->addCategorie($category);
         }
+    }
+
+    /**
+     * @param $id
+     *
+     * @return \Victoire\Bundle\BlogBundle\Entity\Category
+     */
+    public function getOneVicCategory($id)
+    {
+        $category = new \Victoire\Bundle\BlogBundle\Entity\Category();
+        $category->setTitle('Category Test '.$id);
+        $category->setSlug('category-test-'.$id);
+
+        return $category;
     }
 }
