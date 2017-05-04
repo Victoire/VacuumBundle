@@ -9,7 +9,7 @@ use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\BlogFaker;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\MockProvider\MediaFormaterMockProvider;
 
 /**
- * Class VicArticleContentStagesTest
+ * Class VicArticleContentStagesTest.
  */
 class VicArticleContentStagesTest extends AbstractBaseStagesTests
 {
@@ -40,6 +40,7 @@ class VicArticleContentStagesTest extends AbstractBaseStagesTests
 
     /**
      * @param $string
+     *
      * @return string
      */
     private function formatStringPresentation($string)
