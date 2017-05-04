@@ -13,6 +13,6 @@ wget ftp://xmlsoft.org/libxml2/LATEST_LIBXML2
 tar -zxvf LATEST_LIBXML2
 cd libxml2-2.9.4
 ./configure --prefix=/usr/local/libxml2
-make install
+sudo make install
 
 php -d memory_limit=-1 /usr/local/bin/composer install --prefer-dist
