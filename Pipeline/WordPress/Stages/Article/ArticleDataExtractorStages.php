@@ -145,8 +145,8 @@ class ArticleDataExtractorStages implements StageInterface
                     }
                 }
             }
-
-            return $article;
         }
+
+        return $article;
     }
 }

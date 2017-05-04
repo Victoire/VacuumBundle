@@ -26,7 +26,7 @@
             <creator><![CDATA[author1]]></creator>
             <post_id>1</post_id>
             <post_date><![CDATA[2012-12-10 12:51:09]]></post_date>
-            <post_parent>3</post_parent>
+            <post_parent>2</post_parent>
             <menu_order>0</menu_order>
             <post_type><![CDATA[attachment]]></post_type>
             <post_password><![CDATA[]]></post_password>
@@ -44,7 +44,7 @@
             <creator><![CDATA[author1]]></creator>
             <post_id>2</post_id>
             <post_date><![CDATA[2012-12-10 12:51:09]]></post_date>
-            <post_parent>4</post_parent>
+            <post_parent>1</post_parent>
             <menu_order>0</menu_order>
             <post_type><![CDATA[attachment]]></post_type>
             <post_password><![CDATA[]]></post_password>
@@ -100,7 +100,7 @@
             Donec lacinia eleifend libero sed accumsan. Interdum et malesuada fames ac ante ipsum primis in faucibus.]]>
             </encoded>
             <encoded><![CDATA[]]></encoded>
-            <post_id>3</post_id>
+            <post_id>1</post_id>
             <post_date><![CDATA[2012-05-04 17:23:33]]></post_date>
             <post_date_gmt><![CDATA[2012-05-04 15:23:33]]></post_date_gmt>
             <comment_status><![CDATA[open]]></comment_status>
@@ -221,7 +221,7 @@
             Donec lacinia eleifend libero sed accumsan. Interdum et malesuada fames ac ante ipsum primis in faucibus.]]>
             </encoded>
             <encoded><![CDATA[]]></encoded>
-            <post_id>4</post_id>
+            <post_id>2</post_id>
             <post_date><![CDATA[2012-05-04 17:23:33]]></post_date>
             <post_date_gmt><![CDATA[2012-05-04 15:23:33]]></post_date_gmt>
             <comment_status><![CDATA[open]]></comment_status>
@@ -233,9 +233,9 @@
             <post_type><![CDATA[post]]></post_type>
             <post_password><![CDATA[]]></post_password>
             <is_sticky>0</is_sticky>
-            <category domain="post_tag" nicename="test-tag-4"><![CDATA[Tag 4]]></category>
-            <category domain="category" nicename="category-test-1"><![CDATA[Category 2]]></category>
-            <category domain="post_tag" nicename="test-tag-5"><![CDATA[Tag 5]]></category>
+            <category domain="post_tag" nicename="test-tag-1"><![CDATA[Tag 1]]></category>
+            <category domain="category" nicename="category-test-1"><![CDATA[Category 1]]></category>
+            <category domain="post_tag" nicename="test-tag-2"><![CDATA[Tag 2]]></category>
             <category domain="post_tag" nicename="test-tag-3"><![CDATA[Tag 3]]></category>
             <!-- Article SEO -->
             <postmeta>
