@@ -1,6 +1,6 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Tests\Utils;
+namespace Victoire\DevTools\VacuumBundle\Tests\Utils\Faker;
 
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Tag;
 

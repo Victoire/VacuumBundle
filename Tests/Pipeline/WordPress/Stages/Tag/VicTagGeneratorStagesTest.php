@@ -4,9 +4,9 @@ namespace Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\Tag;
 
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Tag\VicTagGeneratorStages;
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\BlogFaker;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\DoctrineMockProvider;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\TagFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\BlogFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\TagFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\MockProvider\DoctrineMockProvider;
 
 /**
  * Class VicTagGeneratorStagesTest.

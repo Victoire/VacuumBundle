@@ -17,4 +17,18 @@
         </testsuite>
     </testsuites>
 
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./Pipeline</directory>
+            <exclude>
+                <directory>./Tests</directory>
+                <directory>./vendor</directory>
+                <directory>./DependencyInjection</directory>
+                <directory>./doc</directory>
+                <directory>./Entity</directory>
+                <directory>./Payload</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
 </phpunit>

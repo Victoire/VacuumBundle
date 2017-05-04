@@ -1,6 +1,6 @@
 <?php
 
-namespace Victoire\DevTools\VacuumBundle\Tests\Utils;
+namespace Victoire\DevTools\VacuumBundle\Tests\Utils\Faker;
 
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
 
@@ -13,7 +13,7 @@ class ArticleFaker
      * @param $nb
      * @param $tmpBlog
      */
-    public function generateWPArticles($nb, $tmpBlog, $newVicBlog)
+    public function generateWPArticles($nb, $tmpBlog, $newVicBlog = null)
     {
         for ($ii = 1; $ii < $nb + 1; $ii++) {
             $article = new Article();
@@ -26,10 +26,12 @@ class ArticleFaker
             $article->setPostDateGmt(new \DateTime('2012-05-04 15:23:33'));
             $article->setStatus('publish');
             $article->setAttachmentUrl('http://lorempixel.com/300/200/abstract');
-            foreach ($newVicBlog->getTags() as $tag) {
-                $article->addTag($tag);
+            if (null != $newVicBlog) {
+                foreach ($newVicBlog->getTags() as $tag) {
+                    $article->addTag($tag);
+                }
+                $article->setCategory($newVicBlog->getCategories()[0]);
             }
-            $article->setCategory($newVicBlog->getCategories()[0]);
             $article->setId($ii);
             $article->setXmlTag('article');
             $tmpBlog->addArticle($article);

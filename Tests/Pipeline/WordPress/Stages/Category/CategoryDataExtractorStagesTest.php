@@ -6,7 +6,7 @@ use Victoire\DevTools\VacuumBundle\Entity\WordPress\Blog;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Category;
 use Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category\CategoryDataExtractorStages;
 use Victoire\DevTools\VacuumBundle\Tests\Pipeline\WordPress\Stages\AbstractBaseStagesTests;
-use Victoire\DevTools\VacuumBundle\Tests\Utils\CategoryFaker;
+use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\CategoryFaker;
 
 /**
  * Class CategoryDataExtractorStagesTest.
