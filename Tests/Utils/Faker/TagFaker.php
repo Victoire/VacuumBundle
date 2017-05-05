@@ -28,18 +28,28 @@ class TagFaker
     }
 
     /**
-     * Generate x Victoire Tag in a Victoire Blog.
-     *
      * @param $nb
-     * @param $blog
+     * @param null $blog
+     *
+     * @return array
      */
-    public function generateVicTag($nb, $blog)
+    public function generateVicTag($nb, $blog = null)
     {
+        $tags = [];
+
         for ($ii = 1; $ii < $nb + 1; $ii++) {
             $tag = new \Victoire\Bundle\BlogBundle\Entity\Tag();
             $tag->setTitle('Test '.$ii);
             $tag->setSlug('test-tag-'.$ii);
-            $blog->addTag($tag);
+            if (null != $blog) {
+                $blog->addTag($tag);
+            } else {
+                array_push($tags, $tag);
+            }
+        }
+
+        if (null == $blog) {
+            return $tags;
         }
     }
 }
