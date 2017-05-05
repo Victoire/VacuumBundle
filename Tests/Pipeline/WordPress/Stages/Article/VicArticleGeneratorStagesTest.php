@@ -8,7 +8,6 @@ use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\ArticleFaker;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\BlogFaker;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\CategoryFaker;
 use Victoire\DevTools\VacuumBundle\Tests\Utils\Faker\TagFaker;
-
 use Victoire\DevTools\VacuumBundle\Tests\Utils\MockProvider\DoctrineMockProvider;
 
 /**
@@ -29,7 +28,7 @@ class VicArticleGeneratorStagesTest extends AbstractBaseStagesTests
 
         $articleFaker = new ArticleFaker();
         $articleFaker->generateWPArticles(2, $tmpBlog, null, true);
-        
+
         $categoryFaker = new CategoryFaker();
         $tagFaker = new TagFaker();
 
