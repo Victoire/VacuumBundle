@@ -23,11 +23,11 @@ class VicArticleTemplateBuilderTest extends AbstractBaseStagesTests
         $stage = new VicArticleTemplateBuilder($doctrineMockerProvider->getEMMock());
 
         $params = [
-            "new_article_template" => true,
-            "article_template_name" => "blog_test_article_template",
-            "article_template_layout" => "oneCol_test_layout",
-            "article_template_parent_id" => 1,
-            "article_template_first_slot" => "main_content"
+            'new_article_template'        => true,
+            'article_template_name'       => 'blog_test_article_template',
+            'article_template_layout'     => 'oneCol_test_layout',
+            'article_template_parent_id'  => 1,
+            'article_template_first_slot' => 'main_content',
         ];
         $xml = file_get_contents('Tests/Resources/xml/empty.xml');
 
@@ -73,7 +73,6 @@ class VicArticleTemplateBuilderTest extends AbstractBaseStagesTests
         foreach ($expected->getArticles() as $artKey => $article) {
             $actualArticle = $payload->getNewVicBlog()->getArticles()[$artKey]->getTemplate();
             foreach ($article->getTemplate()->getWidgetMaps() as $widgMapKey => $widgetMap) {
-
                 $actualWidgetMap = $actualArticle->getWidgetMaps()[$widgMapKey];
                 $widgetMap->setSlot($actualWidgetMap->getSlot());
 
