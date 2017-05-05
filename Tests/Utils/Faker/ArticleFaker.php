@@ -2,6 +2,7 @@
 
 namespace Victoire\DevTools\VacuumBundle\Tests\Utils\Faker;
 
+use Victoire\Bundle\BlogBundle\Entity\ArticleTranslation;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Article;
 
 /**
@@ -38,6 +39,28 @@ class ArticleFaker
             $article->setId($ii);
             $article->setXmlTag('article');
             $tmpBlog->addArticle($article);
+        }
+    }
+
+    /**
+     * @param $nb
+     * @param $vicBlog
+     */
+    public function generateVicArticle($nb, $vicBlog)
+    {
+        for ($ii = 1; $ii < $nb+1; $ii++) {
+            $article = new \Victoire\Bundle\BlogBundle\Entity\Article();
+            $article->setStatus("published");
+            $article->setPublishedAt(new \DateTime('Fri, 04 May 2012 15:23:33 +0000'));
+            $article->setLocale("en");
+            $article->setDefaultLocale("en");
+            $translation = new ArticleTranslation();
+            $translation->setLocale("en");
+            $translation->setName("Article Test ".$ii);
+            $translation->setSlug("article-test-".$ii);
+            $article->addTranslation($translation);
+            $article->mergeNewTranslations();
+            $vicBlog->addArticle($article);
         }
     }
 }
