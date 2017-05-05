@@ -42,13 +42,21 @@ class BlogImportCommand extends ContainerAwareCommand
     
     <comment>-b --blog</comment> is required it expect a blog name
     <comment>-d --dump</comment> is required it expect a path to the dump
+    <comment>-bt --blog-template</comment> is required it expect an id for base blog template
+    <comment>-bpi --blog-parent-id</comment> is required it expect an id for blog parent page
+    
+    <info>If you choose to let the bundle create a new ArticleTemplate</info>
+    <comment>-atn --article-template-name</comment> is required a name for the new ArticleTemplate
+    <comment>-atl --article-template-layout</comment> is required a layout designation for the new ArticleTemplate
+    <comment>-atfs --article-template-first-slot</comment> is required a slot designation where ArticleContent Widget will be attached
+    <comment>-atpid --article-template-parent-id</comment> is required an base Template id for the new ArticleTemplate
+    
+    <info>If you choose to use an existing ArticleTemplate</info>
+    <comment>-ati --atricle-template-id</comment> is required the ArticleTemplate id
     
     <info>php app/console victoire:blog-import --blog=MyVictoireBlog --dump=/Path/To/My/Dump</info>
     
     <info>Other option</info>
-    
-    <comment>-new --new</comment> will generate a new blog 
-    
     If you want to disable any user interaction, use <comment>--no-interaction</comment> but don't forget to pass all needed options:
 EOT
             );
