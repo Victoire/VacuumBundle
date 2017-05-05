@@ -148,9 +148,6 @@ EOT
 
         // blog name
         $question = new Question($questionHelper->getQuestion('blog name', $input->getOption('blog-name')));
-        $question->setValidator(function ($answer) {
-            return self::validateBlogName($answer);
-        });
 
         $blogName = (string) $questionHelper->ask($input, $output, $question);
         $input->setOption('blog-name', $blogName);
@@ -245,22 +242,6 @@ EOT
         }
 
         return $id;
-    }
-
-    /**
-     * @param $name
-     */
-    private function validateBlogName($name)
-    {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $results = $em->getRepository('Victoire\Bundle\BlogBundle\Entity\Blog')->findAll();
-        foreach ($results as $result) {
-            if ($result->getName() == $name) {
-                throw new \RuntimeException(sprintf('Blog with name "%s" already exist', $name));
-            }
-        }
-
-        return $name;
     }
 
     /**
