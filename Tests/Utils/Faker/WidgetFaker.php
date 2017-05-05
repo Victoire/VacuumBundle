@@ -7,7 +7,7 @@ use Victoire\Widget\CKEditorBundle\Entity\WidgetCKEditor;
 use Victoire\Widget\LayoutBundle\Entity\WidgetLayout;
 
 /**
- * Class WidgetFaker
+ * Class WidgetFaker.
  */
 class WidgetFaker
 {
@@ -18,7 +18,7 @@ class WidgetFaker
     {
         $widgetMapLayout = new WidgetMap();
         $widgetMapLayout->setAction(WidgetMap::ACTION_CREATE);
-        $widgetMapLayout->setSlot("main_content");
+        $widgetMapLayout->setSlot('main_content');
 
         $widgetLayout = new WidgetLayout();
         $widgetLayout->setWidgetMap($widgetMapLayout);
