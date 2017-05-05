@@ -30,6 +30,7 @@ class TagFaker
     /**
      * @param $nb
      * @param null $blog
+     *
      * @return array
      */
     public function generateVicTag($nb, $blog = null)
