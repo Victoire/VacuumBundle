@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+     xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:wp="http://wordpress.org/export/1.2/"
+>
+    <channel>
+        <title>Test Blog</title>
+        <link>http://www.testblog.com</link>
+        <description>I test this blog</description>
+        <pubDate>Tue, 02 May 2017 13:56:23 +0000</pubDate>
+        <language>en-EN</language>
+        <wxr_version>1.2</wxr_version>
+        <base_site_url>http://www.testblog.com</base_site_url>
+        <base_blog_url>http://www.testblog.com</base_blog_url>
+        <tag><term_id>1</term_id><tag_slug><![CDATA[test-tag-1]]></tag_slug><tag_name><![CDATA[Test 1]]></tag_name></tag>
+        <tag><term_id>2</term_id><tag_slug><![CDATA[test-tag-2]]></tag_slug><tag_name><![CDATA[Test 2]]></tag_name></tag>
+        <tag><term_id>3</term_id><tag_slug><![CDATA[test-tag-3]]></tag_slug><tag_name><![CDATA[Test 3]]></tag_name></tag>
+        <tag><term_id>4</term_id><tag_slug><![CDATA[test-tag-4]]></tag_slug><tag_name><![CDATA[Test 4]]></tag_name></tag>
+        <tag><term_id>5</term_id><tag_slug><![CDATA[test-tag-5]]></tag_slug><tag_name><![CDATA[Test 5]]></tag_name></tag>
+    </channel>
+</rss>

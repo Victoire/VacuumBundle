@@ -50,11 +50,13 @@ class CommandPayload implements CommandPayloadInterface
     private $XMLHistoryManager;
 
     /**
-     * WordPressPlayload constructor.
+     * CommandPayload constructor.
      *
-     * @param array          $parameters
-     * @param ProgressBar    $progressBar
-     * @param QuestionHelper $questionHelper
+     * @param array             $parameters
+     * @param OutputInterface   $output
+     * @param QuestionHelper    $questionHelper
+     * @param \SimpleXMLElement $rawData
+     * @param XMLHistoryManager $XMLHistoryManager
      */
     public function __construct(
         array $parameters,
@@ -68,13 +70,12 @@ class CommandPayload implements CommandPayloadInterface
         $this->output = $output;
         $this->rawData = $rawData;
         $this->XMLHistoryManager = $XMLHistoryManager;
-        self::loadCustomStyle();
     }
 
     /**
      * Generate custom style for command dispatch.
      */
-    private function loadCustomStyle()
+    public function loadCustomStyle()
     {
         $style = new OutputFormatterStyle('white', 'blue');
         $this->output->getFormatter()->setStyle('stageTitle', $style);
@@ -283,7 +284,6 @@ class CommandPayload implements CommandPayloadInterface
      */
     public function throwErrorAndStop($message)
     {
-        $this->output->writeln('<error>'.$message.'</error>');
-        exit(1);
+        throw new \Exception($message);
     }
 }

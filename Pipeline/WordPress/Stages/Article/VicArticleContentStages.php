@@ -52,7 +52,11 @@ class VicArticleContentStages implements StageInterface
                     }
 
                     if ($document) {
-                        $content = $document->saveHTML();
+                        $content = preg_replace('/^<!DOCTYPE.+?>/', '',
+                            str_replace(['<html>', '</html>', '<body>', '</body>'], ['', '', '', ''],
+                                $document->saveHTML()
+                        ));
+
                         $plArticle->setContent($content);
                         $progress->advance();
                     }
