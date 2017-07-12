@@ -19,18 +19,15 @@
   "require": {
     "php": ">=5.5.9",
     "symfony/framework-bundle": "~2.8|~3.0",
-    "victoire/victoire": "~2.3",
+    "victoire/victoire": "~2.2",
     "victoire/layout-widget": "^2.0",
     "victoire/ckeditor-widget": "^2.0",
     "victoire/text-widget": "^2.0"
   },
-  "required-dev": {
+  "require-dev": {
     "phpunit/phpunit": "5.7"
   },
   "autoload": {
     "psr-4": { "Victoire\\DevTools\\VacuumBundle\\": "" }
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^6.1"
   }
 }
