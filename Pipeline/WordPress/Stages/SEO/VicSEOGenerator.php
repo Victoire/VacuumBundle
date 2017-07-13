@@ -46,7 +46,6 @@ class VicSEOGenerator implements PersisterStageInterface
                         $seo = self::generateNewSEOPage($payload, $wpArticle, $xmlDataFormater, $article);
 
                         if (null != $seo) {
-
                             $ep = $this->entityManager
                                 ->getRepository('Victoire\Bundle\CoreBundle\Entity\EntityProxy')
                                 ->findOneBy(['article' => $article->getId()]);
@@ -151,6 +150,7 @@ class VicSEOGenerator implements PersisterStageInterface
 
     /**
      * @param $string
+     *
      * @return bool|string
      */
     public function truncateString($string)
@@ -158,6 +158,7 @@ class VicSEOGenerator implements PersisterStageInterface
         if (strlen($string) > 255) {
             $string = substr($string, 0, 255);
         }
+
         return $string;
     }
 }
