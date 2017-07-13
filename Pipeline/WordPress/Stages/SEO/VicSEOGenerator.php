@@ -46,14 +46,6 @@ class VicSEOGenerator implements PersisterStageInterface
                         $seo = self::generateNewSEOPage($payload, $wpArticle, $xmlDataFormater, $article);
 
                         if (null != $seo) {
-                            if (null != $article->getTags()) {
-                                $keyword = '';
-                                foreach ($article->getTags() as $tag) {
-                                    $keyword .= $tag->getTitle().',';
-                                }
-                                $seo->setKeyword($keyword, $payload->getNewVicBlog()->getDefaultLocale());
-                            }
-
                             $ep = $this->entityManager
                                 ->getRepository('Victoire\Bundle\CoreBundle\Entity\EntityProxy')
                                 ->findOneBy(['article' => $article->getId()]);
@@ -98,10 +90,10 @@ class VicSEOGenerator implements PersisterStageInterface
 
                 switch ($key) {
                     case '_yoast_wpseo_title':
-                        $seo->setMetaTitle($value, $payload->getNewVicBlog()->getDefaultLocale());
+                        $seo->setMetaTitle($this->truncateString($value), $payload->getNewVicBlog()->getDefaultLocale());
                         break;
                     case '_yoast_wpseo_metadesc':
-                        $seo->setMetaDescription($value, $payload->getNewVicBlog()->getDefaultLocale());
+                        $seo->setMetaDescription($this->truncateString($value), $payload->getNewVicBlog()->getDefaultLocale());
                         break;
                     case '_yoast_wpseo_meta-robots-noindex':
                         $value = (bool) $value;
@@ -154,5 +146,19 @@ class VicSEOGenerator implements PersisterStageInterface
         }
 
         return $seo;
+    }
+
+    /**
+     * @param $string
+     *
+     * @return bool|string
+     */
+    public function truncateString($string)
+    {
+        if (strlen($string) > 255) {
+            $string = substr($string, 0, 255);
+        }
+
+        return $string;
     }
 }
