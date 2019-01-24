@@ -4,7 +4,7 @@ namespace Victoire\DevTools\VacuumBundle\Utils\History;
 
 use Doctrine\ORM\EntityManager;
 use Victoire\DevTools\VacuumBundle\Entity\AbstractVacuumRelationHistory;
-use Victoire\DevTools\VacuumBundle\Entity\VacuumXMlRelationHistory;
+use Victoire\DevTools\VacuumBundle\Entity\VacuumXMLRelationHistory;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\AbstractXMLEntity;
 use Victoire\DevTools\VacuumBundle\Utils\History\Exception\XMLHistoryException;
 
@@ -16,7 +16,7 @@ class XMLHistoryManager implements HistoryManagerInterface
     private $entityManager;
 
     /**
-     * @var array|\Victoire\DevTools\VacuumBundle\Entity\VacuumXMlRelationHistory[]
+     * @var array|\Victoire\DevTools\VacuumBundle\Entity\VacuumXMLRelationHistory[]
      */
     private $histories;
 
@@ -38,7 +38,7 @@ class XMLHistoryManager implements HistoryManagerInterface
     {
         unset($this->histories);
         $this->histories = $this->entityManager
-            ->getRepository('VictoireVacuumBundle:VacuumXMlRelationHistory')
+            ->getRepository('VictoireVacuumBundle:VacuumXMLRelationHistory')
             ->findAll();
     }
 
@@ -46,7 +46,7 @@ class XMLHistoryManager implements HistoryManagerInterface
      * @param AbstractXMLEntity $source
      * @param $vicClass
      *
-     * @return mixed|null|VacuumXMlRelationHistory
+     * @return mixed|null|VacuumXMLRelationHistory
      */
     public function searchHistory(AbstractXMLEntity $source, $vicClass)
     {
@@ -87,11 +87,11 @@ class XMLHistoryManager implements HistoryManagerInterface
      * @param AbstractXMLEntity $source
      * @param $refined
      *
-     * @return VacuumXMlRelationHistory
+     * @return VacuumXMLRelationHistory
      */
     public function generateHistory(AbstractXMLEntity $source, $refined)
     {
-        $history = new VacuumXMlRelationHistory();
+        $history = new VacuumXMLRelationHistory();
         $history->setTagId($source->getId());
         $history->setTagName($source->getXmlTag());
         $history->setVicClass(get_class($refined));
@@ -104,9 +104,9 @@ class XMLHistoryManager implements HistoryManagerInterface
 
     /**
      * @param $entity
-     * @param VacuumXMlRelationHistory $history
+     * @param VacuumXMLRelationHistory $history
      */
-    public function flushHistory($entity, VacuumXMlRelationHistory $history)
+    public function flushHistory($entity, VacuumXMLRelationHistory $history)
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
