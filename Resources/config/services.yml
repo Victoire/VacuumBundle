@@ -19,6 +19,7 @@ services:
             - "@victoire.vacuum_bundle.media_formater.utils"
             - "@victoire.vacuum_bundle.curl_tools.utils"
             - "@victoire.vacuum_bundle.xml_history_manager.utils"
+            - "%victoire_core.user_class%"
 
     ############################
     #### UTILS

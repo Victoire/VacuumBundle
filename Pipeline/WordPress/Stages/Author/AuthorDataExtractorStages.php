@@ -20,6 +20,11 @@ class AuthorDataExtractorStages implements PersisterStageInterface
     private $entityManager;
 
     /**
+     * @var String
+     */
+    private $userClass;
+
+    /**
      * AuthorDataExtractorStages constructor.
      *
      * @param EntityManager $entityManager
@@ -27,6 +32,13 @@ class AuthorDataExtractorStages implements PersisterStageInterface
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    public function setUserClass(string $userClass)
+    {
+        $this->userClass = $userClass;
+
+        return $this;
     }
 
     /**
@@ -52,8 +64,8 @@ class AuthorDataExtractorStages implements PersisterStageInterface
         foreach ($channel->author as $wpAuthor) {
             $email = $xmlDataFormater->formatString('author_email', $wpAuthor);
 
-            $authorByUsername = $this->entityManager->getRepository('AppBundle:User\User')->findOneBy(['username' => $email]);
-            $authorByEmail = $this->entityManager->getRepository('AppBundle:User\User')->findOneBy(['email' => $email]);
+            $authorByUsername = $this->entityManager->getRepository($this->userClass)->findOneBy(['username' => $email]);
+            $authorByEmail = $this->entityManager->getRepository($this->userClass)->findOneBy(['email' => $email]);
 
             if (empty($authorByUsername) && empty($authorByEmail)) {
                 $row = [
