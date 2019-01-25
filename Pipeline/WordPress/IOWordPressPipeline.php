@@ -63,6 +63,11 @@ class IOWordPressPipeline
     private $XMLHistoryManager;
 
     /**
+     * @var string
+     */
+    private $userClass;
+
+    /**
      * IOWordPressPipeline constructor.
      *
      * @param $data
@@ -72,13 +77,15 @@ class IOWordPressPipeline
         $kernelRootDir,
         MediaFormater $mediaFormater,
         CurlsTools $curlsTools,
-        XMLHistoryManager $XMLHistoryManager
+        XMLHistoryManager $XMLHistoryManager,
+        $vicUserClassPath
     ) {
         $this->entityManager = $entityManager;
         $this->kernelRootDir = $kernelRootDir;
         $this->mediaFormater = $mediaFormater;
         $this->curlsTools = $curlsTools;
         $this->XMLHistoryManager = $XMLHistoryManager;
+        $this->userClass = $vicUserClassPath;
     }
 
     /**
@@ -102,7 +109,7 @@ class IOWordPressPipeline
 
         $pipeline
             ->pipe(new BlogDataExtractorStages())
-            ->pipe(new AuthorDataExtractorStages($this->entityManager))
+            ->pipe((new AuthorDataExtractorStages($this->entityManager))->setUserClass($this->userClass))
             ->pipe(new CategoryDataExtractorStages())
             ->pipe(new TagDataExtractorStages())
             ->pipe(new VicBlogGeneratorStages($this->entityManager))

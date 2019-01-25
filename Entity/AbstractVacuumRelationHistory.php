@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *      "xml" = "Victoire\DevTools\VacuumBundle\Entity\VacuumXMlRelationHistory"
+ *      "xml" = "Victoire\DevTools\VacuumBundle\Entity\VacuumXMLRelationHistory"
  * })
  * @ORM\Table("vic_vacuum_historic")
  */

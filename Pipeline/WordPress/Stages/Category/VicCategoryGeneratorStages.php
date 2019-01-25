@@ -3,7 +3,7 @@
 namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Category;
 
 use Doctrine\ORM\EntityManager;
-use Victoire\Bundle\BlogBundle\Entity\Category;
+use Victoire\Bundle\BlogBundle\Entity\BlogCategory;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
 
@@ -44,10 +44,10 @@ class VicCategoryGeneratorStages implements PersisterStageInterface
             $history = $payload->getXMLHistoryManager()->searchHistory($plCategory, Category::class);
 
             if (null == $history) {
-                $category = new Category();
+                $category = new BlogCategory();
                 $category->setTitle($plCategory->getCategoryName());
                 $category->setSlug($plCategory->getCategoryNiceName());
-                $payload->getNewVicBlog()->addCategorie($category);
+                $payload->getNewVicBlog()->addCategory($category);
                 $history = $payload->getXMLHistoryManager()->generateHistory($plCategory, $category);
                 $payload->getXMLHistoryManager()->flushHistory($category, $history);
                 $progress->advance();

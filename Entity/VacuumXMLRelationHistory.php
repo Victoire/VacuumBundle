@@ -36,7 +36,7 @@ class VacuumXMLRelationHistory extends AbstractVacuumRelationHistory
     /**
      * @param string $tagName
      *
-     * @return VacuumXMlRelationHistory
+     * @return VacuumXMLRelationHistory
      */
     public function setTagName(string $tagName)
     {
@@ -56,7 +56,7 @@ class VacuumXMLRelationHistory extends AbstractVacuumRelationHistory
     /**
      * @param int $tagId
      *
-     * @return VacuumXMlRelationHistory
+     * @return VacuumXMLRelationHistory
      */
     public function setTagId(int $tagId)
     {
