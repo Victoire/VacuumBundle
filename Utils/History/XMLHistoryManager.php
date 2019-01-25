@@ -77,6 +77,7 @@ class XMLHistoryManager implements HistoryManagerInterface
                 $history->getVicId(),
                 $history->getVicClass()
             );
+
             throw new XMLHistoryException($message);
         }
 

@@ -20,7 +20,7 @@ class AuthorDataExtractorStages implements PersisterStageInterface
     private $entityManager;
 
     /**
-     * @var String
+     * @var string
      */
     private $userClass;
 
