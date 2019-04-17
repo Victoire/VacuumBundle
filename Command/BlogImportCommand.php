@@ -260,10 +260,6 @@ EOT
             throw new \RuntimeException(sprintf('Wrong path the file "%s" can\'t be found', $path));
         }
 
-        if (mime_content_type($path) != 'application/xml') {
-            throw new \RuntimeException('Wrong file format. Format accepted "xml"');
-        }
-
         return $path;
     }
 
