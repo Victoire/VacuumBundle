@@ -80,6 +80,7 @@ class VicArticleContentStages implements StageInterface
     private function generateDOMDocument($content)
     {
         $document = new \DOMDocument();
+
         try {
             $document->loadHTML(
                 mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'),
@@ -117,13 +118,12 @@ class VicArticleContentStages implements StageInterface
                 $image = $this->mediaFormater->generateImageMedia($distantPath, $folder);
 
                 $node->setAttribute('src', $image->getUrl());
-                
                 //managing wrapping a's
                 $parentNode = $node->parentNode;
                 if (XML_ELEMENT_NODE === $parentNode->nodeType && 'a' === $parentNode->nodeName) {
                     //$parentNode->attributes
                     $href = $parentNode->getAttribute('href');
-                    if ('png' === substr($href, strlen($href) - 3) || 'jpg' === substr($href, strlen($href) - 3) ) {
+                    if ('png' === substr($href, strlen($href) - 3) || 'jpg' === substr($href, strlen($href) - 3)) {
                         $distantPath = $this->mediaFormater->cleanUrl($href);
                         $image = $this->mediaFormater->generateImageMedia($distantPath, $folder);
 
