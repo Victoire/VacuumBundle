@@ -81,7 +81,7 @@ class VicSEOGenerator implements PersisterStageInterface
      */
     private function generateNewSEOPage(CommandPayloadInterface $payload, $wpArticle, XmlDataFormater $xmlDataFormater, $article)
     {
-        if (count($wpArticle->postmeta > 2)) {
+        if ((is_array($wpArticle->postmeta) || $wpArticle->postmeta instanceof Countable) && count($wpArticle->postmeta) > 2) {
             $seo = new PageSeo();
             $seo->setDefaultLocale($payload->getNewVicBlog()->getDefaultLocale());
             foreach ($wpArticle->postmeta as $meta) {
