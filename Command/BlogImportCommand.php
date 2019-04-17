@@ -2,7 +2,6 @@
 
 namespace Victoire\DevTools\VacuumBundle\Command;
 
-use Buzz\Exception\RuntimeException;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -258,11 +257,11 @@ EOT
     private function validatePath($path)
     {
         if (!realpath($path)) {
-            throw new RuntimeException(sprintf('Wrong path the file "%s" can\'t be found', $path));
+            throw new \RuntimeException(sprintf('Wrong path the file "%s" can\'t be found', $path));
         }
 
         if (mime_content_type($path) != 'application/xml') {
-            throw new RuntimeException('Wrong file format. Format accepted "xml"');
+            throw new \RuntimeException('Wrong file format. Format accepted "xml"');
         }
 
         return $path;
