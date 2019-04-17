@@ -104,6 +104,7 @@ class VicArticleContentStages implements StageInterface
         if (null != $document->getElementsByTagName('img')) {
             $xpath = new \DOMXPath($document);
             $nodes = $xpath->query('//a//img');
+            /** @var \DOMNode $node */
             foreach ($nodes as $node) {
                 $distantPath = $this->mediaFormater->cleanUrl($node->getAttribute('src'));
 
@@ -116,6 +117,19 @@ class VicArticleContentStages implements StageInterface
                 $image = $this->mediaFormater->generateImageMedia($distantPath, $folder);
 
                 $node->setAttribute('src', $image->getUrl());
+                
+                //managing wrapping a's
+                $parentNode = $node->parentNode;
+                if (XML_ELEMENT_NODE === $parentNode->nodeType && 'a' === $parentNode->nodeName) {
+                    //$parentNode->attributes
+                    $href = $parentNode->getAttribute('href');
+                    if ('png' === substr($href, strlen($href) - 3) || 'jpg' === substr($href, strlen($href) - 3) ) {
+                        $distantPath = $this->mediaFormater->cleanUrl($href);
+                        $image = $this->mediaFormater->generateImageMedia($distantPath, $folder);
+
+                        $parentNode->setAttribute('href', $image->getUrl());
+                    }
+                }
             }
         }
 
