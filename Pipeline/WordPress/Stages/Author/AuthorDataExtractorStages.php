@@ -4,6 +4,7 @@ namespace Victoire\DevTools\VacuumBundle\Pipeline\WordPress\Stages\Author;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\Table;
+use Victoire\Bundle\UserBundle\Entity\User;
 use Victoire\DevTools\VacuumBundle\Entity\WordPress\Author;
 use Victoire\DevTools\VacuumBundle\Payload\CommandPayloadInterface;
 use Victoire\DevTools\VacuumBundle\Pipeline\PersisterStageInterface;
@@ -52,8 +53,8 @@ class AuthorDataExtractorStages implements PersisterStageInterface
         foreach ($channel->author as $wpAuthor) {
             $email = $xmlDataFormater->formatString('author_email', $wpAuthor);
 
-            $authorByUsername = $this->entityManager->getRepository('AppBundle:User\User')->findOneBy(['username' => $email]);
-            $authorByEmail = $this->entityManager->getRepository('AppBundle:User\User')->findOneBy(['email' => $email]);
+            $authorByUsername = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $email]);
+            $authorByEmail = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
             if (empty($authorByUsername) && empty($authorByEmail)) {
                 $row = [
